@@ -1,0 +1,65 @@
+/* Banner.css */
+.BannerContainer {
+    width: 1728px;
+    height: 682px;
+    position: relative;
+    background: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.BannerImage {
+    width: 1753px;
+    height: 682px;
+    position: absolute;
+}
+
+.SearchBar {
+    padding-top: 15px;
+    padding-bottom: 13.85px;
+    padding-left: 17px;
+    padding-right: 21px;
+    left: 556px;
+    top: 351px;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 32px;
+    border: 1px solid white;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+}
+
+.InputContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.SearchInput {
+    width: 80%;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.SearchBox {
+    width: 100%;
+    color: #C9C9C9;
+    font-size: 18px;
+    font-family: 'Inter';
+    font-weight: 400;
+}
+
+.SearchIcon {
+    width: 20px;
+    height: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #231F20;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+}

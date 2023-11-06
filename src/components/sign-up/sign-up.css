@@ -1,0 +1,91 @@
+/* LoginRegister.css */
+.login-register-container {
+    width: 1440px;
+    height: 900px;
+    position: relative;
+    background: white;
+}
+
+.signup-group {
+    width: 469px;
+    height: 240px;
+    left: 175px;
+    top: 294px;
+    position: absolute;
+}
+
+.title-group {
+    width: 469px;
+    height: 133px;
+    left: 0;
+    top: 0;
+    position: absolute;
+}
+
+.signup-title {
+    left: 0;
+    top: 0;
+    position: absolute;
+    color: black;
+    font-size: 50px;
+    font-family: 'Poppins';
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.library-title {
+    width: 469px;
+    left: 0;
+    top: 80px;
+    position: absolute;
+    color: black;
+    font-size: 35px;
+    font-family: 'Poppins';
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+.login-hint-group {
+    width: 321px;
+    height: 54px;
+    left: 4px;
+    top: 186px;
+    position: absolute;
+}
+
+.hint-text {
+    width: 321px;
+    left: 0;
+    top: 0;
+    position: absolute;
+    color: black;
+    font-size: 16px;
+    font-family: 'Poppins';
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.login-link-text {
+    width: 308px;
+    left: 0;
+    top: 30px;
+    position: absolute;
+}
+
+.normal-text {
+    color: black;
+    font-size: 16px;
+    font-family: 'Poppins';
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.login-link {
+    color: #4D47C3;
+    font-size: 16px;
+    font-family: 'Poppins';
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+/* Add the rest of your CSS here based on your class names */

@@ -1,12 +1,19 @@
 import React from "react";
 import "./login.css";
+import Home from "../home/home";
+import logo from "../assets/images/logo.png";
 
-const Login = () => {
+function Login() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   return (
     <div className="login-container">
       <div className="header">
-        <div className="sign-in-text">Sign in to </div>
-        <div className="app-name">Digital Library Education</div>
+        <h1 className="sign-in-text">Sign in to </h1>
+        <h1 className="app-name">Digital Library Education</h1>
+        <a href="/home">
+        <img id="logo" alt="Company Logo" src={logo} />
+      </a>
       </div>
       <div className="registration">
         <div className="registration-text">If you don’t have an account, register</div>
@@ -16,6 +23,7 @@ const Login = () => {
         </div>
       </div>
       <div className="login-form">
+        <h1 className="sign-in-text-title">Sign in</h1>
         <div className="email-username">
           <div className="input-field">
             <div className="input-box">
@@ -38,16 +46,15 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <div className="forgot-password-link">Forgot password ?</div>
+          <a href="" className="forgot-password-link">Forgot password ?</a>
         </div>
-        <div className="login-button">
+        <button id="login-button">
           <div className="login-button-background"></div>
           <div className="login-text">Login</div>
-        </div>
+        </button>
         <div className="continue-with-text">or continue with</div>
-        <div className="sign-in-text">Sign in</div>
       </div>
-      <img className="library-image" src="https://via.placeholder.com/326x152" />
+
       <div className="google-sign-in">
         <div className="google-vector"></div>
         <div className="google-vector"></div>

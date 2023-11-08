@@ -1,8 +1,8 @@
 // Home.js
 import React from 'react';
-import Header from './header';
-import Footer from './footer';
-import banner from './banner';
+import Header from '../header/header';
+import Footer from '../footer/footer';
+import Banner from '../banner/banner';
 
 const Home = () => {
   return (

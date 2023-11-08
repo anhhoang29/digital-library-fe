@@ -1,13 +1,14 @@
 import React from "react";
 import "./header.css";
+import logo from "../assets/images/logo.png";
 
 const Header = () => {
   return (
     <div className="header-container">
       <div className="header-content">
         <div className="logo">
-          <div className="library1" />
-          <img className="library21" src="https://via.placeholder.com/197x79" alt="Library Logo" />
+          <div className="logo" />
+          <img className="logo" src={logo} alt="logo" />
         </div>
         <div className="menu">
           <div className="category">

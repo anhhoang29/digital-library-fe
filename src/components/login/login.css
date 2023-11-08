@@ -1,55 +1,181 @@
 .login-container {
-    width: 1549px;
-    height: 905px;
-    position: relative;
-    background: white;
-  }
-  
-  .header {
-    width: 463px;
-    height: 240px;
-    left: 175px;
-    top: 294px;
-    position: absolute;
-  }
-  
-  .sign-in-text {
-    left: 0;
-    top: 0;
-    position: absolute;
-    color: black;
-    font-size: 50px;
-    font-family: 'Poppins';
-    font-weight: 600;
-    word-wrap: break-word;
-  }
-  
-  .app-name {
-    width: 459px;
-    left: 4px;
-    top: 88px;
-    position: absolute;
-    color: black;
-    font-size: 35px;
-    font-family: 'Poppins';
-    font-weight: 500;
-    word-wrap: break-word;
-  }
-  
-  .registration {
-    width: 459px;
-    left: 4px;
-    top: 128px;
-    position: absolute;
-    color: black;
-    font-size: 20px;
-    font-family: 'Poppins';
-    font-weight: 500;
-    word-wrap: break-word;
-  }
-  
-  #register-here-link {
-    color: #2F80ED;
-    text-decoration: none;
-  }
-  
+  width: 100%;
+  /*this a*/
+  height: 905px;
+  position: relative;
+  /* this is important */
+  background: white;
+}
+
+.header {
+  width: 463px;
+  height: 240px;
+  left: 175px;
+  top: 294px;
+  position: absolute;
+}
+
+#logo {
+  width: 326px;
+  height: 326px;
+  /* top: 44px;
+  left: 70px; */
+
+}
+
+.sign-in-text {
+  /* left: 0;
+  top: 0; */
+  position: absolute;
+  color: black;
+  font-size: 50px;
+  font-family: 'Poppins';
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.app-name {
+  width: 459px;
+  left: 4px;
+  top: 88px;
+  position: absolute;
+  color: black;
+  font-size: 35px;
+  font-family: 'Poppins';
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.registration {
+  width: 459px;
+  left: 179px;
+  top: 488px;
+  position: absolute;
+  color: black;
+  font-size: 20px;
+  font-family: 'Poppins';
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+#register-here-link {
+  color: #2F80ED;
+  text-decoration: none;
+}
+
+.login-form {
+  width: 369px;
+  height: 455px;
+  top: 174px;
+  left: 892px;
+  position: absolute;
+}
+
+.sign-in-text-title {
+  width: 99px;
+  height: 45px;
+  top: 174px;
+  left: 892px;
+  font-family: Poppins;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 45px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.input-field {
+  /* width: 369px;
+  height: 62px;
+  background: '#F0EFFF';
+  border-radius: 10px; */
+  /* width: 369px;
+  height: 62px;
+  background: #F0EFFF;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding-left: 20px;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left; */
+}
+
+/* .input-box{
+
+} */
+.email-username-input {
+  width: 369px;
+  height: 62px;
+  background: #F0EFFF;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding-left: 20px;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.password-input {
+  width: 369px;
+  height: 62px;
+  background: #F0EFFF;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding-left: 20px;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.forgot-password-link {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+  word-wrap: break-word;
+  margin-left: 236px;
+  color: gray;
+  /* Đặt màu chữ thành xám */
+  text-decoration: none;
+  /* Ẩn gạch chân */
+}
+
+login-button {
+  width: 389px;
+  height: 62px;
+  background: '#4262FF';
+  box-Shadow: '0px 4px 61px rgba(77, 71, 195, 0.40)';
+  border-Radius: 10px;
+  margin-top: 20px;
+
+}
+.login-text{
+  width: 369px;
+  height: 42px;
+  /* top: 174px;
+  left: 892px; */
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 45px;
+  letter-spacing: 0em; 
+  text-align: center;
+
+}

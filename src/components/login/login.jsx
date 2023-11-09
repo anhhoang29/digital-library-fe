@@ -1,19 +1,20 @@
 import React from "react";
 import "./login.css";
 import Home from "../home/home";
-import logo from "../assets/images/logo.png";
+import logo from '../assets/images/logo.png';
+import Google from '../assets/images/Google.svg';
 
 function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (
     <div className="login-container">
+      <a href="/home">
+        <img id="logo" alt="logo" src={logo} />
+      </a>
       <div className="header">
         <h1 className="sign-in-text">Sign in to </h1>
-        <h1 className="app-name">Digital Library Education</h1>
-        <a href="/home">
-        <img id="logo" alt="Company Logo" src={logo} />
-      </a>
+        <p className="app-name">Digital Library Education</p>
       </div>
       <div className="registration">
         <div className="registration-text">If you don’t have an account, register</div>
@@ -48,19 +49,26 @@ function Login() {
           </div>
           <a href="" className="forgot-password-link">Forgot password ?</a>
         </div>
-        <button id="login-button">
+        <button className="login-button" type="button">
           <div className="login-button-background"></div>
           <div className="login-text">Login</div>
         </button>
-        <div className="continue-with-text">or continue with</div>
+        <div className="google-sign-in">
+          <p className="continue-with-text">or continue with</p>
+          <a
+            className='flex items-center lg:gap-[10px] gap-[5px] w-full border rounded-[5px] lg:py-[10px] py-[5px] justify-center border-primary xl:text-base lg:text-sm text-xs hover:bg-athensGray cursor-pointer transition ease-in-out'
+            href=""
+          >
+            <img
+              src={Google}
+              className='object-cover xl:w-6 w-5'
+              alt='Google icon'
+            />
+            <span className='text-primary'>Đăng nhập với Google</span>
+          </a>
+        </div>
       </div>
 
-      <div className="google-sign-in">
-        <div className="google-vector"></div>
-        <div className="google-vector"></div>
-        <div className="google-vector"></div>
-        <div className="google-vector"></div>
-      </div>
     </div>
   );
 };

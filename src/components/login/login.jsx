@@ -3,6 +3,7 @@ import "./login.css";
 import Home from "../home/home";
 import logo from '../assets/images/logo.png';
 import Google from '../assets/images/Google.svg';
+import Footer from "../footer/footer";
 
 function Login() {
   const [email, setEmail] = React.useState("");
@@ -68,9 +69,9 @@ function Login() {
           </a>
         </div>
       </div>
-
+    <Footer />
     </div>
   );
-};
+}
 
 export default Login;

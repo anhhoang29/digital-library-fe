@@ -17,7 +17,7 @@ const AuthPage = ({ children, title, hintText, linkText, linkUrl }) => {
         <div className="registration">
           <div className="registration-text">{hintText}</div>
           <div className="register-link">
-            <span>{linkText}</span>
+            <span>You can </span>
             <a href={linkUrl} className="auth-link">{linkText}</a>
           </div>
         </div>

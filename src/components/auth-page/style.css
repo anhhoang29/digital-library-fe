@@ -3,32 +3,33 @@
     height: 905px;
     position: relative;
     background: white;
-  }
-  
-  .header {
+}
+
+.header {
     width: 463px;
     height: 240px;
     position: relative;
     top: 10px;
     left: 179px;
-  }
-  
-  .logo {
+}
+
+.logo {
     width: 326px;
     height: 326px;
-  }
-  
-  .auth-title {
+}
+
+.auth-title {
     color: black;
     font-size: 50px;
-    font-family: 'Poppins';
-    font-weight: 600;
+    font-family: Poppins;
+    font-weight: bold;
+    line-height: normal;
     word-wrap: break-word;
     margin-bottom: 10px;
     white-space: nowrap;
-  }
-  
-  .app-name {
+}
+
+.app-name {
     width: 100%;
     margin-top: 10px;
     color: black;
@@ -36,9 +37,9 @@
     font-family: 'Poppins';
     font-weight: 500;
     word-wrap: break-word;
-  }
-  
-  .registration {
+}
+
+.registration {
     width: 459px;
     left: 179px;
     top: 488px;
@@ -49,23 +50,24 @@
     font-weight: 500;
     word-wrap: break-word;
     margin-top: 10px;
-  }
-  
-  .auth-link {
+}
+
+.auth-link {
     color: #2F80ED;
     text-decoration: none;
-  }
-  
-  .auth-form {
+}
+
+.auth-form {
     width: 391px;
     height: 455px;
-    top: 174px;
+    top: 10px;
     left: 892px;
     margin-bottom: 50px;
     position: absolute;
-  }
-  
-  .auth-title {
+
+}
+
+.auth-title {
     width: 99px;
     height: 45px;
     top: 174px;
@@ -76,9 +78,10 @@
     line-height: 45px;
     letter-spacing: 0em;
     text-align: left;
-  }
-  
-  .sign-in-text-title {
+}
+
+/* this is form login */
+.sign-in-text-title {
     width: 99px;
     height: 45px;
     top: 174px;
@@ -89,9 +92,9 @@
     line-height: 45px;
     letter-spacing: 0em;
     text-align: left;
-  }
-  
-  .input-field {
+}
+
+.input-field {
     /* width: 369px;
     height: 62px;
     background: '#F0EFFF';
@@ -109,12 +112,12 @@
     line-height: 30px;
     letter-spacing: 0em;
     text-align: left; */
-  }
-  
-  /* .input-box{
+}
+
+/* .input-box{
   
   } */
-  .email-username-input {
+.email-username-input {
     width: 369px;
     height: 62px;
     background: #F0EFFF;
@@ -129,9 +132,9 @@
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 20px;
-  }
-  
-  .password-input {
+}
+
+.password-input {
     width: 369px;
     height: 62px;
     background: #F0EFFF;
@@ -147,19 +150,20 @@
     text-align: left;
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .password-toggle{
+}
+
+.password-toggle {
     margin-left: 300px;
     margin-top: -60px;
     position: absolute;
     cursor: pointer;
-  }
-  
-  .toggle-group{
+}
+
+.toggle-group {
     margin-left: 30px;
-  }
-  
-  .forgot-password-link {
+}
+
+.forgot-password-link {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -168,23 +172,21 @@
     text-align: left;
     word-wrap: break-word;
     margin-left: 239px;
-  
     color: gray;
-    /* Đặt màu chữ thành xám */
     text-decoration: none;
-    /* Ẩn gạch chân */
-  }
-  
-  
-  .login-button {
+
+}
+
+.login-button {
     width: 389px;
     height: 62px;
     background: #4285F4;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-Radius: 9px;
     margin-top: 20px;
-  }
-  .login-text{
+}
+
+.login-text {
     width: 369px;
     height: 42px;
     /* top: 174px;
@@ -193,20 +195,99 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 45px;
-    letter-spacing: 0em; 
+    letter-spacing: 0em;
     text-align: center;
     color: white;
-  }
-  .continue-with-text{
+}
+
+.continue-with-text {
     top: 15px;
     margin-left: 140px;
-  }
-  .object-cover{
+}
+
+.object-cover {
     display: flex;
     margin-left: 180px;
-  }
-  .text-primary{
+}
+
+.text-primary {
     color: #4285F4;
     margin-top: 40px;
-    margin-left: 115px;
-  }
+    margin-left: 118px;
+}
+
+
+/* this is form register */
+
+.form-group {
+    width: 369px;
+
+    margin-top: 20px;
+    flex-shrink: 0;
+}
+.sign-up-text-title {
+    width: 99px;
+    height: 45px;
+    top: 174px;
+    left: 892px;
+    font-family: Poppins;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 45px;
+    letter-spacing: 0em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.first-name-input{
+    width: 369px;
+    height: 62px;
+    background: #F0EFFF;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding-left: 20px;
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.last-name-input{
+    width: 369px;
+    height: 62px;
+    background: #F0EFFF;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding-left: 20px;
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.confirm-password-input{
+    width: 369px;
+    height: 62px;
+    background: #F0EFFF;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding-left: 20px;
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+

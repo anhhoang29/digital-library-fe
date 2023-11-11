@@ -1,27 +1,22 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, createBrowserRouter } from "react-router-dom"; // Import BrowserRouter, Route, và Routes
+import { Route, Routes } from "react-router-dom";
 import Login from "../auth-page/login";
 import Home from "../home/home";
-import SigUp from "../auth-page/sign-up";
+import SignUp from "../auth-page/sign-up";
+import AdminLogin from "../../pages/admin/Login";
+import Layout from "../../components/admin/layout/Layout";
 
-
-const RootRouters = createBrowserRouter([
-    {
-        path: '/home',
-        element: <Home />
-    },
-    {
-        path: '/login',
-        element: <Login />
-    },
-    {
-        path: '/',
-        element: <Home />
-    },
-    {
-        path: '/register',
-        element: <SigUp />
-    }
-]);
+const RootRouters = () => {
+    return (
+        <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            {/* <Route path="/" element={<Home />} /> */}
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route element={<Layout />} />
+        </Routes>
+    );
+};
 
 export default RootRouters;

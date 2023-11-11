@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 import logo from '../assets/images/logo.png';
-import Footer from "../footer/footer";
+import Footer from "../footer/Footer";
 
 const AuthPage = ({ children, title, hintText, linkText, linkUrl }) => {
   return (

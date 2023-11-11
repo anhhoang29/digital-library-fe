@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './banner.css';
 import banner2 from '../assets/images/banner2.jpg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

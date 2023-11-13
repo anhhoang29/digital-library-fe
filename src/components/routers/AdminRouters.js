@@ -11,14 +11,15 @@ import EditDocument from "../../pages/admin/document/EditDocument";
 
 const AdminRoutes = () => {
     return (
-        <Route>
-            <Route path="/admin/documents/new" component={NewDocument} />
-            <Route path="/admin/documents/detail" component={DetailDocument} />
-            <Route path="/admin/documents/update" component={EditDocument} />
-            <Route path="/admin/customers" component={Customers} />
-            <Route path="/admin/products" component={Products} />
-            <Route path="/home" component={Dashboard} />
-        </Route>
+        <Routes>
+            <Route path="/admin/documents/new" element={<NewDocument />} />
+            <Route path="/admin/documents/detail" element={<DetailDocument />} />
+            <Route path="/admin/documents/update" element={<EditDocument />} />
+            <Route path="/admin/customers" element={<Customers />} />
+            <Route path="/admin/products" element={<Products />} />
+            <Route path="/admin/home" element={<Dashboard />} />
+            <Route path="/admin/" element={<Dashboard />} />
+        </Routes>
     );
 };
 

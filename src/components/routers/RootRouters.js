@@ -14,7 +14,7 @@ const RootRouters = () => {
             {/* <Route path="/" element={<Home />} /> */}
             <Route path="/register" element={<SignUp />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route element={<Layout />} />
+            <Route path="*" element={<Layout />} />
         </Routes>
     );
 };

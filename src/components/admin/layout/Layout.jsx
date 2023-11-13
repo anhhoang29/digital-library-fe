@@ -28,10 +28,8 @@ const Layout = () => {
     }, [dispatch]);
 
     return (
-        <Route
-            render={(props) => (
                 <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
-                    <Sidebar {...props} />
+                    <Sidebar/>
                     <div className="layout__content">
                         <TopNav />
                         <div className="layout__content-main">
@@ -39,8 +37,7 @@ const Layout = () => {
                         </div>
                     </div>
                 </div>
-            )}
-        />
+
     );
 };
 

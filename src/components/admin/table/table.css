@@ -1,5 +1,5 @@
 .table-wrapper {
-    overflow-y: auto;
+    overflow-wrap: break-word;
 }
 
 table {
@@ -10,16 +10,25 @@ table {
 
 thead {
     background-color: var(--second-bg);
+    text-align: center;
 }
 
 tr {
+    font-size: 11pt;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom: 2px solid var(--second-bg);
 }
 
 th,
 td {
-    text-transform: capitalize;
-    padding: 15px 10px;
+    padding: 10px 10px;
+    text-overflow: ellipsis;
+}
+
+th {
+    font-size: 14pt;
 }
 
 tbody > tr:hover {

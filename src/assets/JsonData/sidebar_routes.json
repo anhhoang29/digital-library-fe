@@ -6,7 +6,7 @@
     },
     {
         "display_name": "Tài liệu",
-        "route": "/admin/customers",
+        "route": "/admin/documents",
         "icon": "bx bx-user-pin"
     },
     {
@@ -26,8 +26,8 @@
     },
     {
         "display_name": "Người dùng",
-        "route": "/admin/categories",
-        "icon": "bx bx-list-ol"
+        "route": "/admin/users",
+        "icon": "bx bxs-user"
     },
     {
         "display_name": "discount",

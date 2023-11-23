@@ -1,0 +1,15 @@
+action-button:hover {
+    background-color: var(--main-color);
+    color: var(--txt-white);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: rgb(133, 133, 133);
+}
+
+action-button {
+    padding: 0;
+    width: "auto";
+    height: "auto";
+    border: "none";
+    background: "none";
+}

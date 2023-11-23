@@ -6,7 +6,10 @@ import SignUp from "../auth-page/sign-up";
 import AdminLogin from "../../pages/admin/Login";
 import Layout from "../../components/admin/layout/Layout";
 
+import usePrivateAxios from "../../api/usePrivateAxios";
+
 const RootRouters = () => {
+    usePrivateAxios();
     return (
         <Routes>
             <Route path="/home" element={<Home />} />

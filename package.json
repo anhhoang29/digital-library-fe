@@ -23,6 +23,7 @@
         "react-redux": "^7.2.4",
         "react-router-dom": "^6.18.0",
         "react-scripts": "5.0.1",
+        "react-tooltip": "^5.23.0",
         "redux": "^4.1.0",
         "web-vitals": "^2.1.4"
     },
@@ -52,5 +53,9 @@
     },
     "devDependencies": {
         "tailwindcss": "^3.3.5"
+    },
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
     }
 }

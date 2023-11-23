@@ -18,7 +18,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/admin";
+    const from = location.state?.from?.pathname || "/admin/documents";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -75,6 +75,7 @@ const LoginForm = () => {
                 } else {
                     localStorage.setItem("accessToken", response.data.data.accessToken);
                     localStorage.setItem("refreshToken", response.data.data.refreshToken);
+                    navigate(from);
                 }
             } catch (error) {
                 console.log(error);

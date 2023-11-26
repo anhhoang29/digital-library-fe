@@ -11,37 +11,27 @@
     },
     {
         "display_name": "Danh mục",
-        "route": "/admin/products",
+        "route": "/admin/categories",
         "icon": "bx bx-package"
     },
     {
         "display_name": "Lĩnh vực",
-        "route": "/admin/orders",
+        "route": "/admin/fields",
         "icon": "bx bx-cart"
     },
     {
-        "display_name": "Tổ chức",
-        "route": "/admin/analytics",
+        "display_name": "Trường học",
+        "route": "/admin/organizations",
         "icon": "bx bx-bar-chart-alt"
     },
     {
         "display_name": "Người dùng",
         "route": "/admin/users",
-        "icon": "bx bxs-user"
+        "icon": "bx bx-user"
     },
     {
-        "display_name": "discount",
-        "route": "/admin/discount",
+        "display_name": "Phê duyệt",
+        "route": "/admin/documents/pending",
         "icon": "bx bx-gift"
-    },
-    {
-        "display_name": "inventory",
-        "route": "/admin/inventory",
-        "icon": "bx bx-store-alt"
-    },
-    {
-        "display_name": "settings",
-        "route": "/admin/settings",
-        "icon": "bx bx-cog"
     }
 ]

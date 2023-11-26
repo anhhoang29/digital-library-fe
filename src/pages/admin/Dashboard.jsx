@@ -79,10 +79,14 @@ const topCustomers = {
     ],
 };
 
-const renderCusomerHead = (item, index) => <th key={index}>{item}</th>;
+const renderCusomerHead = (item, index) => (
+    <th key={index} className="capitalize text-base">
+        {item}
+    </th>
+);
 
 const renderCusomerBody = (item, index) => (
-    <tr key={index}>
+    <tr key={index} className="capitalize text-base">
         <td>{item.username}</td>
         <td>{item.order}</td>
         <td>{item.price}</td>
@@ -137,10 +141,14 @@ const orderStatus = {
     refund: "danger",
 };
 
-const renderOrderHead = (item, index) => <th key={index}>{item}</th>;
+const renderOrderHead = (item, index) => (
+    <th key={index} className="capitalize text-base">
+        {item}
+    </th>
+);
 
 const renderOrderBody = (item, index) => (
-    <tr key={index}>
+    <tr key={index} className="capitalize text-base">
         <td>{item.id}</td>
         <td>{item.user}</td>
         <td>{item.price}</td>
@@ -193,7 +201,7 @@ const Dashboard = () => {
                         <div className="card__header">
                             <h3>top customers</h3>
                         </div>
-                        <div className="card__body">
+                        <div className="card__body" style={{ overflowX: "auto" }}>
                             <Table headData={topCustomers.head} renderHead={(item, index) => renderCusomerHead(item, index)} bodyData={topCustomers.body} renderBody={(item, index) => renderCusomerBody(item, index)} />
                         </div>
                         <div className="card__footer">

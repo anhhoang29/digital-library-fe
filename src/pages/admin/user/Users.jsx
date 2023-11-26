@@ -5,13 +5,16 @@ import Table from "../../../components/admin/table/Table";
 
 import ActionButton from "../../../components/admin/action-button/ActionButton";
 
-import { Button, Pagination, Modal } from "flowbite-react";
-import { HiDocumentRemove } from "react-icons/hi";
+import { Button, Pagination, Modal, Toast } from "flowbite-react";
+import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
 
-import { getAllUsers } from "../../../api/admin/userAPI";
+import { getAllUsers, deleteAUser } from "../../../api/admin/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
+import UserModal from "../../../components/admin/modal/user/UserModal";
+import profileImage from "../../../assets/images/default_profile.jpg";
 
 let selectedPage = 0;
+let refreshCounter = 0;
 
 const Users = () => {
     const customerTableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", "Trạng thái", ""];
@@ -21,12 +24,14 @@ const Users = () => {
     const renderBody = (item, index) => (
         <tr key={index}>
             <td className="text-center font-bold">{selectedPage * 20 + index + 1}</td>
-            <td className="max-w-xs text-center">Ảnh</td>
+            <td className="max-w-xs text-center">
+                <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12" />
+            </td>
             <td className="max-w-xs text-center">{item.lastName}</td>
             <td className="max-w-xs text-center">{item.firstName}</td>
             <td className="max-w-xs">{item.email}</td>
             <td className="max-w-xs text-center">{item.role && item.role.roleName}</td>
-            <td className="max-w-xs text-center">{item.deleted ? "Đang hoạt động" : "Đã xoá"}</td>
+            <td className="max-w-xs text-center">{item.deleted ? "Đã xoá" : "Đang hoạt động"}</td>
             <td className="text-center">
                 <div className="flex space-x-0">
                     <ActionButton onClick={() => handleDetail(item.userId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" />
@@ -43,12 +48,22 @@ const Users = () => {
         navigate(`/admin/users/${userId}`);
     };
 
+    const handleAdd = () => {
+        setOpenUserModal(true);
+        setIsCreatingNew(true);
+        setTriggerModal(triggerModal + 1);
+    };
+
     const handleEdit = (userId) => {
-        navigate(`/admin/userId/${userId}/edit`);
+        setOpenUserModal(true);
+        setIsCreatingNew(false);
+        setUserId(userId);
+        setTriggerModal(triggerModal + 1);
     };
 
     const handleDelete = (userId) => {
         setOpenModal(true);
+        setUserId(userId);
     };
 
     usePrivateAxios();
@@ -56,12 +71,22 @@ const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [userList, setUserList] = useState([]);
+    const [userId, setUserId] = useState("");
 
+    const [openUserModal, setOpenUserModal] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [isCreatingNew, setIsCreatingNew] = useState(true);
+    const [triggerModal, setTriggerModal] = useState(0);
+    const [status, setStatus] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         getUserList(currentPage);
     }, [currentPage]);
+
+    useEffect(() => {
+        getUserList(1);
+    }, [refreshCounter]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -74,7 +99,7 @@ const Users = () => {
             const response = await getAllUsers({
                 params: {
                     page: page - 1,
-                    size: 20,
+                    size: 15,
                 },
             });
             if (response.status === 200) {
@@ -88,10 +113,32 @@ const Users = () => {
         }
     };
 
+    const deleteUser = async (userId) => {
+        setIsLoading(true);
+        try {
+            const response = await deleteAUser(userId);
+            setIsLoading(false);
+            setOpenModal(false);
+            if (response.status === 200) {
+                setStatus(1);
+                setTimeout(() => {
+                    setStatus(0);
+                }, 2000);
+            } else {
+                setStatus(-1);
+                setTimeout(() => {
+                    setStatus(0);
+                }, 2000);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div>
             <h2 className="page-header">Người dùng</h2>
-            <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/admin/documents/new")}>
+            <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={handleAdd}>
                 <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
                 Thêm người dùng
             </Button>
@@ -117,16 +164,32 @@ const Users = () => {
                         <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bạn có chắc chắn muốn xoá người dùng này không?</h3>
                         <div className="flex justify-center gap-4">
-                            <Button color="failure" onClick={() => setOpenModal(false)}>
-                                {"Chắc chắn"}
+                            <Button color="failure" isProcessing={isLoading} onClick={() => deleteUser(userId)}>
+                                Chắc chắn
                             </Button>
-                            <Button color="gray" onClick={() => setOpenModal(false)}>
+                            <Button color="gray" disabled={isLoading} onClick={() => setOpenModal(false)}>
                                 Huỷ bỏ
                             </Button>
                         </div>
                     </div>
                 </Modal.Body>
             </Modal>
+
+            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} />
+
+            {status === -1 && (
+                <Toast className="top-1/4 right-5 w-100 fixed">
+                    <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
+                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
+                </Toast>
+            )}
+
+            {status === 1 && (
+                <Toast className="top-1/4 right-5 fixed w-100">
+                    <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
+                    <div className="pl-4 text-sm font-normal">Xoá người dùng thành công!</div>
+                </Toast>
+            )}
         </div>
     );
 };

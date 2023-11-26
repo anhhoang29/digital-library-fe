@@ -1,5 +1,5 @@
-import { privateAxios } from "./axios";
 import { useEffect } from "react";
+import { privateAxios } from "./axios";
 // import useRefreshToken from "./useRefreshToken";
 import { useNavigate } from "react-router-dom";
 
@@ -10,13 +10,9 @@ const usePrivateAxios = () => {
         const requestInterceptor = privateAxios.interceptors.request.use(
             (config) => {
                 const accessToken = localStorage.getItem("accessToken");
-                console.log("accessToken", accessToken);
 
-                if (!accessToken) {
-                    navigate("/admin/login");
-                } else {
-                    config.headers.Authorization = `Bearer ${accessToken}`;
-                }
+                if (!accessToken) navigate("/admin/login");
+                else config.headers.Authorization = `Bearer ${accessToken}`;
 
                 return config;
             },
@@ -25,6 +21,10 @@ const usePrivateAxios = () => {
 
         const responseInterceptor = privateAxios.interceptors.response.use(
             (response) => {
+                if (response.data.status === 401) {
+                    if (response.data.message === "User unauthorized. Please log in first.") navigate("/admin/login");
+                } else if (response.data.status === 403) navigate("/admin/login");
+
                 return response;
             },
             (error) => {

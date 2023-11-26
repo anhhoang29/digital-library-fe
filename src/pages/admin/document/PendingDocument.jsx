@@ -1,19 +1,18 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "../../../components/admin/table/Table";
 
 import ActionButton from "../../../components/admin/action-button/ActionButton";
 
-import { Button, Pagination, Modal, Toast } from "flowbite-react";
+import { Button, Label, Modal, Pagination, TextInput, Toast } from "flowbite-react";
 import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
 
-import { getAllDocuments, deleteADocument } from "../../../api/admin/documentAPI";
+import { approveADocument, getPendingDocuments } from "../../../api/admin/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 let selectedPage = 0;
 
-const Documents = () => {
+const PendingDocuments = () => {
     const customerTableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
 
     const renderHead = (item, index) => <th key={index}>{item}</th>;
@@ -28,8 +27,7 @@ const Documents = () => {
             <td className="text-center">
                 <div className="flex space-x-0">
                     <ActionButton onClick={() => handleDetail(item.slug)} icon="bx bxs-calendar" color="green" content="Xem chi tiết tài liệu" />
-                    <ActionButton onClick={() => handleEdit(item.slug)} icon="bx bxs-calendar-edit" color="yellow" content="Chỉnh sửa tài liệu" />
-                    <ActionButton onClick={() => handleDelete(item.id)} icon="bx bxs-calendar-x" color="red" content="Xoá tài liệu" />
+                    <ActionButton onClick={() => handleApprove(item.docId)} icon="bx bxs-calendar-edit" color="yellow" content="Phê duyệt tài liệu" />
                 </div>
             </td>
         </tr>
@@ -43,12 +41,8 @@ const Documents = () => {
         navigate(`/admin/documents/${slug}`);
     };
 
-    const handleEdit = (slug) => {
-        navigate(`/admin/documents/${slug}/edit`);
-    };
-
-    const handleDelete = (docId) => {
-        setOpenModal(true);
+    const handleApprove = (docId) => {
+        setOpenAppoveModal(true);
         setDocId(docId);
     };
 
@@ -56,7 +50,10 @@ const Documents = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [documentList, setDocumentList] = useState([]);
 
-    const [openModal, setOpenModal] = useState(false);
+    const [openAppoveModal, setOpenAppoveModal] = useState(false);
+    const [openRejectModal, setOpenRejectModal] = useState(false);
+    const [reason, setReason] = useState("");
+    const [message, setMessage] = useState("");
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [docId, setDocId] = useState("");
@@ -68,15 +65,14 @@ const Documents = () => {
     const onPageChange = (page) => {
         setCurrentPage(page);
         selectedPage = page - 1;
-        // data
     };
 
     const getDocumentList = async (page) => {
         try {
-            const response = await getAllDocuments({
+            const response = await getPendingDocuments({
                 params: {
                     page: page - 1,
-                    size: 15,
+                    size: 10,
                     order: "docId",
                 },
             });
@@ -91,23 +87,42 @@ const Documents = () => {
         }
     };
 
-    const deleteDocument = async (docId) => {
+    const approveDocument = async (docId, approvedStatus) => {
         setIsLoading(true);
         try {
-            const response = await deleteADocument(docId);
+            const response = await approveADocument(docId, {
+                params: {
+                    isApproved: approvedStatus,
+                    note: reason,
+                },
+            });
+
             setIsLoading(false);
-            setOpenModal(false);
+            if (approvedStatus) setOpenAppoveModal(false);
+            else {
+                setOpenRejectModal(false);
+                setReason("");
+            }
+
             if (response.status === 200) {
                 setStatus(1);
+
+                if (approvedStatus) setMessage("Phê duyệt tài liệu thành công!");
+                else setMessage("Đã từ chối tài liệu!");
+
                 setTimeout(() => {
                     setStatus(0);
-                }, 2000);
+                }, 4000);
+
                 getDocumentList(1);
+                setCurrentPage(1);
+                selectedPage = 0;
             } else {
                 setStatus(-1);
+                setMessage("Đã xảy ra lỗi!");
                 setTimeout(() => {
                     setStatus(0);
-                }, 2000);
+                }, 4000);
             }
         } catch (error) {
             console.log(error);
@@ -116,12 +131,7 @@ const Documents = () => {
 
     return (
         <div>
-            <h2 className="page-header">tài liệu</h2>
-            <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/admin/documents/new")}>
-                <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
-                Thêm tài liệu
-            </Button>
-
+            <h2 className="page-header">tài liệu đang chờ</h2>
             <div className="row">
                 <div className="col-12">
                     <div className="card">
@@ -136,17 +146,50 @@ const Documents = () => {
                 </div>
             </div>
 
-            <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+            <Modal show={openAppoveModal} size="md" onClose={() => setOpenAppoveModal(false)} popup>
                 <Modal.Header />
                 <Modal.Body>
                     <div className="text-center">
                         <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bạn có chắc chắn muốn xoá tài liệu này không?</h3>
+                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Thao tác phê duyệt</h3>
                         <div className="flex justify-center gap-4">
-                            <Button color="failure" isProcessing={isLoading} onClick={() => deleteDocument(docId)}>
-                                {"Chắc chắn"}
+                            <Button color="success" isProcessing={isLoading} onClick={() => approveDocument(docId, true)}>
+                                Phê duyệt
                             </Button>
-                            <Button color="gray" disabled={isLoading} onClick={() => setOpenModal(false)}>
+                            <Button
+                                color="warning"
+                                disabled={isLoading}
+                                onClick={() => {
+                                    setOpenRejectModal(true);
+                                    setOpenAppoveModal(false);
+                                }}>
+                                Từ chối
+                            </Button>
+                            <Button color="gray" disabled={isLoading} onClick={() => setOpenAppoveModal(false)}>
+                                Huỷ bỏ
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={openRejectModal} size="md" onClose={() => setOpenRejectModal(false)} popup>
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bạn có chắc chắn muốn từ chối tài liệu này không?</h3>
+                        <div className="mb-4">
+                            <div className="mb-2 block">
+                                <Label htmlFor="reason" value="Lý do" />
+                            </div>
+                            <TextInput id="reason" placeholder="Tài liệu không đầy đủ" value={reason} onChange={(event) => setReason(event.target.value)} required />
+                        </div>
+                        <div className="flex justify-center gap-4">
+                            <Button color="warning" isProcessing={isLoading} onClick={() => approveDocument(docId, false)}>
+                                Từ chối
+                            </Button>
+                            <Button color="gray" disabled={isLoading} onClick={() => setOpenRejectModal(false)}>
                                 Huỷ bỏ
                             </Button>
                         </div>
@@ -157,18 +200,18 @@ const Documents = () => {
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
                     <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
-                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
+                    <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}
 
             {status === 1 && (
                 <Toast className="top-1/4 right-5 fixed w-100">
                     <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
-                    <div className="pl-4 text-sm font-normal">Xoá tài liệu thành công!</div>
+                    <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}
         </div>
     );
 };
 
-export default Documents;
+export default PendingDocuments;

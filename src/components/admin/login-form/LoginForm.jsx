@@ -1,7 +1,6 @@
-import React, { useRef } from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "../../../api/axios";
 
@@ -73,9 +72,12 @@ const LoginForm = () => {
                 } else if (response.data.status === 400) {
                     setMessage("Có lỗi xảy ra");
                 } else {
+                    setMessage("Đăng nhập thành công");
                     localStorage.setItem("accessToken", response.data.data.accessToken);
                     localStorage.setItem("refreshToken", response.data.data.refreshToken);
-                    navigate(from);
+                    setTimeout(() => {
+                        navigate(from);
+                    }, 2000);
                 }
             } catch (error) {
                 console.log(error);

@@ -5,10 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import { getAllCategories } from "../../../api/admin/categoryAPI";
 import { getAllFields } from "../../../api/admin/fieldAPI";
-import { getAllOrganizations } from "../../../api/admin/organizationAPI";
+import { getAccessibleOrganizations } from "../../../api/admin/organizationAPI";
 import { getADocument, updateDocument } from "../../../api/admin/documentAPI";
 
-import { Spinner, Toast } from "flowbite-react";
+import { Button, Spinner, Toast } from "flowbite-react";
 import { HiOutlineCloudUpload, HiExclamation, HiAnnotation } from "react-icons/hi";
 
 const EditDocument = () => {
@@ -56,7 +56,7 @@ const EditDocument = () => {
 
     const getOrganizationList = async () => {
         try {
-            const response = await getAllOrganizations({
+            const response = await getAccessibleOrganizations({
                 params: {
                     page: 0,
                     size: 100,
@@ -243,12 +243,12 @@ const EditDocument = () => {
     return (
         <div className="grid place-items-center">
             <h1 className="mb-10 text-3xl font-bold dark:text-white ">Chỉnh sửa tài liệu</h1>
-
+{/* 
             {isLoading && (
                 <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-white bg-opacity-50 z-50">
                     <Spinner aria-label="Uploading" size="xl" />
                 </div>
-            )}
+            )} */}
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
@@ -412,9 +412,9 @@ const EditDocument = () => {
                                     {!isFileValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* {fileMessage}</p>}
                                 </div>
 
-                                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Lưu thay đổi
-                                </button>
+                                <Button type="submit" isProcessing={isLoading} color="success" className="w-28">
+                                    Lưu
+                                </Button>
                             </form>
                         </div>
                     </div>

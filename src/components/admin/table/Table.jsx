@@ -1,15 +1,17 @@
-import React from 'react'
+import React from "react";
 
-import './table.css'
+import "./table.css";
 
-const Table = props => {
+const Table = (props) => {
     return (
         <div>
             <div className="table-wrapper">
                 <table>
-                    {props.headData && props.renderHead? (
+                    {props.headData && props.renderHead ? (
                         <thead>
-                            <tr className='text-center'>{props.headData.map((item, index) => props.renderHead(item, index))}</tr>
+                            <tr>
+                                {props.headData.map((item, index) => props.renderHead(item, index))}
+                            </tr>
                         </thead>
                     ) : null}
                     {props.bodyData && props.renderBody ? <tbody>{props.bodyData.map((item, index) => props.renderBody(item, index))}</tbody> : null}
@@ -17,6 +19,6 @@ const Table = props => {
             </div>
         </div>
     );
-}
+};
 
-export default Table
+export default Table;

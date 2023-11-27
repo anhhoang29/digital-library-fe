@@ -226,7 +226,7 @@ const EditDocument = () => {
                 if (response.status === 200) {
                     setStatus(1);
                     setTimeout(() => {
-                        navigate("/admin/documents");
+                        navigate(-1);
                     }, 2000);
                 } else {
                     setStatus(-1);

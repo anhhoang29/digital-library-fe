@@ -62,3 +62,12 @@ export const approveADocument = async (docId, config) => {
         throw error;
     }
 };
+
+export const getLatestDocuments = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/latest", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

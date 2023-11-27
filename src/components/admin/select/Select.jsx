@@ -3,7 +3,7 @@ import React from "react";
 const Select = (props) => {
     const { selectName, options, selectedValue, onChangeHandler, name, field} = props;
     return (
-        <div className="mb-2 mt-6">
+        <div className="mb-2">
             <label htmlFor="hs-select-label" className="block text-sm font-medium mb-2 dark:text-white">
                 {selectName}
             </label>

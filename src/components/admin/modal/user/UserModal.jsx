@@ -13,7 +13,7 @@ import profileImage from "../../../../assets/images/default_profile.jpg";
 const UserModal = (props) => {
     usePrivateAxios();
 
-    const { userId, openUserModal, isCreatingNew, triggerModal } = props;
+    const { userId, openUserModal, isCreatingNew, triggerModal, refreshUserList } = props;
 
     const genderList = [
         { id: 0, name: "Nam" },
@@ -258,6 +258,8 @@ const UserModal = (props) => {
                         setOpenModal(false);
                         setStatus(0);
                     }, 2000);
+
+                    refreshUserList();
                 } else {
                     setStatus(-1);
 

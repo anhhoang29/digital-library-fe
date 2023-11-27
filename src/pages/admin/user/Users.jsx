@@ -1,20 +1,18 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useMatch } from "react-router-dom";
 import Table from "../../../components/admin/table/Table";
 
 import ActionButton from "../../../components/admin/action-button/ActionButton";
 
-import { Button, Pagination, Modal, Toast } from "flowbite-react";
+import { Button, Modal, Pagination, Toast } from "flowbite-react";
 import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
 
-import { getAllUsers, deleteAUser } from "../../../api/admin/userAPI";
+import { deleteAUser, getAllUsers, getLatestUsers } from "../../../api/admin/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
-import UserModal from "../../../components/admin/modal/user/UserModal";
 import profileImage from "../../../assets/images/default_profile.jpg";
+import UserModal from "../../../components/admin/modal/user/UserModal";
 
 let selectedPage = 0;
-let refreshCounter = 0;
 
 const Users = () => {
     const customerTableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", "Trạng thái", ""];
@@ -47,6 +45,8 @@ const Users = () => {
     const handleDetail = (userId) => {
         navigate(`/admin/users/${userId}`);
     };
+
+    const isLatestRoute = useMatch("/admin/users/latest");
 
     const handleAdd = () => {
         setOpenUserModal(true);
@@ -81,12 +81,9 @@ const Users = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        getUserList(currentPage);
+        if(isLatestRoute) getLatestUserList(currentPage);
+        else getUserList(currentPage);
     }, [currentPage]);
-
-    useEffect(() => {
-        getUserList(1);
-    }, [refreshCounter]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -97,6 +94,25 @@ const Users = () => {
     const getUserList = async (page) => {
         try {
             const response = await getAllUsers({
+                params: {
+                    page: page - 1,
+                    size: 15,
+                },
+            });
+            if (response.status === 200) {
+                setUserList(response.data.content);
+                setTotalPages(response.data.totalPages);
+            } else {
+                navigate("/admin/login");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getLatestUserList = async (page) => {
+        try {
+            const response = await getLatestUsers({
                 params: {
                     page: page - 1,
                     size: 15,
@@ -137,7 +153,7 @@ const Users = () => {
 
     return (
         <div>
-            <h2 className="page-header">Người dùng</h2>
+            <h2 className="page-header">{isLatestRoute ? "Người dùng mới" : "Người dùng"}</h2>
             <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={handleAdd}>
                 <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
                 Thêm người dùng
@@ -175,7 +191,8 @@ const Users = () => {
                 </Modal.Body>
             </Modal>
 
-            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} />
+            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} 
+            refreshUserList={() => isLatestRoute ? getLatestUserList(1) : getUserList(1)}/>
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">

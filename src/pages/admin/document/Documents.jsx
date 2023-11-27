@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import Table from "../../../components/admin/table/Table";
 
 import ActionButton from "../../../components/admin/action-button/ActionButton";
@@ -8,7 +8,7 @@ import ActionButton from "../../../components/admin/action-button/ActionButton";
 import { Button, Pagination, Modal, Toast } from "flowbite-react";
 import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
 
-import { getAllDocuments, deleteADocument } from "../../../api/admin/documentAPI";
+import { getAllDocuments, deleteADocument, getLatestDocuments } from "../../../api/admin/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 let selectedPage = 0;
@@ -37,6 +37,8 @@ const Documents = () => {
 
     const navigate = useNavigate();
 
+    const isLatestRoute = useMatch("/admin/documents/latest")
+
     usePrivateAxios();
 
     const handleDetail = (slug) => {
@@ -62,7 +64,8 @@ const Documents = () => {
     const [docId, setDocId] = useState("");
 
     useEffect(() => {
-        getDocumentList(currentPage);
+        if (isLatestRoute) getLatestDocumentList(currentPage);
+        else getDocumentList(currentPage);
     }, [currentPage]);
 
     const onPageChange = (page) => {
@@ -78,6 +81,25 @@ const Documents = () => {
                     page: page - 1,
                     size: 15,
                     order: "docId",
+                },
+            });
+            if (response.status === 200) {
+                setDocumentList(response.data.content);
+                setTotalPages(response.data.totalPages);
+            } else {
+                navigate("/admin/login");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getLatestDocumentList = async (page) => {
+        try {
+            const response = await getLatestDocuments({
+                params: {
+                    page: page - 1,
+                    size: 15,
                 },
             });
             if (response.status === 200) {

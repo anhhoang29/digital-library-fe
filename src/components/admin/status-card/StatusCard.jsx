@@ -4,7 +4,7 @@ import './statuscard.css'
 
 const StatusCard = props => {
     return (
-        <div className='status-card'>
+        <a className='status-card' href={props.link}>
             <div className="status-card__icon">
                 <i className={props.icon}></i>
             </div>
@@ -12,7 +12,7 @@ const StatusCard = props => {
                 <h4 className="info">{props.count}</h4>
                 <span>{props.title}</span>
             </div>
-        </div>
+        </a>
     )
 }
 

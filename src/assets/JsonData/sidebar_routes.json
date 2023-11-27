@@ -2,27 +2,27 @@
     {
         "display_name": "Trang chủ",
         "route": "/admin",
-        "icon": "bx bx-category-alt"
+        "icon": "bx bx-atom"
     },
     {
         "display_name": "Tài liệu",
         "route": "/admin/documents",
-        "icon": "bx bx-user-pin"
+        "icon": "bx bx-file"
     },
     {
         "display_name": "Danh mục",
         "route": "/admin/categories",
-        "icon": "bx bx-package"
+        "icon": "bx bx-category-alt"
     },
     {
         "display_name": "Lĩnh vực",
         "route": "/admin/fields",
-        "icon": "bx bx-cart"
+        "icon": "bx bx-cube"
     },
     {
         "display_name": "Trường học",
         "route": "/admin/organizations",
-        "icon": "bx bx-bar-chart-alt"
+        "icon": "bx bx-buildings"
     },
     {
         "display_name": "Người dùng",
@@ -32,6 +32,6 @@
     {
         "display_name": "Phê duyệt",
         "route": "/admin/documents/pending",
-        "icon": "bx bx-gift"
+        "icon": "bx bx-notification"
     }
 ]

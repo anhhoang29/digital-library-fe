@@ -44,3 +44,12 @@ export const deleteAUser = async (userId, config) => {
         throw error;
     }
 };
+
+export const getLatestUsers = async (config) => {
+    try {
+        const response = await privateAxios.get("/users/latest", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

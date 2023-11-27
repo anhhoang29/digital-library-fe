@@ -76,7 +76,7 @@ const LoginForm = () => {
                     localStorage.setItem("accessToken", response.data.data.accessToken);
                     localStorage.setItem("refreshToken", response.data.data.refreshToken);
                     setTimeout(() => {
-                        navigate(from);
+                        navigate("/admin/home");
                     }, 2000);
                 }
             } catch (error) {

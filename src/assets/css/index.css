@@ -159,4 +159,11 @@ input:focus {
     color: #fff;
 }
 
+.image__profile__background{
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
 
+.profile-info {
+    padding: 30px;
+}

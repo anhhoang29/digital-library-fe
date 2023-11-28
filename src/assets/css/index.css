@@ -87,8 +87,10 @@ input:focus {
 }
 
 .page-header {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-transform: capitalize;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .card {
@@ -109,6 +111,8 @@ input:focus {
 
 .card__header {
     text-transform: capitalize;
+    font-weight: bold;
+    font-size: 1.17em;
 }
 
 .card > div ~ div {
@@ -153,4 +157,13 @@ input:focus {
 .orange-color {
     background-color: var(--main-color-orange);
     color: #fff;
+}
+
+.image__profile__background{
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.profile-info {
+    padding: 30px;
 }

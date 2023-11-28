@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -10,9 +10,10 @@ import StatusCard from "../../components/admin/status-card/StatusCard";
 
 import Table from "../../components/admin/table/Table";
 
-import Badge from "../../components/admin/badge/Badge";
-
-import statusCards from "../../assets/JsonData/status-card-data.json";
+import { getLatestDocuments } from "../../api/admin/documentAPI";
+import { getGeneralStatistics } from "../../api/admin/statisticsAPI";
+import { getLatestUsers } from "../../api/admin/userAPI";
+import usePrivateAxios from "../../api/usePrivateAxios";
 
 const chartOptions = {
     series: [
@@ -48,111 +49,139 @@ const chartOptions = {
     },
 };
 
-const topCustomers = {
-    head: ["user", "total orders", "total spending"],
-    body: [
-        {
-            username: "john doe",
-            order: "490",
-            price: "$15,870",
-        },
-        {
-            username: "frank iva",
-            order: "250",
-            price: "$12,251",
-        },
-        {
-            username: "anthony baker",
-            order: "120",
-            price: "$10,840",
-        },
-        {
-            username: "frank iva",
-            order: "110",
-            price: "$9,251",
-        },
-        {
-            username: "anthony baker",
-            order: "80",
-            price: "$8,840",
-        },
-    ],
-};
+const latestUserHead = ["Họ", "Tên", "Trường"];
 
-const renderCusomerHead = (item, index) => <th key={index}>{item}</th>;
+const renderLatestUserHead = (item, index) => (
+    <th key={index} className="capitalize text-base">
+        {item}
+    </th>
+);
 
-const renderCusomerBody = (item, index) => (
-    <tr key={index}>
-        <td>{item.username}</td>
-        <td>{item.order}</td>
-        <td>{item.price}</td>
+const renderLatestUserBody = (item, index) => (
+    <tr key={index} className="capitalize text-base">
+        <td>{item.lastName}</td>
+        <td>{item.firstName}</td>
+        <td>{item?.organization?.orgName}</td>
     </tr>
 );
 
-const latestOrders = {
-    header: ["order id", "user", "total price", "date", "status"],
-    body: [
-        {
-            id: "#OD1711",
-            user: "john doe",
-            date: "17 Jun 2021",
-            price: "$900",
-            status: "shipping",
-        },
-        {
-            id: "#OD1712",
-            user: "frank iva",
-            date: "1 Jun 2021",
-            price: "$400",
-            status: "paid",
-        },
-        {
-            id: "#OD1713",
-            user: "anthony baker",
-            date: "27 Jun 2021",
-            price: "$200",
-            status: "pending",
-        },
-        {
-            id: "#OD1712",
-            user: "frank iva",
-            date: "1 Jun 2021",
-            price: "$400",
-            status: "paid",
-        },
-        {
-            id: "#OD1713",
-            user: "anthony baker",
-            date: "27 Jun 2021",
-            price: "$200",
-            status: "refund",
-        },
-    ],
-};
+const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường", "Trạng thái"];
 
-const orderStatus = {
-    shipping: "primary",
-    pending: "warning",
-    paid: "success",
-    refund: "danger",
-};
+// const orderStatus = {
+//     shipping: "primary",
+//     pending: "warning",
+//     paid: "success",
+//     refund: "danger",
+// };
 
-const renderOrderHead = (item, index) => <th key={index}>{item}</th>;
+const renderLatestDocumentHead = (item, index) => (
+    <th key={index} className="capitalize text-base">
+        {item}
+    </th>
+);
 
-const renderOrderBody = (item, index) => (
-    <tr key={index}>
-        <td>{item.id}</td>
-        <td>{item.user}</td>
-        <td>{item.price}</td>
-        <td>{item.date}</td>
-        <td>
-            <Badge type={orderStatus[item.status]} content={item.status} />
-        </td>
+const renderLatestDocumentBody = (item, index) => (
+    <tr key={index} className="capitalize text-base">
+        <td>{item.docName}</td>
+        <td>{item?.field?.fieldName}</td>
+        <td>{item?.category?.categoryName}</td>
+        <td>{item?.organization?.orgName}</td>
+        <td>{/* <Badge type={orderStatus[item.status]} content={item.status} /> */}</td>
     </tr>
 );
 
 const Dashboard = () => {
     const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+
+    usePrivateAxios();
+
+    const [totalDocuments, setTotalDocuments] = useState(0);
+    const [totalPendingDocuments, setTotalPendingDocuments] = useState(0);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [latestUsers, setLatestUsers] = useState([]);
+    const [latestDocuments, setLatestDocuments] = useState([]);
+
+    const statusCards = [
+        {
+            icon: "bx bx-user",
+            count: totalUsers,
+            title: "Người dùng",
+            link: "/admin/users",
+        },
+        {
+            icon: "bx bx-cart",
+            count: 0,
+            title: "Daily visits",
+            link: "#"
+        },
+        {
+            icon: "bx bx-file",
+            count: totalDocuments,
+            title: "Tài liệu",
+            link: "/admin/documents",
+        },
+        {
+            icon: "bx bx-time-five",
+            count: totalPendingDocuments,
+            title: "Đang chờ duyệt",
+            link: "/admin/documents/pending",
+        },
+    ];
+
+    useEffect(() => {
+        getStatistics();
+        getLatestUserList();
+        getLatestDocumentList();
+    }, []);
+
+    useEffect(
+        () => {
+            statusCards[0].count = totalUsers;
+            statusCards[2].count = totalDocuments;
+            statusCards[3].count = totalPendingDocuments;
+        },
+        totalDocuments,
+        totalPendingDocuments,
+        totalUsers,
+    );
+
+    const getStatistics = async () => {
+        try {
+            const response = await getGeneralStatistics();
+
+            if (response.status === 200) {
+                setTotalDocuments(response.data.totalDocuments);
+                setTotalPendingDocuments(response.data.totalPendingDocuments);
+                setTotalUsers(response.data.totalUsers);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getLatestUserList = async () => {
+        try {
+            const response = await getLatestUsers();
+
+            if (response.status === 200) {
+                setLatestUsers(response.data.content);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getLatestDocumentList = async () => {
+        try {
+            const response = await getLatestDocuments();
+
+            if (response.status === 200) {
+                setLatestDocuments(response.data.content);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div>
@@ -162,7 +191,7 @@ const Dashboard = () => {
                     <div className="row">
                         {statusCards.map((item, index) => (
                             <div className="col-6" key={index}>
-                                <StatusCard icon={item.icon} count={item.count} title={item.title} />
+                                <StatusCard icon={item.icon} count={item.count} title={item.title} link={item.link}/>
                             </div>
                         ))}
                     </div>
@@ -191,26 +220,30 @@ const Dashboard = () => {
                 <div className="col-4">
                     <div className="card">
                         <div className="card__header">
-                            <h3>top customers</h3>
+                            <h3>Người dùng mới nhất</h3>
                         </div>
-                        <div className="card__body">
-                            <Table headData={topCustomers.head} renderHead={(item, index) => renderCusomerHead(item, index)} bodyData={topCustomers.body} renderBody={(item, index) => renderCusomerBody(item, index)} />
+                        <div className="card__body overflow-x-auto">
+                            <Table headData={latestUserHead} renderHead={(item, index) => renderLatestUserHead(item, index)} bodyData={latestUsers} renderBody={(item, index) => renderLatestUserBody(item, index)} />
                         </div>
                         <div className="card__footer">
-                            <Link to="/">view all</Link>
+                            <Link to="/admin/users/latest" className="font-bold">
+                                Xem tất cả
+                            </Link>
                         </div>
                     </div>
                 </div>
                 <div className="col-8">
                     <div className="card">
                         <div className="card__header">
-                            <h3>latest orders</h3>
+                            <h3>Tài liệu mới nhất</h3>
                         </div>
-                        <div className="card__body">
-                            <Table headData={latestOrders.header} renderHead={(item, index) => renderOrderHead(item, index)} bodyData={latestOrders.body} renderBody={(item, index) => renderOrderBody(item, index)} />
+                        <div className="card__body overflow-x-auto">
+                            <Table headData={latestDocumentHead} renderHead={(item, index) => renderLatestDocumentHead(item, index)} bodyData={latestDocuments} renderBody={(item, index) => renderLatestDocumentBody(item, index)} />
                         </div>
                         <div className="card__footer">
-                            <Link to="/">view all</Link>
+                            <Link to="/admin/documents/latest" className="font-bold">
+                                Xem tất cả
+                            </Link>
                         </div>
                     </div>
                 </div>

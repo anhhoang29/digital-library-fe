@@ -1,18 +1,14 @@
 [
     {
         "icon": "bx bx-user",
-        "content": "Profile"
-    },
-    {
-        "icon": "bx bx-wallet-alt",
-        "content": "My Wallet"
+        "content": "Trang cá nhân"
     },
     {
         "icon": "bx bx-cog",
-        "content": "Settings"
+        "content": "Cài đặt"
     },
     {
         "icon": "bx bx-log-out-circle bx-rotate-180",
-        "content": "Logout"
+        "content": "Đăng xuất"
     }
 ]

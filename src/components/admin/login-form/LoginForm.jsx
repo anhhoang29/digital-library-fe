@@ -1,7 +1,6 @@
-import React, { useRef } from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "../../../api/axios";
 
@@ -18,7 +17,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/admin";
+    const from = location.state?.from?.pathname || "/admin/documents";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -73,8 +72,12 @@ const LoginForm = () => {
                 } else if (response.data.status === 400) {
                     setMessage("Có lỗi xảy ra");
                 } else {
+                    setMessage("Đăng nhập thành công");
                     localStorage.setItem("accessToken", response.data.data.accessToken);
                     localStorage.setItem("refreshToken", response.data.data.refreshToken);
+                    setTimeout(() => {
+                        navigate("/admin/home");
+                    }, 2000);
                 }
             } catch (error) {
                 console.log(error);

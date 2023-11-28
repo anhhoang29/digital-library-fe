@@ -2,46 +2,36 @@
     {
         "display_name": "Trang chủ",
         "route": "/admin",
-        "icon": "bx bx-category-alt"
+        "icon": "bx bx-atom"
     },
     {
         "display_name": "Tài liệu",
-        "route": "/admin/customers",
-        "icon": "bx bx-user-pin"
+        "route": "/admin/documents",
+        "icon": "bx bx-file"
     },
     {
         "display_name": "Danh mục",
-        "route": "/admin/products",
-        "icon": "bx bx-package"
+        "route": "/admin/categories",
+        "icon": "bx bx-category-alt"
     },
     {
         "display_name": "Lĩnh vực",
-        "route": "/admin/orders",
-        "icon": "bx bx-cart"
+        "route": "/admin/fields",
+        "icon": "bx bx-cube"
     },
     {
-        "display_name": "Tổ chức",
-        "route": "/admin/analytics",
-        "icon": "bx bx-bar-chart-alt"
+        "display_name": "Trường học",
+        "route": "/admin/organizations",
+        "icon": "bx bx-buildings"
     },
     {
         "display_name": "Người dùng",
-        "route": "/admin/categories",
-        "icon": "bx bx-list-ol"
+        "route": "/admin/users",
+        "icon": "bx bx-user"
     },
     {
-        "display_name": "discount",
-        "route": "/admin/discount",
-        "icon": "bx bx-gift"
-    },
-    {
-        "display_name": "inventory",
-        "route": "/admin/inventory",
-        "icon": "bx bx-store-alt"
-    },
-    {
-        "display_name": "settings",
-        "route": "/admin/settings",
-        "icon": "bx bx-cog"
+        "display_name": "Phê duyệt",
+        "route": "/admin/documents/pending",
+        "icon": "bx bx-notification"
     }
 ]

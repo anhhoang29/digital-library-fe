@@ -50,7 +50,7 @@ const Topnav = () => {
     return (
         <div className='topnav'>
             <div className="topnav__search">
-                <input type="text" placeholder='Search here...' />
+                <input className="search_input" type="text" placeholder='Nhập để tìm kiếm...' />
                 <i className='bx bx-search'></i>
             </div>
             <div className="topnav__right">
@@ -68,7 +68,7 @@ const Topnav = () => {
                         badge='12'
                         contentData={notifications}
                         renderItems={(item, index) => renderNotificationItem(item, index)}
-                        renderFooter={() => <Link to='/'>View All</Link>}
+                        renderFooter={() => <Link to='/'>Xem tất cả</Link>}
                     />
                     {/* dropdown here */}
                 </div>

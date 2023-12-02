@@ -1,14 +1,15 @@
 import React from "react";
+import { BrowserRouter} from "react-router-dom";
+
 import RootRouters from "./components/routers/RootRouters";
-import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
     return (
-        <Router>
+        <BrowserRouter>
             <div className="App">
                 <RootRouters />
             </div>
-        </Router>
+        </BrowserRouter>
     );
 }
 

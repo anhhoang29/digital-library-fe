@@ -1,7 +1,7 @@
 [
     {
         "display_name": "Trang chủ",
-        "route": "/admin",
+        "route": "/admin/home",
         "icon": "bx bx-atom"
     },
     {

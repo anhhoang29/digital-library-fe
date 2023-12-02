@@ -1,14 +1,17 @@
 [
     {
         "icon": "bx bx-user",
-        "content": "Trang cá nhân"
+        "content": "Trang cá nhân",
+        "link": "/admin/profile"
     },
     {
         "icon": "bx bx-cog",
-        "content": "Cài đặt"
+        "content": "Cài đặt",
+        "link": "#"
     },
     {
         "icon": "bx bx-log-out-circle bx-rotate-180",
-        "content": "Đăng xuất"
+        "content": "Đăng xuất",
+        "link": "#"
     }
 ]

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Select from "../../../components/admin/select/Select";
 import { useNavigate, useParams } from "react-router-dom";
+import Select from "../../../components/management/select/Select";
 
+import { getAllCategories } from "../../../api/main/categoryAPI";
+import { getADocument, updateDocument } from "../../../api/main/documentAPI";
+import { getAllFields } from "../../../api/main/fieldAPI";
+import { getAccessibleOrganizations } from "../../../api/main/organizationAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
-import { getAllCategories } from "../../../api/admin/categoryAPI";
-import { getAllFields } from "../../../api/admin/fieldAPI";
-import { getAccessibleOrganizations } from "../../../api/admin/organizationAPI";
-import { getADocument, updateDocument } from "../../../api/admin/documentAPI";
 
-import { Button, Spinner, Toast } from "flowbite-react";
-import { HiOutlineCloudUpload, HiExclamation, HiAnnotation } from "react-icons/hi";
+import { Button, Toast } from "flowbite-react";
+import { HiAnnotation, HiExclamation, HiOutlineCloudUpload, HiChevronLeft, HiChevronUp } from "react-icons/hi";
 
 const EditDocument = () => {
     usePrivateAxios();
@@ -210,8 +210,7 @@ const EditDocument = () => {
 
                 const formData = new FormData();
                 formData.append("document", JSON.stringify(updatedDocument));
-                if(selectedFile)
-                    formData.append("file", selectedFile);
+                if (selectedFile) formData.append("file", selectedFile);
 
                 const config = {
                     headers: {
@@ -243,22 +242,16 @@ const EditDocument = () => {
     return (
         <div className="grid place-items-center">
             <h1 className="mb-10 text-3xl font-bold dark:text-white ">Chỉnh sửa tài liệu</h1>
-{/* 
-            {isLoading && (
-                <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-white bg-opacity-50 z-50">
-                    <Spinner aria-label="Uploading" size="xl" />
-                </div>
-            )} */}
 
             {status === -1 && (
-                <Toast className="top-1/4 right-5 w-100 fixed">
+                <Toast className="top-1/4 right-5 w-100 fixed z-50">
                     <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
                     <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
                 </Toast>
             )}
 
             {status === 1 && (
-                <Toast className="top-1/4 right-5 fixed w-100">
+                <Toast className="top-1/4 right-5 fixed w-100 z-50">
                     <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
                     <div className="pl-4 text-sm font-normal">Cập nhật thành công!</div>
                 </Toast>
@@ -294,7 +287,7 @@ const EditDocument = () => {
                                     {!isNameValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng nhập tên</p>}
                                 </div>
 
-                                <div className="">
+                                <div className="mb-6">
                                     <label htmlFor="message" className="block mb-2 text-sm font-medium dark:text-white">
                                         Mô tả
                                     </label>
@@ -312,44 +305,50 @@ const EditDocument = () => {
                                     {!isIntroductionValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng nhập mô tả</p>}
                                 </div>
 
-                                <Select
-                                    selectName="Trường học"
-                                    options={organizationList}
-                                    selectedValue={organizationId}
-                                    onChangeHandler={(e) => {
-                                        setOrganizationId(e.target.value);
-                                    }}
-                                    name="orgName"
-                                    field="orgId"
-                                    required
-                                />
-                                {!isOrganizationValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn trường học</p>}
+                                <div className="mb-6">
+                                    <Select
+                                        selectName="Trường học"
+                                        options={organizationList}
+                                        selectedValue={organizationId}
+                                        onChangeHandler={(e) => {
+                                            setOrganizationId(e.target.value);
+                                        }}
+                                        name="orgName"
+                                        field="orgId"
+                                        required
+                                    />
+                                    {!isOrganizationValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn trường học</p>}
+                                </div>
 
-                                <Select
-                                    selectName="Danh mục"
-                                    options={categoryList}
-                                    selectedValue={categoryId}
-                                    onChangeHandler={(e) => {
-                                        setCategoryId(e.target.value);
-                                    }}
-                                    name="categoryName"
-                                    field="categoryId"
-                                    required
-                                />
-                                {!isCategoryValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn danh mục</p>}
+                                <div className="mb-6">
+                                    <Select
+                                        selectName="Danh mục"
+                                        options={categoryList}
+                                        selectedValue={categoryId}
+                                        onChangeHandler={(e) => {
+                                            setCategoryId(e.target.value);
+                                        }}
+                                        name="categoryName"
+                                        field="categoryId"
+                                        required
+                                    />
+                                    {!isCategoryValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn danh mục</p>}
+                                </div>
 
-                                <Select
-                                    selectName="Lĩnh vực"
-                                    options={fieldList}
-                                    selectedValue={fieldId}
-                                    onChangeHandler={(e) => {
-                                        setFieldId(e.target.value);
-                                    }}
-                                    name="fieldName"
-                                    field="fieldId"
-                                    required
-                                />
-                                {!isFieldValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn lĩnh vực</p>}
+                                <div className="mb-6">
+                                    <Select
+                                        selectName="Lĩnh vực"
+                                        options={fieldList}
+                                        selectedValue={fieldId}
+                                        onChangeHandler={(e) => {
+                                            setFieldId(e.target.value);
+                                        }}
+                                        name="fieldName"
+                                        field="fieldId"
+                                        required
+                                    />
+                                    {!isFieldValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn lĩnh vực</p>}
+                                </div>
 
                                 <div className="mb-6 mt-6">
                                     <label className="block mb-2 text-sm font-medium dark:text-white">Chọn đối tượng xem tài liệu</label>
@@ -398,9 +397,9 @@ const EditDocument = () => {
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <HiOutlineCloudUpload className="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400 font-bold" />
                                                 <p className="mb-2 text-medium text-green-500 dark:text-gray-400">
-                                                    <span className="font-semibold">Nhấn để tải lên</span> hoặc kéo thả
+                                                    <span className="font-semibold">Nhấn để tải lên</span>
                                                 </p>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedFile ? `Selected file: ${selectedFile.name}` : "PDF (tối đa 100MB)"}</p>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedFile ? `Tệp đã chọn: ${selectedFile.name}` : "PDF (tối đa 100MB)"}</p>
                                             </div>
                                             <input id="dropzone-file" type="file" className="hidden" accept=".pdf" onChange={handleFileChange} />
                                         </label>
@@ -412,9 +411,17 @@ const EditDocument = () => {
                                     {!isFileValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* {fileMessage}</p>}
                                 </div>
 
-                                <Button type="submit" isProcessing={isLoading} color="success" className="w-28">
-                                    Lưu
-                                </Button>
+                                <div className="flex flex-wrap gap-2">
+                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/admin/documents")}>
+                                        <HiChevronLeft className="mr-2 h-5 w-5" />
+                                        Huỷ bỏ
+                                    </Button>
+
+                                    <Button type="submit" isProcessing={isLoading} color="success" className="w-auto">
+                                        Lưu
+                                        <HiChevronUp className="ml-2 h-5 w-5" />
+                                    </Button>
+                                </div>
                             </form>
                         </div>
                     </div>

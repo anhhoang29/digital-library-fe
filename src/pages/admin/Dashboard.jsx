@@ -6,13 +6,13 @@ import Chart from "react-apexcharts";
 
 import { useSelector } from "react-redux";
 
-import StatusCard from "../../components/admin/status-card/StatusCard";
+import StatusCard from "../../components/management/status-card/StatusCard";
 
-import Table from "../../components/admin/table/Table";
+import Table from "../../components/management/table/Table";
 
-import { getLatestDocuments } from "../../api/admin/documentAPI";
-import { getGeneralStatistics } from "../../api/admin/statisticsAPI";
-import { getLatestUsers } from "../../api/admin/userAPI";
+import { getLatestDocuments } from "../../api/main/documentAPI";
+import { getGeneralStatistics } from "../../api/main/statisticsAPI";
+import { getLatestUsers } from "../../api/main/userAPI";
 import usePrivateAxios from "../../api/usePrivateAxios";
 
 const chartOptions = {
@@ -65,7 +65,7 @@ const renderLatestUserBody = (item, index) => (
     </tr>
 );
 
-const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường", "Trạng thái"];
+const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường"];
 
 // const orderStatus = {
 //     shipping: "primary",
@@ -86,7 +86,6 @@ const renderLatestDocumentBody = (item, index) => (
         <td>{item?.field?.fieldName}</td>
         <td>{item?.category?.categoryName}</td>
         <td>{item?.organization?.orgName}</td>
-        <td>{/* <Badge type={orderStatus[item.status]} content={item.status} /> */}</td>
     </tr>
 );
 
@@ -112,7 +111,7 @@ const Dashboard = () => {
             icon: "bx bx-cart",
             count: 0,
             title: "Daily visits",
-            link: "#"
+            link: "#",
         },
         {
             icon: "bx bx-file",
@@ -134,16 +133,11 @@ const Dashboard = () => {
         getLatestDocumentList();
     }, []);
 
-    useEffect(
-        () => {
-            statusCards[0].count = totalUsers;
-            statusCards[2].count = totalDocuments;
-            statusCards[3].count = totalPendingDocuments;
-        },
-        totalDocuments,
-        totalPendingDocuments,
-        totalUsers,
-    );
+    useEffect(() => {
+        statusCards[0].count = totalUsers;
+        statusCards[2].count = totalDocuments;
+        statusCards[3].count = totalPendingDocuments;
+    }, [totalDocuments, totalPendingDocuments, totalUsers]);
 
     const getStatistics = async () => {
         try {
@@ -191,7 +185,7 @@ const Dashboard = () => {
                     <div className="row">
                         {statusCards.map((item, index) => (
                             <div className="col-6" key={index}>
-                                <StatusCard icon={item.icon} count={item.count} title={item.title} link={item.link}/>
+                                <StatusCard icon={item.icon} count={item.count} title={item.title} link={item.link} />
                             </div>
                         ))}
                     </div>

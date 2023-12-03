@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import OrganizationModal from "../../../components/admin/modal/organization/OrganizationModal";
-import Table from "../../../components/admin/table/Table";
+import OrganizationModal from "../../../components/management/admin/modal/organization/OrganizationModal";
+import Table from "../../../components/management/table/Table";
+import ActionButton from "../../../components/management/action-button/ActionButton";
 
-import ActionButton from "../../../components/admin/action-button/ActionButton";
-
-import { Badge, Button, Modal, Toast, Pagination } from "flowbite-react";
+import { Badge, Button, Modal, Toast, Pagination, Spinner } from "flowbite-react";
 import { HiDocumentRemove } from "react-icons/hi";
 
-import { deleteAOrganization, getAllOrganizations } from "../../../api/admin/organizationAPI";
+import { deleteAOrganization, getAllOrganizations } from "../../../api/main/organizationAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
-import { HiCheck, HiExclamation, HiOutlineCloudUpload, HiX } from "react-icons/hi";
+import { HiCheck, HiOutlineCheck, HiX } from "react-icons/hi";
 
 let selectedPage = 0;
 
 const Organizations = () => {
-    const customerTableHead = ["", "Tên", "Trạng thái", "Số tài liệu", ""];
+    const tableHead = ["", "Tên", "Trạng thái", "Số tài liệu", ""];
 
     const renderHead = (item, index) => (
         <th className="text-center" key={index}>
@@ -43,8 +42,8 @@ const Organizations = () => {
             <td className="w-2/12 text-center">123</td>
             <td className="w-1/12 text-center">
                 <div className="flex space-x-0">
-                    <ActionButton onClick={() => handleEdit(item.orgId)} icon="bx bxs-user-check" color="yellow" content="Chỉnh sửa trường học" />
-                    <ActionButton onClick={() => handleDelete(item.orgId)} icon="bx bxs-user-x" color="red" content="Xoá trường học" />
+                    <ActionButton onClick={() => handleEdit(item.orgId)} icon="bx bx-edit" color="yellow" content="Chỉnh sửa trường học" />
+                    <ActionButton onClick={() => handleDelete(item.orgId)} icon="bx bx-trash" color="red" content="Xoá trường học" />
                 </div>
             </td>
         </tr>
@@ -84,6 +83,7 @@ const Organizations = () => {
     const [status, setStatus] = useState(0);
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
         getOrganizationList(currentPage);
@@ -96,12 +96,14 @@ const Organizations = () => {
 
     const getOrganizationList = async (page) => {
         try {
+            setIsFetching(true);
             const response = await getAllOrganizations({
                 params: {
                     page: page - 1,
                     size: 10,
                 },
             });
+            setIsFetching(false);
             if (response.status === 200) {
                 setOrganizationList(response.data.content);
                 setTotalPages(response.data.totalPages);
@@ -158,7 +160,9 @@ const Organizations = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
-                            <Table totalPages="10" headData={customerTableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={organizationList} renderBody={(item, index) => renderBody(item, index)} />
+                            <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={organizationList} renderBody={(item, index) => renderBody(item, index)} />
+
+                            {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
                                 <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
@@ -172,7 +176,7 @@ const Organizations = () => {
                 <Modal.Header />
                 <Modal.Body>
                     <div className="text-center">
-                        <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                        <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-red-600 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bạn có chắc chắn muốn xoá trường học này không?</h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" isProcessing={isLoading} onClick={() => deleteOrganization(organizationId)}>
@@ -190,14 +194,14 @@ const Organizations = () => {
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed z-50">
-                    <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
+                    <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}
 
             {status === 1 && (
                 <Toast className="top-1/4 right-5 fixed w-100 z-50">
-                    <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
+                    <HiOutlineCheck className="h-5 w-5 bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}

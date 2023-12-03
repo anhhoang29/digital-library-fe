@@ -1,35 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useMatch } from "react-router-dom";
-import Table from "../../../components/admin/table/Table";
+import { useMatch, useNavigate } from "react-router-dom";
 
-import ActionButton from "../../../components/admin/action-button/ActionButton";
+import Table from "../../../components/management/table/Table";
+import ActionButton from "../../../components/management/action-button/ActionButton";
 
-import { Button, Modal, Pagination, Toast } from "flowbite-react";
-import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
+import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
+import { HiCheck, HiDocumentRemove, HiOutlineBadgeCheck, HiOutlineCheck, HiX } from "react-icons/hi";
 
-import { deleteAUser, getAllUsers, getLatestUsers } from "../../../api/admin/userAPI";
+import { deleteAUser, getAllUsers, getLatestUsers } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileImage from "../../../assets/images/default_profile.jpg";
-import UserModal from "../../../components/admin/modal/user/UserModal";
+import UserModal from "../../../components/management/admin/modal/user/UserModal";
 
 let selectedPage = 0;
 
 const Users = () => {
-    const customerTableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", "Trạng thái", ""];
+    const tableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", "Trạng thái", ""];
 
-    const renderHead = (item, index) => <th key={index}>{item}</th>;
+    const roleList = {
+        ROLE_ADMIN: "ADMIN",
+        ROLE_STUDENT: "SINH VIÊN",
+        ROLE_LECTURER: "GIẢNG VIÊN",
+        ROLE_MANAGER: "QUẢN LÝ",
+    };
+
+    const renderHead = (item, index) => (
+        <th key={index} className="text-center">
+            {item}
+        </th>
+    );
 
     const renderBody = (item, index) => (
-        <tr key={index}>
-            <td className="text-center font-bold">{selectedPage * 20 + index + 1}</td>
-            <td className="max-w-xs text-center">
+        <tr key={index} className="cursor-pointer">
+            <td className="text-center font-bold" onClick={() => handleDetail(item.userId)}>
+                {selectedPage * 20 + index + 1}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12" />
             </td>
-            <td className="max-w-xs text-center">{item.lastName}</td>
-            <td className="max-w-xs text-center">{item.firstName}</td>
-            <td className="max-w-xs">{item.email}</td>
-            <td className="max-w-xs text-center">{item.role && item.role.roleName}</td>
-            <td className="max-w-xs text-center">{item.deleted ? "Đã xoá" : "Đang hoạt động"}</td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
+                {item.lastName}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
+                {item.firstName}
+            </td>
+            <td className="max-w-xs" onClick={() => handleDetail(item.userId)}>
+                {item.email}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
+                {item.role && <Badge icon={HiOutlineBadgeCheck}>{roleList[item.role.roleName]}</Badge>}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
+                <div className="m-auto w-fit">
+                    {item.deleted ? (
+                        <Badge color="warning" icon={HiX}>
+                            Đã vô hiệu
+                        </Badge>
+                    ) : (
+                        <Badge icon={HiCheck} color="success">
+                            Đang hoạt động
+                        </Badge>
+                    )}
+                </div>
+            </td>
             <td className="text-center">
                 <div className="flex space-x-0">
                     <ActionButton onClick={() => handleDetail(item.userId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" />
@@ -79,9 +112,10 @@ const Users = () => {
     const [triggerModal, setTriggerModal] = useState(0);
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
-        if(isLatestRoute) getLatestUserList(currentPage);
+        if (isLatestRoute) getLatestUserList(currentPage);
         else getUserList(currentPage);
     }, [currentPage]);
 
@@ -93,12 +127,14 @@ const Users = () => {
 
     const getUserList = async (page) => {
         try {
+            setIsFetching(true);
             const response = await getAllUsers({
                 params: {
                     page: page - 1,
                     size: 15,
                 },
             });
+            setIsFetching(false);
             if (response.status === 200) {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
@@ -112,12 +148,14 @@ const Users = () => {
 
     const getLatestUserList = async (page) => {
         try {
+            setIsFetching(true);
             const response = await getLatestUsers({
                 params: {
                     page: page - 1,
                     size: 15,
                 },
             });
+            setIsFetching(false);
             if (response.status === 200) {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
@@ -139,12 +177,12 @@ const Users = () => {
                 setStatus(1);
                 setTimeout(() => {
                     setStatus(0);
-                }, 2000);
+                }, 4000);
             } else {
                 setStatus(-1);
                 setTimeout(() => {
                     setStatus(0);
-                }, 2000);
+                }, 4000);
             }
         } catch (error) {
             console.log(error);
@@ -163,7 +201,9 @@ const Users = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
-                            <Table totalPages="10" headData={customerTableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={userList} renderBody={(item, index) => renderBody(item, index)} />
+                            <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={userList} renderBody={(item, index) => renderBody(item, index)} />
+
+                            {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
                                 <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
@@ -177,7 +217,7 @@ const Users = () => {
                 <Modal.Header />
                 <Modal.Body>
                     <div className="text-center">
-                        <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                        <HiDocumentRemove className="mx-auto mb-4 h-14 w-14 text-red-600 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Bạn có chắc chắn muốn xoá người dùng này không?</h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" isProcessing={isLoading} onClick={() => deleteUser(userId)}>
@@ -191,19 +231,18 @@ const Users = () => {
                 </Modal.Body>
             </Modal>
 
-            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} 
-            refreshUserList={() => isLatestRoute ? getLatestUserList(1) : getUserList(1)}/>
+            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshUserList={() => (isLatestRoute ? getLatestUserList(1) : getUserList(1))} />
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
-                    <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
+                    <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
                     <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
                 </Toast>
             )}
 
             {status === 1 && (
                 <Toast className="top-1/4 right-5 fixed w-100">
-                    <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
+                    <HiOutlineCheck className="h-5 w-5 bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200" />
                     <div className="pl-4 text-sm font-normal">Xoá người dùng thành công!</div>
                 </Toast>
             )}

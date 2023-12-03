@@ -1,29 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Table from "../../../components/admin/table/Table";
 
-import ActionButton from "../../../components/admin/action-button/ActionButton";
+import Table from "../../../components/management/table/Table";
+import ActionButton from "../../../components/management/action-button/ActionButton";
 
-import { Button, Label, Modal, Pagination, TextInput, Toast } from "flowbite-react";
-import { HiDocumentRemove, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
+import { Button, Label, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
+import { HiDocumentRemove, HiOutlineCheck, HiX } from "react-icons/hi";
 
-import { approveADocument, getPendingDocuments } from "../../../api/admin/documentAPI";
+import { approveADocument, getPendingDocuments } from "../../../api/main/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 let selectedPage = 0;
 
 const PendingDocuments = () => {
-    const customerTableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
+    const tableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
 
-    const renderHead = (item, index) => <th key={index}>{item}</th>;
+    const renderHead = (item, index) => (
+        <th key={index} className="cursor-pointer">
+            {item}
+        </th>
+    );
 
     const renderBody = (item, index) => (
         <tr key={index}>
-            <td className="text-center font-bold">{selectedPage * 20 + index + 1}</td>
-            <td className="max-w-xs">{item.docName}</td>
-            <td className="max-w-xs">{item.docIntroduction}</td>
-            <td className="max-w-xs text-center">{item.deleted ? "Đã xoá" : "Chưa xoá"}</td>
-            <td className="max-w-xs text-center">{item.totalView}</td>
+            <td className="text-center font-bold" onClick={() => handleDetail(item.slug)}>
+                {selectedPage * 20 + index + 1}
+            </td>
+            <td className="max-w-xs" onClick={() => handleDetail(item.slug)}>
+                {item.docName}
+            </td>
+            <td className="max-w-xs" onClick={() => handleDetail(item.slug)}>
+                {item.docIntroduction}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.slug)}>
+                {item.deleted ? "Đã xoá" : "Chưa xoá"}
+            </td>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.slug)}>
+                {item.totalView}
+            </td>
             <td className="text-center">
                 <div className="flex space-x-0">
                     <ActionButton onClick={() => handleDetail(item.slug)} icon="bx bxs-calendar" color="green" content="Xem chi tiết tài liệu" />
@@ -57,6 +71,7 @@ const PendingDocuments = () => {
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [docId, setDocId] = useState("");
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
         getDocumentList(currentPage);
@@ -69,6 +84,7 @@ const PendingDocuments = () => {
 
     const getDocumentList = async (page) => {
         try {
+            setIsFetching(true);
             const response = await getPendingDocuments({
                 params: {
                     page: page - 1,
@@ -76,6 +92,7 @@ const PendingDocuments = () => {
                     order: "docId",
                 },
             });
+            setIsFetching(false);
             if (response.status === 200) {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
@@ -136,7 +153,9 @@ const PendingDocuments = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
-                            <Table totalPages="10" headData={customerTableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={documentList} renderBody={(item, index) => renderBody(item, index)} />
+                            <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={documentList} renderBody={(item, index) => renderBody(item, index)} />
+
+                            {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
                                 <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
@@ -199,14 +218,14 @@ const PendingDocuments = () => {
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
-                    <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
+                    <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}
 
             {status === 1 && (
                 <Toast className="top-1/4 right-5 fixed w-100">
-                    <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
+                    <HiOutlineCheck className="h-5 w-5 bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}

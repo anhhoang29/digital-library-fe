@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Select from "../../../components/management/select/Select";
 
-import { getAllCategories } from "../../../api/main/categoryAPI";
+import { getAccessibleCategories, getAllCategories } from "../../../api/main/categoryAPI";
 import { uploadNewDocument } from "../../../api/main/documentAPI";
-import { getAllFields } from "../../../api/main/fieldAPI";
+import { getAccessibleFields, getAllFields } from "../../../api/main/fieldAPI";
 import { getAccessibleOrganizations } from "../../../api/main/organizationAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
+
+import { useSelector } from "react-redux";
 
 import { Button, Toast } from "flowbite-react";
 import { HiExclamation, HiOutlineCloudUpload, HiChevronUp, HiChevronLeft } from "react-icons/hi";
@@ -16,14 +18,14 @@ const ManagerNewDocument = () => {
 
     const navigate = useNavigate();
 
+    const currentUser = useSelector((state) => state.LoginReducer.user);
+
     const [name, setName] = useState("");
     const [introduction, setIntroduction] = useState("");
-    const [organizationId, setOrganizationId] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [fieldId, setFieldId] = useState("");
     const [isInternal, setIsInternal] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [organizationList, setOrganizationList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [fieldList, setFieldList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,32 +33,14 @@ const ManagerNewDocument = () => {
 
     const [isNameValid, setIsNameValid] = useState(true);
     const [isIntroductionValid, setIsIntroductionValid] = useState(true);
-    const [isOrganizationValid, setIsOrganizationValid] = useState(true);
     const [isCategoryValid, setIsCategoryValid] = useState(true);
     const [isFieldValid, setIsFieldValid] = useState(true);
     const [isFileValid, setIsFileValid] = useState(true);
     const [fileMessage, setFileMessage] = useState("");
 
-    const getOrganizationList = async () => {
-        try {
-            const response = await getAccessibleOrganizations({
-                params: {
-                    page: 0,
-                    size: 100,
-                },
-            });
-            if (response.status === 200) {
-                setOrganizationList(response.data);
-            } else {
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const getCategoryList = async () => {
         try {
-            const response = await getAllCategories({
+            const response = await getAccessibleCategories({
                 params: {
                     page: 0,
                     size: 100,
@@ -73,7 +57,7 @@ const ManagerNewDocument = () => {
 
     const getFieldList = async () => {
         try {
-            const response = await getAllFields({
+            const response = await getAccessibleFields({
                 params: {
                     page: 0,
                     size: 100,
@@ -91,7 +75,6 @@ const ManagerNewDocument = () => {
     useEffect(() => {
         getCategoryList();
         getFieldList();
-        getOrganizationList();
     }, []);
 
     const handleFileChange = (e) => {
@@ -112,14 +95,6 @@ const ManagerNewDocument = () => {
             setIsIntroductionValid(false);
         } else {
             setIsIntroductionValid(true);
-        }
-    };
-
-    const validateOraganization = () => {
-        if (organizationId === "") {
-            setIsOrganizationValid(false);
-        } else {
-            setIsOrganizationValid(true);
         }
     };
 
@@ -154,12 +129,11 @@ const ManagerNewDocument = () => {
     const validateInput = () => {
         validateName();
         validateIntroduction();
-        validateOraganization();
         validateCategory();
         validateField();
         setIsFileValid(validateFile());
 
-        if (!isNameValid || !isIntroductionValid || !isOrganizationValid || !isCategoryValid || !isFieldValid || !validateFile()) {
+        if (!isNameValid || !isIntroductionValid || !isCategoryValid || !isFieldValid || !validateFile()) {
             return false;
         } else {
             return true;
@@ -177,7 +151,7 @@ const ManagerNewDocument = () => {
                     docName: name,
                     docIntroduction: introduction,
                     internal: isInternal,
-                    orgId: organizationId,
+                    orgId: currentUser.organization.orgId,
                     categoryId: categoryId,
                     fieldId: fieldId,
                 };
@@ -281,21 +255,6 @@ const ManagerNewDocument = () => {
                                 </div>
 
                                 <div className="mb-6">
-                                    <Select
-                                        selectName="Trường học"
-                                        options={organizationList}
-                                        selectedValue={organizationId}
-                                        onChangeHandler={(e) => {
-                                            setOrganizationId(e.target.value);
-                                        }}
-                                        name="orgName"
-                                        field="orgId"
-                                        required
-                                    />
-                                    {!isOrganizationValid && <p className="block mt-2 text-sm font-medium text-red-600 italic">* Vui lòng chọn trường học</p>}
-                                </div>
-
-                                <div className="mb-6">
                                     {" "}
                                     <Select
                                         selectName="Danh mục"
@@ -386,7 +345,7 @@ const ManagerNewDocument = () => {
                                 </div>
 
                                 <div className="flex flex-wrap gap-2">
-                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/admin/documents")}>
+                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/manager/documents")}>
                                         <HiChevronLeft className="mr-2 h-5 w-5" />
                                         Huỷ bỏ
                                     </Button>

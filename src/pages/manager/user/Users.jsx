@@ -7,10 +7,12 @@ import ActionButton from "../../../components/management/action-button/ActionBut
 import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
 import { HiCheck, HiDocumentRemove, HiOutlineBadgeCheck, HiOutlineCheck, HiX } from "react-icons/hi";
 
-import { deleteAUser, getAllUsers, getLatestUsers } from "../../../api/main/userAPI";
+import { deleteAUser, getAllUsersByOrganization, getLatestUsersByOrganization } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileImage from "../../../assets/images/default_profile.jpg";
 import UserModal from "../../../components/management/manager/modal/user/UserModal";
+
+import { useSelector } from "react-redux";
 
 let selectedPage = 0;
 
@@ -75,11 +77,13 @@ const ManagerUsers = () => {
 
     const navigate = useNavigate();
 
+    const user = useSelector((state) => state.LoginReducer.user);
+
     const handleDetail = (userId) => {
-        navigate(`/admin/users/${userId}`);
+        navigate(`/manager/users/${userId}`);
     };
 
-    const isLatestRoute = useMatch("/admin/users/latest");
+    const isLatestRoute = useMatch("/manager/users/latest");
 
     const handleAdd = () => {
         setOpenUserModal(true);
@@ -128,7 +132,7 @@ const ManagerUsers = () => {
     const getUserList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getAllUsers({
+            const response = await getAllUsersByOrganization(user.organization.slug, {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -139,7 +143,7 @@ const ManagerUsers = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -149,7 +153,7 @@ const ManagerUsers = () => {
     const getLatestUserList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getLatestUsers({
+            const response = await getLatestUsersByOrganization(user.organization.slug, {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -160,7 +164,7 @@ const ManagerUsers = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);

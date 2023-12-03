@@ -7,8 +7,10 @@ import ActionButton from "../../../components/management/action-button/ActionBut
 import { Button, Modal, Pagination, Spinner, TextInput, Toast, Badge } from "flowbite-react";
 import { HiDocumentRemove, HiDocumentSearch, HiOutlineCheck, HiX, HiCheck } from "react-icons/hi";
 
-import { deleteADocument, getAllDocuments, getLatestDocuments, searchDocuments } from "../../../api/main/documentAPI";
+import { deleteADocument, getAllDocuments, getAllDocumentsByOrganizations, getLatestDocuments, getLatestDocumentsByOrganization, searchDocuments, searchDocumentsByOrganization } from "../../../api/main/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
+
+import { useSelector } from "react-redux";
 
 let selectedPage = 0;
 
@@ -58,16 +60,18 @@ const ManagerDocuments = () => {
 
     const navigate = useNavigate();
 
-    const isLatestRoute = useMatch("/admin/documents/latest");
+    const isLatestRoute = useMatch("/manager/documents/latest");
+
+    const user = useSelector((state) => state.LoginReducer.user);
 
     usePrivateAxios();
 
     const handleDetail = (slug) => {
-        navigate(`/admin/documents/${slug}`);
+        navigate(`/manager/documents/${slug}`);
     };
 
     const handleEdit = (slug) => {
-        navigate(`/admin/documents/${slug}/edit`);
+        navigate(`/manager/documents/${slug}/edit`);
     };
 
     const handleDelete = (docId) => {
@@ -103,7 +107,9 @@ const ManagerDocuments = () => {
     const getDocumentList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getAllDocuments({
+            const response = await getAllDocumentsByOrganizations(
+                user.organization.slug,
+                {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -115,7 +121,7 @@ const ManagerDocuments = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -125,7 +131,9 @@ const ManagerDocuments = () => {
     const getLatestDocumentList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getLatestDocuments({
+            const response = await getLatestDocumentsByOrganization(
+                user.organization.slug,
+                {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -136,7 +144,7 @@ const ManagerDocuments = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -146,7 +154,9 @@ const ManagerDocuments = () => {
     const getDocumentListWithSearch = async (page) => {
         try {
             setIsFetching(true);
-            const response = await searchDocuments({
+            const response = await searchDocumentsByOrganization(
+                user.organization.slug,
+                {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -158,7 +168,7 @@ const ManagerDocuments = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -203,7 +213,7 @@ const ManagerDocuments = () => {
             <h2 className="page-header">tài liệu</h2>
             <div className="flex h-fit">
                 <div>
-                    <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/admin/documents/new")}>
+                    <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/manager/documents/new")}>
                         <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
                         Thêm tài liệu
                     </Button>

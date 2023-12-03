@@ -2,7 +2,7 @@
     {
         "icon": "bx bx-user",
         "content": "Trang cá nhân",
-        "link": "/admin/profile"
+        "link": "#"
     },
     {
         "icon": "bx bx-cog",

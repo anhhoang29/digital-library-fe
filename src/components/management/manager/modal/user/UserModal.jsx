@@ -4,7 +4,8 @@ import { HiX, HiOutlineCheck, HiChevronUp, HiChevronLeft } from "react-icons/hi"
 
 import Select from "../../../select/Select";
 
-import { getAccessibleOrganizations } from "../../../../../api/main/organizationAPI";
+import { useSelector } from "react-redux";
+
 import { createUser, getAUser, updateUser } from "../../../../../api/main/userAPI";
 import usePrivateAxios from "../../../../../api/usePrivateAxios";
 
@@ -14,6 +15,8 @@ const UserModal = (props) => {
     usePrivateAxios();
 
     const { userId, openUserModal, isCreatingNew, triggerModal, refreshUserList } = props;
+
+        const currentUser = useSelector((state) => state.LoginReducer.user);
 
     const genderList = [
         { id: 0, name: "Nam" },
@@ -201,7 +204,7 @@ const UserModal = (props) => {
                     phone: phone,
                     gender: gender,
                     dateOfBirth: dateOfBirth,
-                    // orgId: orgId,
+                    orgId: currentUser.organization.orgId,
                     roleId: roleId,
                     password: password,
                     confirmPassword: confirmPassword,

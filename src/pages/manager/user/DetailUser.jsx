@@ -120,7 +120,7 @@ const ManagerDetailUser = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -153,11 +153,11 @@ const ManagerDetailUser = () => {
     };
 
     const handleDetail = (slug) => {
-        navigate(`/admin/documents/${slug}`);
+        navigate(`/manager/documents/${slug}`);
     };
 
     const handleEdit = (slug) => {
-        navigate(`/admin/documents/${slug}/edit`);
+        navigate(`/manager/documents/${slug}/edit`);
     };
 
     const handleDelete = (docId) => {
@@ -172,10 +172,10 @@ const ManagerDetailUser = () => {
                     <HiChevronLeft className="mr-2 h-5 w-5" />
                     Quay lại
                 </Button>
-                <Button color="success" onClick={() => navigate(`/admin/users/${userId}/edit`)}>
+                {/* <Button color="success" onClick={() => navigate(`/manager/users/${userId}/edit`)}>
                     Chỉnh sửa
                     <HiOutlinePencilAlt className="ml-2 h-5 w-5" />
-                </Button>
+                </Button> */}
             </div>
             <div className="row">
                 <div className="col-12 flex">

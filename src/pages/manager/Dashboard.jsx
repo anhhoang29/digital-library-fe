@@ -10,9 +10,9 @@ import StatusCard from "../../components/management/status-card/StatusCard";
 
 import Table from "../../components/management/table/Table";
 
-import { getLatestDocuments } from "../../api/main/documentAPI";
-import { getGeneralStatistics } from "../../api/main/statisticsAPI";
-import { getLatestUsers } from "../../api/main/userAPI";
+import { getLatestDocumentsByOrganization } from "../../api/main/documentAPI";
+import { getGeneralStatisticsForManager } from "../../api/main/statisticsAPI";
+import { getLatestUsersByOrganization } from "../../api/main/userAPI";
 import usePrivateAxios from "../../api/usePrivateAxios";
 
 const chartOptions = {
@@ -49,7 +49,7 @@ const chartOptions = {
     },
 };
 
-const latestUserHead = ["Họ", "Tên", "Trường"];
+const latestUserHead = ["Họ", "Tên", "Email"];
 
 const renderLatestUserHead = (item, index) => (
     <th key={index} className="capitalize text-base">
@@ -61,18 +61,11 @@ const renderLatestUserBody = (item, index) => (
     <tr key={index} className="capitalize text-base">
         <td>{item.lastName}</td>
         <td>{item.firstName}</td>
-        <td>{item?.organization?.orgName}</td>
+        <td>{item.email}</td>
     </tr>
 );
 
-const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường"];
-
-// const orderStatus = {
-//     shipping: "primary",
-//     pending: "warning",
-//     paid: "success",
-//     refund: "danger",
-// };
+const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục"];
 
 const renderLatestDocumentHead = (item, index) => (
     <th key={index} className="capitalize text-base">
@@ -84,8 +77,7 @@ const renderLatestDocumentBody = (item, index) => (
     <tr key={index} className="capitalize text-base">
         <td>{item.docName}</td>
         <td>{item?.field?.fieldName}</td>
-        <td>{item?.category?.categoryName}</td>
-        <td>{item?.organization?.orgName}</td>
+        <td>{item?.category?.orgName}</td>
     </tr>
 );
 
@@ -93,6 +85,8 @@ const ManagerDashboard = () => {
     const themeReducer = useSelector((state) => state.ThemeReducer.mode);
 
     usePrivateAxios();
+
+    const user = useSelector((state) => state.LoginReducer.user);
 
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [totalPendingDocuments, setTotalPendingDocuments] = useState(0);
@@ -105,7 +99,7 @@ const ManagerDashboard = () => {
             icon: "bx bx-user",
             count: totalUsers,
             title: "Người dùng",
-            link: "/admin/users",
+            link: "/manager/users",
         },
         {
             icon: "bx bx-cart",
@@ -117,13 +111,13 @@ const ManagerDashboard = () => {
             icon: "bx bx-file",
             count: totalDocuments,
             title: "Tài liệu",
-            link: "/admin/documents",
+            link: "/manager/documents",
         },
         {
             icon: "bx bx-time-five",
             count: totalPendingDocuments,
             title: "Đang chờ duyệt",
-            link: "/admin/documents/pending",
+            link: "/manager/documents/pending",
         },
     ];
 
@@ -141,7 +135,7 @@ const ManagerDashboard = () => {
 
     const getStatistics = async () => {
         try {
-            const response = await getGeneralStatistics();
+            const response = await getGeneralStatisticsForManager();
 
             if (response.status === 200) {
                 setTotalDocuments(response.data.totalDocuments);
@@ -155,7 +149,7 @@ const ManagerDashboard = () => {
 
     const getLatestUserList = async () => {
         try {
-            const response = await getLatestUsers();
+            const response = await getLatestUsersByOrganization(user.organization.slug);
 
             if (response.status === 200) {
                 setLatestUsers(response.data.content);
@@ -167,7 +161,7 @@ const ManagerDashboard = () => {
 
     const getLatestDocumentList = async () => {
         try {
-            const response = await getLatestDocuments();
+            const response = await getLatestDocumentsByOrganization(user.organization.slug);
 
             if (response.status === 200) {
                 setLatestDocuments(response.data.content);
@@ -220,7 +214,7 @@ const ManagerDashboard = () => {
                             <Table headData={latestUserHead} renderHead={(item, index) => renderLatestUserHead(item, index)} bodyData={latestUsers} renderBody={(item, index) => renderLatestUserBody(item, index)} />
                         </div>
                         <div className="card__footer">
-                            <Link to="/admin/users/latest" className="font-bold">
+                            <Link to="/manager/users/latest" className="font-bold">
                                 Xem tất cả
                             </Link>
                         </div>
@@ -235,7 +229,7 @@ const ManagerDashboard = () => {
                             <Table headData={latestDocumentHead} renderHead={(item, index) => renderLatestDocumentHead(item, index)} bodyData={latestDocuments} renderBody={(item, index) => renderLatestDocumentBody(item, index)} />
                         </div>
                         <div className="card__footer">
-                            <Link to="/admin/documents/latest" className="font-bold">
+                            <Link to="/manager/documents/latest" className="font-bold">
                                 Xem tất cả
                             </Link>
                         </div>

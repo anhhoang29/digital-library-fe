@@ -52,7 +52,7 @@ const ManagerPendingDocuments = () => {
     usePrivateAxios();
 
     const handleDetail = (slug) => {
-        navigate(`/admin/documents/${slug}`);
+        navigate(`/manager/documents/${slug}`);
     };
 
     const handleApprove = (docId) => {
@@ -97,7 +97,7 @@ const ManagerPendingDocuments = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);

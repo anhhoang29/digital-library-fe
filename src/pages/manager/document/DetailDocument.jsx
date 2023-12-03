@@ -40,7 +40,7 @@ const ManagerDetailDocument = () => {
                     <HiChevronLeft className="mr-2 h-5 w-5" />
                     Quay lại
                 </Button>
-                <Button color="success" onClick={() => navigate(`/admin/documents/${slug}/edit`)}>
+                <Button color="success" onClick={() => navigate(`/manager/documents/${slug}/edit`)}>
                     Chỉnh sửa
                     <HiOutlinePencilAlt className="ml-2 h-5 w-5" />
                 </Button>

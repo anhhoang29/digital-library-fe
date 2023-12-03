@@ -145,7 +145,7 @@ const ManagerProfile = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -198,11 +198,11 @@ const ManagerProfile = () => {
     };
 
     const handleDetail = (slug) => {
-        navigate(`/admin/documents/${slug}`);
+        navigate(`/manager/documents/${slug}`);
     };
 
     const handleEdit = (slug) => {
-        navigate(`/admin/documents/${slug}/edit`);
+        navigate(`/manager/documents/${slug}/edit`);
     };
 
     const handleDelete = (docId) => {

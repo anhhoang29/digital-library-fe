@@ -37,7 +37,7 @@ import "./index.css";
 
 const store = createStore(rootReducer);
 
-document.title = "Tua CRM";
+document.title = "Wisdo";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

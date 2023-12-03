@@ -1,0 +1,22 @@
+[
+    {
+        "display_name": "Trang chủ",
+        "route": "/manager/home",
+        "icon": "bx bx-atom"
+    },
+    {
+        "display_name": "Tài liệu",
+        "route": "/manager/documents",
+        "icon": "bx bx-file"
+    },
+    {
+        "display_name": "Người dùng",
+        "route": "/manager/users",
+        "icon": "bx bx-user"
+    },
+    {
+        "display_name": "Phê duyệt",
+        "route": "/manager/documents/pending",
+        "icon": "bx bx-notification"
+    }
+]

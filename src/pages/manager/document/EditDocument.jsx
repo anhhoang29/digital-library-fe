@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "../../../components/management/select/Select";
 
-import { getAllCategories } from "../../../api/main/categoryAPI";
+import { getAccessibleCategories, getAllCategories } from "../../../api/main/categoryAPI";
 import { getADocument, updateDocument } from "../../../api/main/documentAPI";
-import { getAllFields } from "../../../api/main/fieldAPI";
+import { getAccessibleFields, getAllFields } from "../../../api/main/fieldAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
+
+import { useSelector } from "react-redux";
 
 import { Button, Toast } from "flowbite-react";
 import { HiAnnotation, HiChevronLeft, HiChevronUp, HiExclamation, HiOutlineCloudUpload } from "react-icons/hi";
@@ -14,6 +16,8 @@ const ManagerEditDocument = () => {
     usePrivateAxios();
 
     const { slug } = useParams();
+
+    const currentUser = useSelector((state) => state.LoginReducer.user);
 
     const [document, setDocument] = useState(null);
 
@@ -52,7 +56,7 @@ const ManagerEditDocument = () => {
 
     const getCategoryList = async () => {
         try {
-            const response = await getAllCategories({
+            const response = await getAccessibleCategories({
                 params: {
                     page: 0,
                     size: 100,
@@ -69,7 +73,7 @@ const ManagerEditDocument = () => {
 
     const getFieldList = async () => {
         try {
-            const response = await getAllFields({
+            const response = await getAccessibleFields({
                 params: {
                     page: 0,
                     size: 100,
@@ -171,6 +175,7 @@ const ManagerEditDocument = () => {
                     docName: name,
                     docIntroduction: introduction,
                     internal: isInternal,
+                    orgId: currentUser.organization.orgId,
                     categoryId: categoryId,
                     fieldId: fieldId,
                 };
@@ -364,7 +369,7 @@ const ManagerEditDocument = () => {
                                 </div>
 
                                 <div className="flex flex-wrap gap-2">
-                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/admin/documents")}>
+                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/manager/documents")}>
                                         <HiChevronLeft className="mr-2 h-5 w-5" />
                                         Huỷ bỏ
                                     </Button>

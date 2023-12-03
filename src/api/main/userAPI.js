@@ -10,6 +10,15 @@ export const getAllUsers = async (config) => {
     }
 };
 
+export const getAllUsersByOrganization = async (org, config) => {
+    try {
+        const response = await privateAxios.get(`/users/organizations/${org}`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const createUser = async (data, config) => {
     try {
         const response = await privateAxios.post("/users", data, config);
@@ -49,6 +58,15 @@ export const deleteAUser = async (userId, config) => {
 export const getLatestUsers = async (config) => {
     try {
         const response = await privateAxios.get("/users/latest", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getLatestUsersByOrganization = async (org, config) => {
+    try {
+        const response = await privateAxios.get(`/users/organizations/${org}/latest`, config);
         return response.data;
     } catch (error) {
         throw error;

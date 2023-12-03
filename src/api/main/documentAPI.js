@@ -9,6 +9,15 @@ export const getAllDocuments = async (config) => {
     }
 };
 
+export const getAllDocumentsByOrganizations = async (org, config) => {
+    try {
+        const response = await privateAxios.get(`/documents/organizations/${org}`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getPendingDocuments = async (config) => {
     try {
         const response = await privateAxios.get("/documents/pending", config);
@@ -72,6 +81,15 @@ export const getLatestDocuments = async (config) => {
     }
 };
 
+export const getLatestDocumentsByOrganization = async (org, config) => {
+    try {
+        const response = await privateAxios.get(`/documents/organizations/${org}/latest`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getUploadedDocuments = async (config) => {
     try {
         const response = await privateAxios.get("/documents/mine", config);
@@ -93,6 +111,15 @@ export const getUploadedDocumentsByUser = async (userId, config) => {
 export const searchDocuments = async (config) => {
     try {
         const response = await privateAxios.get("/documents/search", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const searchDocumentsByOrganization = async (org, config) => {
+    try {
+        const response = await privateAxios.get(`/documents/organizations/${org}/search`, config);
         return response.data;
     } catch (error) {
         throw error;

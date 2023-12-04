@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from "../../components/management/layout/Layout";
 import Login from "../auth-page/login";
-import SignUp from "../auth-page/sign-up";
+import signUp from "../auth-page/sign-up";
 import Home from "../home/home";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -26,12 +26,12 @@ const RootRouters = () => {
                 <Routes>
                     <Route path="/home" element={<Home />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<SignUp />} />
+                    <Route path="/register" element= {<signUp/>}/>
                     <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/manager/forgot-password" element={<ManagerForgotPassword />} />
                     <Route path="/manager/login" element={<ManagerLogin />} />
-                    <Route path="*" element={<Layout />} />
+                    <Route path="/admin/*" element={<Layout />} />
                 </Routes>
             </CSSTransition>
         </TransitionGroup>

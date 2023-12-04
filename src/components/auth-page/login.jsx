@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./style.css";
 import AuthPage from "./AuthPage";
-import Google from '../assets/images/Google.svg';
+// import Google from '../assets/images/google.svg';
+import { Group, GroupWrapper} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -97,7 +98,7 @@ function Login() {
           <div className="login-text">Login</div>
         </button>
         <div className="google-sign-in">
-          <p className="continue-with-text">or continue with</p>
+          {/* <p className="continue-with-text">or continue with</p>
           <a
             className="flex items-center lg:gap-[10px] gap-[5px] w-full border rounded-[5px] lg:py-[10px] py-[5px] justify-center border-primary xl:text-base lg:text-sm text-xs hover:bg-athensGray cursor-pointer transition ease-in-out"
             href=""
@@ -108,7 +109,7 @@ function Login() {
               alt="Google icon"
             />
             <span className="text-primary">Đăng nhập với Google</span>
-          </a>
+          </a> */}
         </div>
       </div>
     </AuthPage>

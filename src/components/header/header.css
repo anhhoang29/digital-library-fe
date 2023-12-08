@@ -1,6 +1,6 @@
 .header-container {
   display: flex;
-  width: 1728px;
+  width: 100%;
   height: 93px;
   background: white;
   border-bottom: 1px solid #F0F0F0;
@@ -101,6 +101,27 @@
   line-height: 16px;
   word-wrap: break-word;
   text-decoration: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .header-container {
+    width: 100%; 
+    height: 100%
+  }
+
+  .menu {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    left: 0; /* Đặt lại vị trí */
+  }
+
+  .menu-login {
+    left: 0; /* Đặt lại vị trí */
+  }
+
+  .signup {
+    left: 0; /* Đặt lại vị trí */
+  }
+  
 }
 
 /* .category {

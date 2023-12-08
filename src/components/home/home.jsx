@@ -6,11 +6,13 @@ import Footer from '../footer/Footer';
 
 import Banner from '../banner/banner';
 
+
 const Home = () => {
   return (
-    <div className="Home">
+
+    <div className="home w-4xl bg-gray-100">
       <Header />
-      <Banner/>
+      <Banner />
       {/* <Main /> */}
       <Footer />
     </div>

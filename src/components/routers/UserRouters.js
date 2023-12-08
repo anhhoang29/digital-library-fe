@@ -3,7 +3,7 @@
 // import { useAuth } from "../../contexts/AuthContext";
 // import Cookies from "js-cookie";
 
-// export default function PrivateRoute({ component: Component, ...rest }) {
+// const UserRoute = ({ component: Component, ...rest }) => {
 //     const { currentUser } = useAuth();
 //     const token = Cookies.get("token");
 
@@ -17,6 +17,8 @@
 //                     <Redirect to="/login" />
 //                 );
 //             }}
-//         ></Route>
+//         />
 //     );
-// }
+// };
+
+// export default UserRoute;

@@ -1,6 +1,6 @@
 /* Banner.css */
 .BannerContainer {
-    width: 1728px;
+    width: 1519.2px;
     height: 682px;
     position: relative;
     background: white;
@@ -8,7 +8,7 @@
 }
 
 .BannerImage {
-    width: 1728px;
+    width: 1519.2px;
     height: 682px;
     object-fit: cover;
     position: absolute;
@@ -66,4 +66,22 @@
     border-radius: 50%;
     cursor: pointer;
     color: black;
+}
+
+@media screen and (max-width: 768px) {
+    .BannerContainer {
+        width: 100%;
+        height: auto;
+    }
+
+    .BannerImage {
+        width: 100%;
+        height: auto;
+    }
+
+    .SearchBar {
+        width: 80%;
+        left: 10%;
+        top: 100px;
+    }
 }

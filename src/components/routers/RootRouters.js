@@ -12,7 +12,8 @@ import AdminForgotPassword from "../../pages/admin/auth/ForgotPassword";
 import AdminLogin from "../../pages/admin/auth/Login";
 import ManagerForgotPassword from "../../pages/manager/auth/ForgotPassword";
 import ManagerLogin from "../../pages/manager/auth/Login";
-
+import UserHome from "../user/home";
+// import UserRoute from "./UserRouters";
 import "../../App.css"
 
 const RootRouters = () => {
@@ -22,6 +23,7 @@ const RootRouters = () => {
 
     return (
         <TransitionGroup>
+            {/* // key is used to tell react to re-render the component when the key changes */}
             <CSSTransition key={location.pathname} classNames="slide" timeout={300}>
                 <Routes>
                     <Route path="/home" element={<Home />} />
@@ -32,6 +34,8 @@ const RootRouters = () => {
                     <Route path="/manager/forgot-password" element={<ManagerForgotPassword />} />
                     <Route path="/manager/login" element={<ManagerLogin />} />
                     <Route path="/admin/*" element={<Layout />} />
+                    {/* <UserRoute path="/user/*" element={<Layout />} /> */}
+                    <Route path="/user" element={<UserHome />} />
                 </Routes>
             </CSSTransition>
         </TransitionGroup>

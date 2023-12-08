@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 
 import logo from '../assets/images/logo.png';
-
+import { Home } from '../home/home';
 // import { Link } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 // import StatusCard from '../management/status-card/StatusCard';
@@ -543,7 +543,7 @@ function UserHome() {
                     </div>
                 </div>
                 <div className="left-[44px] top-[2003px] absolute justify-start items-start gap-[39px] inline-flex">
-    
+
                     <div className="px-[15px] pt-4 pb-[13px] bg-white rounded-[10px] flex-col justify-center items-center gap-3 inline-flex">
                         <img className="w-[123px] h-[170px] rounded-[5px]" src="https://via.placeholder.com/123x170" alt="Ảnh mô phỏng" />
                         <div className="self-stretch flex-col justify-start items-start gap-[5px] inline-flex">
@@ -673,7 +673,7 @@ function UserHome() {
                 <div className="w-[203px] h-[50px] left-[1305px] top-[38px] absolute">
                     <div className="w-[203px] h-[50px] left-0 top-0 absolute bg-white rounded-[33px] shadow" />
                     <img className="w-[45px] h-[45px] left-[3px] top-[3px] absolute rounded-full border border-white" src="https://via.placeholder.com/45x45" />
-                    <div className="w-[134px] h-[27px] left-[68px] top-[14px] absolute text-neutral-600 text-xl font-normal font-['Inter'] leading-relaxed">Kenson</div>
+                    <div className="w-[134px] h-[27px] left-[68px] top-[14px] absolute text-neutral-600 text-xl font-normal font-['Inter'] leading-relaxed">Hoàng Anh</div>
                 </div>
                 <div className="w-[541px] h-[49px] left-[46px] top-[38px] absolute">
                     <div className="w-[541px] h-[49px] left-0 top-0 absolute bg-white rounded-[40px] shadow" />
@@ -712,12 +712,15 @@ function UserHome() {
                             </div>
                         </div>
                     </div>
-                    <img className="w-[120px] h-[74.18px] left-[68px] top-[38px] absolute" src="https://via.placeholder.com/120x74" />
+                    <div>
+                        <a href='/home'>
+                            <img className="w-[120px] h-[74.18px] left-[68px] top-[38px] absolute" src={logo} />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     );
-
 }
 
 export default UserHome;

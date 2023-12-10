@@ -109,7 +109,7 @@ function Login() {
           <div className="w-[308px] left-0 top-0 absolute text-black text-base font-normal font-['Poppins']">If you don’t have an account register</div>
           <div className="w-[308px] left-0 top-[30px] absolute">
             <span style={{ color: 'black', fontSize: 'base', fontWeight: 'normal', fontFamily: ['Poppins'] }}>You can</span>
-            <a href={signUp} style={{ color: 'indigo-700', fontSize: 'base', fontWeight: 'semibold', fontFamily: ['Poppins'] }}> Register here !</a>
+            <a href='/register' style={{ color: '#7975D2', fontSize: 'base', fontWeight: 'bold', fontFamily: ['Poppins'] }}> Register here !</a>
           </div>
         </div>
       </div>

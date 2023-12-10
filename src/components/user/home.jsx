@@ -659,17 +659,18 @@ function UserHome() {
                     <div className="w-[455px] h-[46px] left-0 top-0 absolute bg-white rounded-[40px] shadow shadow-inner" />
                     <div className="w-[133px] h-[19px] left-[57px] top-[14px] absolute justify-start items-start gap-[5px] inline-flex">
                         <div className="w-[19px] h-[19px] relative" />
-                        <div className="w-[109px] h-[19px] text-center text-neutral-600 text-[15px] font-normal font-['Digital Numbers'] leading-tight">09:00 AM</div>
+                        {/* Lấy giờ hiện tại */}
+                        <div className="w-[109px] h-[19px] text-center text-neutral-600 text-[15px] font-normal font-['Digital Numbers'] leading-tight">{}</div>
                     </div>
                     <div className="w-[149px] h-[19px] left-[256px] top-[14px] absolute justify-start items-start gap-[5px] inline-flex">
                         <div className="w-[125px] h-[19px] text-center text-neutral-600 text-[15px] font-normal font-['Digital Numbers'] leading-tight">4-Mar-2023</div>
                     </div>
                 </div>
-                <div className="w-[170px] h-[47px] left-[622px] top-[38px] absolute">
+                {/* <div className="w-[170px] h-[47px] left-[622px] top-[38px] absolute">
                     <div className="w-[170px] h-[47px] left-0 top-0 absolute bg-white rounded-[30px] shadow" />
                     <div className="w-5 h-5 left-[25px] top-[14px] absolute" />
                     <div className="w-[91px] h-[22.12px] left-[40px] top-[12px] absolute text-center text-neutral-600 text-xl font-normal font-['Inter'] leading-relaxed">Lang</div>
-                </div>
+                </div> */}
                 <div className="w-[203px] h-[50px] left-[1305px] top-[38px] absolute">
                     <div className="w-[203px] h-[50px] left-0 top-0 absolute bg-white rounded-[33px] shadow" />
                     <img className="w-[45px] h-[45px] left-[3px] top-[3px] absolute rounded-full border border-white" src="https://via.placeholder.com/45x45" />

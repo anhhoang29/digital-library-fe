@@ -2,8 +2,6 @@ import React from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
-import { useSelector } from "react-redux";
-
 import "./sidebar.css";
 
 import logo2 from "../../../components/assets/images/logo.png";
@@ -27,7 +25,8 @@ const SidebarItem = (props) => {
 const Sidebar = () => {
     const location = useLocation();
 
-    const user = useSelector((state) => state.LoginReducer.user);
+    // const user = useSelector((state) => state.LoginReducer.user);
+    const user = JSON.parse(sessionStorage.getItem("profile"));
 
     const checkRoutes = () => {
         if (user && user.role.roleName === "ROLE_MANAGER") return manager_sidebar_items;

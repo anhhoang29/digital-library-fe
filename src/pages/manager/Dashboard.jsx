@@ -52,32 +52,35 @@ const chartOptions = {
 const latestUserHead = ["Họ", "Tên", "Email"];
 
 const renderLatestUserHead = (item, index) => (
-    <th key={index} className="capitalize text-base">
+    <th key={index} className="capitalize text-base text-center">
         {item}
     </th>
 );
 
 const renderLatestUserBody = (item, index) => (
-    <tr key={index} className="capitalize text-base">
+    <tr key={index} className="text-sm text-center">
         <td>{item.lastName}</td>
         <td>{item.firstName}</td>
         <td>{item.email}</td>
     </tr>
 );
 
-const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục"];
+const latestDocumentHead = ["Tên", "Giới thiệu"];
 
 const renderLatestDocumentHead = (item, index) => (
-    <th key={index} className="capitalize text-base">
+    <th key={index} className="text-base text-center">
         {item}
     </th>
 );
 
 const renderLatestDocumentBody = (item, index) => (
-    <tr key={index} className="capitalize text-base">
-        <td>{item.docName}</td>
-        <td>{item?.field?.fieldName}</td>
-        <td>{item?.category?.orgName}</td>
+    <tr key={index} className="text-sm text-justify">
+        <td className="max-w-xs">
+            <p className="truncate whitespace-normal leading-6 line-clamp-2">{item.docName}</p>
+        </td>
+        <td className="max-w-xl">
+            <p className="truncate whitespace-normal leading-6 line-clamp-2">{item.docIntroduction}</p>
+        </td>
     </tr>
 );
 
@@ -86,7 +89,8 @@ const ManagerDashboard = () => {
 
     usePrivateAxios();
 
-    const user = useSelector((state) => state.LoginReducer.user);
+    // const user = useSelector((state) => state.LoginReducer.user);
+    const user = JSON.parse(sessionStorage.getItem("profile"));
 
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [totalPendingDocuments, setTotalPendingDocuments] = useState(0);

@@ -92,7 +92,7 @@ const Fields = () => {
             if (response.status === 200) {
                 setFieldList(response.data);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -116,14 +116,14 @@ const Fields = () => {
                 getFieldList();
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
             }
         } catch (error) {
             setStatus(-1);
-            setMessage("Đã xảy ra lỗi!");
+            setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
             setTimeout(() => {
                 setStatus(0);
             }, 4000);

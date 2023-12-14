@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import loginAction from "../../../redux/actions/LoginAction";
 
 import axios from "../../../api/axios";
 
-import { Button, Toast, Label, Checkbox } from "flowbite-react";
+import { Button, Checkbox, Label, Toast } from "flowbite-react";
 import { HiOutlineCheck, HiX } from "react-icons/hi";
 
 import { emailRegrex } from "../../../utils/regrex";
 
-import "./login-form.css";
 import { getProfile } from "../../../api/main/userAPI";
+import "./login-form.css";
 
 const LOGIN_URL = "/auth/login";
 
@@ -25,17 +25,25 @@ const AdminLogin = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("Đã xảy ra lỗi!");
+    const [message, setMessage] = useState("Đã xảy ra lỗi! Xin vui lòng thử lại!");
     const [emailMessage, setEmailMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [entryMessage, setEntryMessage] = useState("");
 
     const errRef = useRef();
 
     useEffect(() => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+
+        setEntryMessage(sessionStorage.getItem("entryMessage"));
+
+        setTimeout(() => {
+            setEntryMessage(null);
+            sessionStorage.removeItem("entryMessage");
+        }, 4000);
     }, []);
 
     useEffect(() => {
@@ -107,17 +115,27 @@ const AdminLogin = () => {
                     const res = await getProfile(config);
                     const user = res.data;
 
-                    dispatch(loginAction.setUser(user));
+                    if (user.role.roleName === "ROLE_ADMIN") {
+                        sessionStorage.setItem("profile", JSON.stringify(user));
+                        dispatch(loginAction.setUser(user));
 
-                    setStatus(1);
-                    setTimeout(() => {
-                        navigate("/admin/home");
-                        setStatus(0);
-                    }, 2000);
+                        setStatus(1);
+                        setTimeout(() => {
+                            navigate("/admin/home");
+                            setStatus(0);
+                        }, 2000);
+                    } else {
+                        setStatus(-1);
+                        setMessage("Tài khoản không có quyền truy cập!");
+                        setTimeout(() => {
+                            navigate("/admin/login");
+                            setStatus(0);
+                        }, 2000);
+                    }
                 }
             } catch (error) {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -222,6 +240,15 @@ const AdminLogin = () => {
                                             <HiOutlineCheck className="h-5 w-5" />
                                         </div>
                                         <div className="ml-3 text-sm font-normal">{message}</div>
+                                        <Toast.Toggle />
+                                    </Toast>
+                                )}
+                                {entryMessage !== "" && entryMessage !== null && (
+                                    <Toast className="top-5 right-5 fixed">
+                                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                                            <HiX className="h-5 w-5" />
+                                        </div>
+                                        <div className="ml-3 text-sm font-normal">{entryMessage}</div>
                                         <Toast.Toggle />
                                     </Toast>
                                 )}

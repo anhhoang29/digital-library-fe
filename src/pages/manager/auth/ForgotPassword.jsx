@@ -21,7 +21,7 @@ const ManagerForgotPassword = () => {
     const [confirmationPassword, setConfirmationPassword] = useState("");
     const [verificationCode, setVerificationCode] = useState();
 
-    const [message, setMessage] = useState("Đã xảy ra lỗi!");
+    const [message, setMessage] = useState("Đã xảy ra lỗi! Xin vui lòng thử lại!");
     const [emailMessage, setEmailMessage] = useState("");
     const [newPasswordMessage, setNewPasswordMessage] = useState("");
     const [confirmationPasswordMessage, setConfirmationPasswordMessage] = useState("");
@@ -97,7 +97,7 @@ const ManagerForgotPassword = () => {
                 }
             } catch (error) {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -131,7 +131,7 @@ const ManagerForgotPassword = () => {
                     if (response.message === "User not found") setMessage("Email không tồn tại");
                     else if (response.message === "Verification code is expired") setMessage("Mã xác thực đã hết hạn");
                     else if (response.message === "Wrong verification code") setMessage("Mã xác thực không hợp lệ");
-                    else setMessage("Đã xảy ra lỗi!");
+                    else setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                     setStatus(-1);
                     setTimeout(() => {
                         setStatus(0);
@@ -139,7 +139,7 @@ const ManagerForgotPassword = () => {
                 }
             } catch (error) {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -178,7 +178,7 @@ const ManagerForgotPassword = () => {
                     if (response.message === "Passwords not matched") setConfirmationPasswordMessage("Mật khẩu mới không khớp!");
                     else {
                         if (response.message === "User not found") setMessage("Người dùng không tồn tại!");
-                        else setMessage("Đã xảy ra lỗi!");
+                        else setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
 
                         setStatus(-1);
                         setTimeout(() => {
@@ -189,7 +189,7 @@ const ManagerForgotPassword = () => {
             } catch (error) {
                 setIsLoading(false);
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);

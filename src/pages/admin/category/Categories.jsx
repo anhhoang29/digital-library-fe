@@ -118,7 +118,7 @@ const Categories = () => {
                 setCategoryList(response.data);
                 // setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -142,14 +142,14 @@ const Categories = () => {
                 getCategoryList();
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
             }
         } catch (error) {
             setStatus(-1);
-            setMessage("Đã xảy ra lỗi!");
+            setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
             setTimeout(() => {
                 setStatus(0);
             }, 4000);

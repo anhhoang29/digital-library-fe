@@ -1,6 +1,6 @@
 import { Button, Datepicker, FileInput, Label, Modal, TextInput, Toast } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { HiX, HiOutlineCheck, HiChevronUp, HiChevronLeft } from "react-icons/hi";
+import { HiChevronLeft, HiChevronUp, HiOutlineCheck, HiX } from "react-icons/hi";
 
 import Select from "../../../select/Select";
 
@@ -77,7 +77,7 @@ const UserModal = (props) => {
         setFirstName("");
         setImage(profileImage);
         setGender(0);
-        //setDateOfBirth(new Date());
+        setDateOfBirth(new Date());
         setEmail("");
         setPhone("");
         setOrgId("");
@@ -155,8 +155,9 @@ const UserModal = (props) => {
     };
 
     const validateOraganization = () => {
-        if (orgId === "" || orgId.trim() === "") setIsOrganizationValid(false);
-        else setIsOrganizationValid(true);
+        if (roleId !== "c0a801b9-8ac0-1a60-818a-c04a8fb50038") {
+            if (orgId === "" || orgId.trim() === "") setIsOrganizationValid(false);
+        } else setIsOrganizationValid(true);
     };
 
     const validateRole = () => {
@@ -294,14 +295,14 @@ const UserModal = (props) => {
     return (
         <>
             {status === -1 && (
-                <Toast className="top-1/4 right-5 w-100 fixed">
+                <Toast className="top-1/4 right-5 w-100 fixed z-50">
                     <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
                     <div className="pl-4 text-sm font-normal">{mainMessage}</div>
                 </Toast>
             )}
 
             {status === 1 && (
-                <Toast className="top-1/4 right-5 fixed w-100">
+                <Toast className="top-1/4 right-5 fixed w-100 z-50">
                     <HiOutlineCheck className="h-5 w-5 bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200" />
                     <div className="pl-4 text-sm font-normal">
                         {!isCreatingNew && "Cập nhật người dùng"} {isCreatingNew && "Tạo người dùng"} thành công!
@@ -309,7 +310,7 @@ const UserModal = (props) => {
                 </Toast>
             )}
 
-            <Modal show={openModal} size="md" onClose={onCloseModal} popup>
+            <Modal show={openModal} size="md" onClose={onCloseModal} popup className="z-40">
                 <Modal.Header />
                 <Modal.Body>
                     <div className="space-y-6">

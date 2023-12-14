@@ -26,7 +26,7 @@ const Organizations = () => {
 
     const renderBody = (item, index) => (
         <tr key={index}>
-            <td className="w-1/12 text-center font-bold">{selectedPage * 20 + index + 1}</td>
+            <td className="w-1/12 text-center font-bold">{selectedPage * 10 + index + 1}</td>
             <td className="w-5/12 text-center">{item.orgName}</td>
             <td className="w-3/12 text-center">
                 <div className="m-auto w-fit">
@@ -108,7 +108,7 @@ const Organizations = () => {
                 setOrganizationList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -134,14 +134,14 @@ const Organizations = () => {
                 selectedPage = 0;
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
             }
         } catch (error) {
             setStatus(-1);
-            setMessage("Đã xảy ra lỗi!");
+            setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
             setTimeout(() => {
                 setStatus(0);
             }, 4000);

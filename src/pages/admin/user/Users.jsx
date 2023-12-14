@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 
-import Table from "../../../components/management/table/Table";
 import ActionButton from "../../../components/management/action-button/ActionButton";
+import Table from "../../../components/management/table/Table";
 
 import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
 import { HiCheck, HiDocumentRemove, HiOutlineBadgeCheck, HiOutlineCheck, HiX } from "react-icons/hi";
@@ -33,7 +33,7 @@ const Users = () => {
     const renderBody = (item, index) => (
         <tr key={index} className="cursor-pointer">
             <td className="text-center font-bold" onClick={() => handleDetail(item.userId)}>
-                {selectedPage * 20 + index + 1}
+                {selectedPage * 15 + index + 1}
             </td>
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12" />
@@ -139,7 +139,7 @@ const Users = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -160,7 +160,7 @@ const Users = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -174,6 +174,11 @@ const Users = () => {
             setIsLoading(false);
             setOpenModal(false);
             if (response.status === 200) {
+                setCurrentPage(1);
+                selectedPage = 0;
+                if (isLatestRoute) getLatestUserList(currentPage);
+                else getUserList(currentPage);
+
                 setStatus(1);
                 setTimeout(() => {
                     setStatus(0);
@@ -187,6 +192,12 @@ const Users = () => {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const refreshUserList = () => {
+        selectedPage = 0;
+        setCurrentPage(1);
+        isLatestRoute ? getLatestUserList(currentPage) : getUserList(currentPage);
     };
 
     return (
@@ -231,12 +242,12 @@ const Users = () => {
                 </Modal.Body>
             </Modal>
 
-            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshUserList={() => (isLatestRoute ? getLatestUserList(1) : getUserList(1))} />
+            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshUserList={refreshUserList} />
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
                     <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
-                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
+                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi! Xin vui lòng thử lại!</div>
                 </Toast>
             )}
 

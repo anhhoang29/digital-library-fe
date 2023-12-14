@@ -2,21 +2,21 @@ import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getUploadedDocumentsByUser, deleteADocument } from "../../../api/main/documentAPI";
+import { deleteADocument, getUploadedDocumentsByUser } from "../../../api/main/documentAPI";
 import { getAUser } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
-import { Button, Pagination, Spinner, Toast, Modal , Badge} from "flowbite-react";
-import { HiChevronLeft, HiOutlinePencilAlt, HiAtSymbol, HiCake, HiCloudUpload, HiPhone, HiUser, HiUserAdd, HiDocumentRemove, HiExclamation, HiOutlineCloudUpload, HiX, HiCheck } from "react-icons/hi";
+import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
+import { HiAtSymbol, HiCake, HiCheck, HiChevronLeft, HiCloudUpload, HiDocumentRemove, HiExclamation, HiOutlineCloudUpload, HiOutlineDotsHorizontal, HiPhone, HiUser, HiUserAdd, HiX } from "react-icons/hi";
 
-import Table from "../../../components/management/table/Table";
 import ActionButton from "../../../components/management/action-button/ActionButton";
+import Table from "../../../components/management/table/Table";
 
 import profileImage from "../../../assets/images/default_profile.jpg";
 
-const ManagerDetailUser = () => {
-    let selectedPage = 0;
+let selectedPage = 0;
 
+const ManagerDetailUser = () => {
     const roleList = {
         ROLE_ADMIN: "ADMIN",
         ROLE_STUDENT: "SINH VIÊN",
@@ -35,19 +35,25 @@ const ManagerDetailUser = () => {
     const renderBody = (item, index) => (
         <tr key={index} className="cursor-pointer">
             <td className="text-center font-bold" onClick={() => handleDetail(item.slug)}>
-                {selectedPage * 20 + index + 1}
+                {selectedPage * 10 + index + 1}
             </td>
             <td className="max-w-xs text-justify" onClick={() => handleDetail(item.slug)}>
                 {item.docName}
             </td>
             <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
-                {item.deleted ? (
-                    <Badge color="warning" icon={HiX}>
-                        Đã vô hiệu
-                    </Badge>
-                ) : (
-                    <Badge icon={HiCheck}>Đang hoạt động</Badge>
-                )}
+                <div className="m-auto w-fit">
+                    {item.verifiedStatus === -1 && (
+                        <Badge color="failure" icon={HiX}>
+                            Từ chối
+                        </Badge>
+                    )}
+                    {item.verifiedStatus === 0 && (
+                        <Badge color="warning" icon={HiOutlineDotsHorizontal}>
+                            Đợi duyệt
+                        </Badge>
+                    )}
+                    {item.verifiedStatus === 1 && <Badge icon={HiCheck}>Đã duyệt</Badge>}
+                </div>
             </td>
             <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
                 {item.totalView}
@@ -78,8 +84,8 @@ const ManagerDetailUser = () => {
     const [openModal, setOpenModal] = useState(false);
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
     const [status, setStatus] = useState(0);
-    const [message, setMessage] = useState("Đã xảy ra lỗi!");
-    
+    const [message, setMessage] = useState("Đã xảy ra lỗi! Xin vui lòng thử lại!");
+
     useEffect(() => {
         getUserByUserId();
     }, []);
@@ -120,7 +126,7 @@ const ManagerDetailUser = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/manager/login");
+                // navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -142,7 +148,7 @@ const ManagerDetailUser = () => {
                 getUploadedDocumentList(1);
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -255,7 +261,7 @@ const ManagerDetailUser = () => {
                         </div>
                     </div>
 
-                    <div className="card w-2/3 overscroll-x-auto">
+                    <div className="card w-2/3 overscroll-x-auto h-fit">
                         <div className="card__body">
                             <div className="mb-5">
                                 <div className="flex items-center mb-2 font-bold">

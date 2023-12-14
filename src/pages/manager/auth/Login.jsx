@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import loginAction from "../../../redux/actions/LoginAction";
 
 import axios from "../../../api/axios";
 
-import { Button, Toast, Label, Checkbox } from "flowbite-react";
+import { Button, Checkbox, Label, Toast } from "flowbite-react";
 import { HiOutlineCheck, HiX } from "react-icons/hi";
 
 import { emailRegrex } from "../../../utils/regrex";
 
-import "./login-form.css";
 import { getProfile } from "../../../api/main/userAPI";
+import "./login-form.css";
 
 const LOGIN_URL = "/auth/login";
 
@@ -25,17 +25,26 @@ const ManagerLogin = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("Đã xảy ra lỗi!");
+    const [message, setMessage] = useState("Đã xảy ra lỗi! Xin vui lòng thử lại!");
     const [emailMessage, setEmailMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [entryMessage, setEntryMessage] = useState("");
 
     const errRef = useRef();
 
     useEffect(() => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+
+        setEntryMessage(sessionStorage.getItem("entryMessage"));
+
+        setTimeout(() => {
+            setEntryMessage(null);
+            sessionStorage.removeItem("entryMessage")
+        }, 4000);
+        
     }, []);
 
     useEffect(() => {
@@ -107,17 +116,27 @@ const ManagerLogin = () => {
                     const res = await getProfile(config);
                     const user = res.data;
 
-                    dispatch(loginAction.setUser(user));
+                    if (user.role.roleName === "ROLE_MANAGER") {
+                        sessionStorage.setItem("profile", JSON.stringify(user));
+                        dispatch(loginAction.setUser(user));
 
-                    setStatus(1);
-                    setTimeout(() => {
-                        navigate("/manager/home");
-                        setStatus(0);
-                    }, 2000);
+                        setStatus(1);
+                        setTimeout(() => {
+                            navigate("/manager/home");
+                            setStatus(0);
+                        }, 2000);
+                    } else {
+                        setStatus(-1);
+                        setMessage("Tài khoản không có quyền truy cập!");
+                        setTimeout(() => {
+                            navigate("/manager/login");
+                            setStatus(0);
+                        }, 2000);
+                    }
                 }
             } catch (error) {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -186,9 +205,7 @@ const ManagerLogin = () => {
                                         Đăng nhập
                                     </Button>
                                 </form>
-
                                 <hr className="mt-6 mb-4" />
-
                                 <button
                                     type="button"
                                     className="flex justify-center w-full text-gray-800 bg-white border login-form-border hover:bg-gray-200 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center mr-2 transition-colors active:bg-gray-600 duration-150 focus:outline-none focus:shadow-outline-gray">
@@ -201,7 +218,6 @@ const ManagerLogin = () => {
                                     </svg>
                                     Google
                                 </button>
-
                                 <p className="mt-4 text-right">
                                     <Link className="text-sm font-medium text-red-600 dark:text-purple-400 hover:underline" to="/manager/forgot-password">
                                         Quên mật khẩu?
@@ -222,6 +238,15 @@ const ManagerLogin = () => {
                                             <HiOutlineCheck className="h-5 w-5" />
                                         </div>
                                         <div className="ml-3 text-sm font-normal">{message}</div>
+                                        <Toast.Toggle />
+                                    </Toast>
+                                )}
+                                {entryMessage !== "" && entryMessage !== null && (
+                                    <Toast className="top-5 right-5 fixed">
+                                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                                            <HiX className="h-5 w-5" />
+                                        </div>
+                                        <div className="ml-3 text-sm font-normal">{entryMessage}</div>
                                         <Toast.Toggle />
                                     </Toast>
                                 )}

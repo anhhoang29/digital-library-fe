@@ -15,6 +15,11 @@
         "icon": "bx bx-user"
     },
     {
+        "display_name": "Đánh giá",
+        "route": "/manager/reviews",
+        "icon": "bx bxs-star-half"
+    },
+    {
         "display_name": "Phê duyệt",
         "route": "/manager/documents/pending",
         "icon": "bx bx-notification"

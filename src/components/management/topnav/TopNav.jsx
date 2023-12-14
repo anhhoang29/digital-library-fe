@@ -4,8 +4,6 @@ import "./topnav.css";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
-
 import Dropdown from "../dropdown/Dropdown";
 
 import ThemeMenu from "../thememenu/ThemeMenu";
@@ -66,7 +64,8 @@ const Topnav = () => {
     const handleLogoutClick = (event) => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        navigate("/admin/login");
+       if (currentPath.includes("/manager")) navigate("/manager/login");
+       else navigate("/admin/login");
 
         event.preventDefault();
     };
@@ -80,12 +79,22 @@ const Topnav = () => {
         event.preventDefault();
     };
 
-    const user = useSelector((state) => state.LoginReducer.user);
+    // const user = useSelector((state) => state.LoginReducer.user);
     const currentPath = location.pathname;
-    if (!user) {
+
+    let user = sessionStorage.getItem("profile");
+
+    // Kiểm tra xem thông tin người dùng có tồn tại không
+    if (user === null) {
         if (currentPath.includes("/manager")) navigate("/manager/login");
         else navigate("/admin/login");
+    } else {
+        user = JSON.parse(user);
     }
+    // if (!user) {
+    //     if (currentPath.includes("/manager")) navigate("/manager/login");
+    //     else navigate("/admin/login");
+    // }
 
     return (
         <div className="topnav">

@@ -13,7 +13,7 @@ const Select = (props) => {
             dark:text-gray-400 dark:focus:ring-gray-600"
                 value={selectedValue}
                 onChange={onChangeHandler}>
-                <option value="">Chọn</option>
+                <option value="all">Tất cả</option>
                 {options?.map((item) => (
                     <option key={item[field]} value={item[field]}>
                         {item[name]}

@@ -52,20 +52,18 @@ const chartOptions = {
 const latestUserHead = ["Họ", "Tên", "Trường"];
 
 const renderLatestUserHead = (item, index) => (
-    <th key={index} className="capitalize text-base">
+    <th key={index} className="capitalize text-base text-center">
         {item}
     </th>
 );
 
 const renderLatestUserBody = (item, index) => (
-    <tr key={index} className="capitalize text-base">
-        <td>{item.lastName}</td>
-        <td>{item.firstName}</td>
-        <td>{item?.organization?.orgName}</td>
+    <tr key={index} className="text-sm">
+        <td className="text-center">{item.lastName}</td>
+        <td className="text-center">{item.firstName}</td>
+        <td className="text-justify">{item?.organization?.orgName}</td>
     </tr>
 );
-
-const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường"];
 
 // const orderStatus = {
 //     shipping: "primary",
@@ -74,18 +72,22 @@ const latestDocumentHead = ["Tên", "Lĩnh vực", "Danh mục", "Trường"];
 //     refund: "danger",
 // };
 
+const latestDocumentHead = ["Tên", "Giới thiệu"];
+
 const renderLatestDocumentHead = (item, index) => (
-    <th key={index} className="capitalize text-base">
+    <th key={index} className="text-base text-center">
         {item}
     </th>
 );
 
 const renderLatestDocumentBody = (item, index) => (
-    <tr key={index} className="capitalize text-base">
-        <td>{item.docName}</td>
-        <td>{item?.field?.fieldName}</td>
-        <td>{item?.category?.categoryName}</td>
-        <td>{item?.organization?.orgName}</td>
+    <tr key={index} className="text-sm text-justify">
+        <td className="max-w-xs">
+            <p className="truncate whitespace-normal leading-6 line-clamp-2">{item.docName}</p>
+        </td>
+        <td className="max-w-xl">
+            <p className="truncate whitespace-normal leading-6 line-clamp-2">{item.docIntroduction}</p>
+        </td>
     </tr>
 );
 

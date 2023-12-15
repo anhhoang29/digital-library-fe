@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser, setIsLoggedIn } from "../../redux/actions/LoginAction";
+import { Toast } from "flowbite-react";
+import { HiX } from "react-icons/hi";
+import authAction from "../../redux/actions/authAction";
 import { emailRegrex } from "../../utils/regrex";
-import { SIGN_UP_URL } from "../../api/main/authAPI";
-
-
+import { register } from "../../api/main/authAPI";
 import logo from '../assets/images/logo.png';
-
-
+import { HiCheck } from "react-icons/hi";
+import qs from "qs";
 
 function SignUp() {
     const [email, setEmail] = useState("");
@@ -17,13 +17,11 @@ function SignUp() {
     const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    
     const [emailMessage, setEmailMessage] = useState("");
     const [firstNameMessage, setFirstNameMessage] = useState("");
     const [lastNameMessage, setLastNameMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
     const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
-
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +29,6 @@ function SignUp() {
     const [status, setStatus] = useState(0);
     const dispatch = useDispatch();
     const location = useLocation();
-
     useEffect(() => {
         setMessage("");
         setEmailMessage("");
@@ -41,6 +38,14 @@ function SignUp() {
         setConfirmPasswordMessage("");
     }, [email, firstName, lastName, password, confirmPassword]);
 
+    const navigate = useNavigate();
+
+    useNavigate((location) => {
+        if (location.state && location.state.from) {
+            return location.state.from;
+        }
+        return "/";
+    });
     const validateEmail = () => {
         if (email === "" || email.trim() === "") {
             setEmailMessage("Email không được để trống");
@@ -48,25 +53,21 @@ function SignUp() {
             setEmailMessage("Email không hợp lệ");
         }
     };
-
     const validateFirstName = () => {
         if (firstName === "" || firstName.trim() === "") {
             setFirstNameMessage("Tên không được để trống");
         }
     };
-
     const validateLastName = () => {
         if (lastName === "" || lastName.trim() === "") {
             setLastNameMessage("Họ không được để trống");
         }
     };
-
     const validatePassword = () => {
         if (password === "" || password.trim() === "") {
             setPasswordMessage("Mật khẩu không được để trống");
         }
     };
-
     const validateConfirmPassword = () => {
         if (confirmPassword === "" || confirmPassword.trim() === "") {
             setConfirmPasswordMessage("Mật khẩu không được để trống");
@@ -74,41 +75,48 @@ function SignUp() {
             setConfirmPasswordMessage("Mật khẩu không khớp");
         }
     }
-
     const handleSignUp = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
         validateEmail();
         validateFirstName();
         validateLastName();
         validatePassword();
         validateConfirmPassword();
+
         if (email && firstName && lastName && password && confirmPassword) {
             try {
-                const response = await axios.post(SIGN_UP_URL, JSON.stringify({ email, firstName, lastName, password, confirmPassword }), {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                });
+                const response = await register((JSON.stringify({
+                    firstName,
+                    lastName,
+                    password,
+                    email,
+                    orgId: "",
+                    roleId: "c0a801b9-8ac0-1a60-818a-c04a8f950035"
+                })),
+                    ({
+                        headers: { "Content-Type": "application/json" },
+                        withCredentials: true,
+                    }));
                 setIsLoading(false);
-                if (response.data.status === 401) {
-                    setMessage("Email or password is incorrect");
-                    setStatus(-1);
-                    setTimeout(() => {
-                        setMessage("");
-                    }, 4000);
-                } else if (response.data.status === 400) {
+                if (response.status === 401 || response.status === 400) {
                     setMessage("Có lỗi xảy ra");
                     setStatus(-1);
-                    setTimeout(() => {
-                        setMessage("");
-                    }, 4000);
                 } else {
-                    dispatch(setUser(response.data.data));
-                    dispatch(setIsLoggedIn(true));
+                    setMessage("Đăng ký thành công");
+                    setStatus(1);
+                    dispatch(authAction.setUser(response.data));
+                    dispatch(authAction.setIsLoggedIn(true));
+
                     if (location.state && location.state.from) {
                         navigate(location.state.from);
                     } else {
-                        navigate("/");
+                        setTimeout(() => {
+                            navigate("/login");
+                            setStatus(0);
+                        }
+                            , 2000);
                     }
                 }
             } catch (error) {
@@ -117,8 +125,6 @@ function SignUp() {
             }
         }
     };
-
-
 
     return (
         <div className="Login1Register w-[1440px] h-[1024px] relative bg-white">
@@ -138,92 +144,94 @@ function SignUp() {
             <div className="Group19 w-[369px] h-[683.46px] left-[892px] top-[100px] absolute">
                 <input
                     type="text"
+                    value={email}
                     name="email"
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter email"
                     className="Group15 w-[369px] h-[62px] left-0 top-[73px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
-                    style={{ color:'indigo',border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
+                    style={{ color: 'indigo', border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
                 />
-                {/* <div className="Group15 w-[369px] h-[62px] left-0 top-[73px] absolute justify-center items-center inline-flex">
-                    <div className="Group4 w-[369px] h-[62px] relative">
-                        <div className="Rectangle1 w-[369px] h-[62px] left-0 top-0 absolute bg-indigo-50 rounded-lg" />
-                        <div className="EnterEmail left-[26px] top-[20px] absolute text-indigo-300 text-[15px] font-normal font-['Poppins']">Enter Email</div>
-                    </div>
-                </div> */}
-                
-                {/* <div className="Group17 w-[369px] h-[62px] left-0 top-[153px] absolute justify-center items-center inline-flex">
-                    <div className="Group4 w-[369px] h-[62px] relative">
-                        <div className="Rectangle1 w-[369px] h-[62px] left-0 top-0 absolute bg-indigo-50 rounded-lg" />
-                        <div className="FirstName left-[26px] top-[20px] absolute text-indigo-300 text-[15px] font-normal font-['Poppins']">Enter First Name</div>
-                    </div>
-                </div> */}
+                <emailMessage className="text-red-500 text-sm">{emailMessage}</emailMessage>
                 <input
                     type="text"
+                    value={firstName}
                     name="firstName"
+                    onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Enter first name"
                     className="Group17 w-[369px] h-[62px] left-0 top-[153px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
-                    style={{ color:'indigo',border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
+                    style={{ color: 'indigo', border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
                 />
-                {/* <div className="Group18 w-[369px] h-[62px] left-0 top-[233px] absolute justify-center items-center inline-flex">
-                    <div className="Group4 w-[369px] h-[62px] relative">
-                        <div className="Rectangle1 w-[369px] h-[62px] left-0 top-0 absolute bg-indigo-50 rounded-lg" />
-                        <div className="LastName left-[26px] top-[20px] absolute text-indigo-300 text-[15px] font-normal font-['Poppins']">Enter Last Name</div>
-                    </div>
-                </div> */}
+                <firstNameMessage className="text-red-500 text-sm">{firstNameMessage}</firstNameMessage>
                 <input
                     type="text"
+                    value={lastName}
                     name="lastName"
+                    onChange={(e) => setLastName(e.target.value)}
                     placeholder="Enter last name"
                     className="Group18 w-[369px] h-[62px] left-0 top-[233px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
-                    style={{ color:'indigo',border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
+                    style={{ color: 'indigo', border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
                 />
-                {/* <div className="Group6 w-[369px] h-[62px] left-0 top-[394px] absolute">
-                    <div className="Group5 w-[369px] h-[62px] left-0 top-0 absolute">
-                        <div className="Rectangle1 w-[369px] h-[62px] left-0 top-0 absolute bg-indigo-50 rounded-lg" />
-                        <div className="ConfrimPassword w-[147px] left-[29px] top-[20px] absolute text-indigo-300 text-[15px] font-normal font-['Poppins']">Confrim Password</div>
-                    </div>
-                    <div className="Invisible1 w-[17px] h-[17px] left-[320px] top-[23px] absolute">
-                        <div className="Group w-[17px] h-[14.68px] left-0 top-[1.16px] absolute">
-                        </div>
-                    </div>
-                </div> */}
+                <lastNameMessage className="text-red-500 text-sm">{lastNameMessage}</lastNameMessage>
                 <input
                     type="password"
+                    value={password}
                     name="password"
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter password"
-                    className="Group6 w-[369px] h-[62px] left-0 top-[394px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
-                    style={{ color:'indigo',border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
+                    className="Group6 w-[369px] h-[62px] left-0 top-[313px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
+                    style={{ color: 'indigo', border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
                 />
+                <passwordMessage className="text-red-500 text-sm">{passwordMessage}</passwordMessage>
                 <input
                     type="password"
+                    value={confirmPassword}
                     name="confirmPassword"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm password"
-                    className="Group6 w-[369px] h-[62px] left-0 top-[313px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
-                    style={{ color:'indigo',border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
+                    className="Group6 w-[369px] h-[62px] left-0 top-[394px] absolute  bg-indigo-50 rounded-lg justify-center items-center inline-flex"
+                    style={{ color: 'indigo', border: 'none', outline: 'none', width: '369px', height: '62px', borderRadius: '0.5rem', fontFamily: ['Poppins'] }}
                 />
-                {/* <div className="Group6 w-[369px] h-[62px] left-0 top-[313px] absolute">
-                    <div className="Group5 w-[369px] h-[62px] left-0 top-0 absolute">
-                        <div className="Rectangle1 w-[369px] h-[62px] left-0 top-0 absolute bg-indigo-50 rounded-lg" />
-                        <div className="Password w-[147px] left-[29px] top-[20px] absolute text-indigo-300 text-[15px] font-normal font-['Poppins']">Password</div>
-                    </div>
-                    <div className="Invisible1 w-[17px] h-[17px] left-[320px] top-[23px] absolute">
-                        <div className="Group w-[17px] h-[14.68px] left-0 top-[1.16px] absolute">
-                        </div>
-                    </div>
-                </div> */}
+                <confirmPasswordMessage className="text-red-500 text-sm">{confirmPasswordMessage}</confirmPasswordMessage>
                 <div className="Group14 w-[369px] h-[59px] left-0 top-[484px] absolute justify-center items-center inline-flex">
                     <div className="Group9 w-[369px] h-[59px] relative">
                         <div className="Rectangle2 w-[369px] h-[59px] left-0 top-0 absolute bg-blue-500 rounded-[9px] shadow" />
                         <button
                             className="Register left-[158px] top-[18px] absolute text-white text-base font-medium font-Poppins"
-                            onClick={() => {
-                                handleSignUp();
-                                console.log('Registration button clicked!');
-                            }}
+                            onClick={handleSignUp}
                         >
                             Register
                         </button>
                     </div>
                 </div>
+                {status === -1 && (
+                    <Toast className="top-5 right-5 fixed">
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                            <HiX className="h-5 w-5" />
+                        </div>
+                        <div className="ml-3 text-sm font-normal">{message}</div>
+                        <Toast.Toggle />
+                    </Toast>
+                )}
+                {status === 1 && (
+                    <Toast className="top-5 right-5 fixed">
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+                            <HiCheck className="h-5 w-5" />
+                        </div>
+                        <div className="ml-3 text-sm font-normal">{message}</div>
+                        <Toast.Toggle />
+                    </Toast>
+                )}
+                {error && (
+                    <Toast className="top-5 right-5 fixed">
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                            <HiX className="h-5 w-5" />
+                        </div>
+                        <div className="ml-3 text-sm font-normal">{error}</div>
+                        <Toast.Toggle />
+                    </Toast>
+                )}
+
+
                 <div className="OrContinueWith left-[120px] top-[590px] absolute text-zinc-400 text-base font-medium font-['Poppins']">or continue with</div>
                 <div className="Google w-[41.46px] h-[41.46px] left-[176px] top-[642px] absolute flex-col justify-start items-start inline-flex" />
                 <div className="SignUp left-0 top-0 absolute text-black text-3xl font-medium font-['Poppins']">Sign Up</div>

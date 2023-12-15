@@ -1,6 +1,8 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import Cookies from 'js-cookie';
+import "../config.env";
+// set up default config for http requests here
 
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -16,11 +18,11 @@ axiosClient.interceptors.request.use(async (config) => {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-}
-);
+});
 
 axiosClient.interceptors.response.use((response) => {
     if (response && response.data) {
+
         return response.data;
     }
     return response;
@@ -29,5 +31,7 @@ axiosClient.interceptors.response.use((response) => {
         throw error;
     }
 );
+
+
 
 export default axiosClient;

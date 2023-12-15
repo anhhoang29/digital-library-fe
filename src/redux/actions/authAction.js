@@ -3,8 +3,16 @@ const setUser = (user) => ({
     payload: user,
 });
 
-const loginAction = {
-    setUser,
+const setIsLoggedIn = (isLoggedIn) => {
+    return {
+        type: "SET_IS_LOGGED_IN",
+        payload: isLoggedIn,
+    };
 };
 
-export default loginAction;
+const authAction = {
+    setUser,
+    setIsLoggedIn,
+};
+
+export default authAction;

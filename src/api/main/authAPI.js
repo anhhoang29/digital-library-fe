@@ -1,9 +1,8 @@
 import axios from "../axios";
 
-const SIGNUP_URL = "/auth/register";
+const SIGN_UP_URL = "/auth/signup";
 const LOGIN_URL = "/auth/login";
 const LOGOUT_URL = "/auth/logout";
-// const ME_URL = "/auth/me";
 const SEND_EMAIL_URL = "/auth/sendEmail";
 const VERIFY_URL = "/auth/verify";
 
@@ -20,7 +19,6 @@ export const logout = async (config) => {
 };
 
 
-
 export const login = async (data, config) => {
     try {
         const response = await axios.post(LOGIN_URL, data, config);
@@ -32,13 +30,13 @@ export const login = async (data, config) => {
 
 export const register = async (data, config) => {
     try {
-        const response = await axios.post(SIGNUP_URL, data, config);
+        const response = await axios.post(SIGN_UP_URL, data, config);
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
+        console.error("Error in register function:", error);
         throw error;
     }
-}
+};
 
 
 export const sendEmail = async (config) => {
@@ -58,3 +56,4 @@ export const verify = async (config) => {
         throw error;
     }
 };
+

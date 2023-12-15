@@ -35,7 +35,7 @@ const RootRouters = () => {
                     <Route path="/manager/login" element={<ManagerLogin />} />
                     <Route path="/admin/*" element={<Layout />} />
                     {/* <UserRoute path="/user/*" element={<Layout />} /> */}
-                    <Route path="/user" element={<UserHome />} />
+                    <Route path="/user/*" element={<UserHome />} />
                 </Routes>
             </CSSTransition>
         </TransitionGroup>

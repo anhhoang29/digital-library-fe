@@ -1,24 +1,26 @@
-// import React from "react";
-// import { Route, Redirect } from "react-router-dom";
-// import { useAuth } from "../../contexts/AuthContext";
-// import Cookies from "js-cookie";
+import { React } from "react";
+import { Route, Routes } from "react-router-dom";
 
-// const UserRoute = ({ component: Component, ...rest }) => {
-//     const { currentUser } = useAuth();
-//     const token = Cookies.get("token");
 
-//     return (
-//         <Route
-//             {...rest}
-//             render={(props) => {
-//                 return token && currentUser ? (
-//                     <Component {...props} />
-//                 ) : (
-//                     <Redirect to="/login" />
-//                 );
-//             }}
-//         />
-//     );
-// };
+import ReadDocument from "../document/document";
+import Search from "../search/search";
+import UserHome from "../user/home";
+import UserProfile from "../user/profile";
+import DocumentDetail from "../document/documentDetail";
 
-// export default UserRoute;
+
+const UserRoute = () => {
+    return (
+        <Routes>
+            <Route path="/user" element={<UserHome />} />
+            <Route path="/user/documents/read" element={<ReadDocument />} />
+            {/* <Route path="/user/documents" element={<UserDocuments />} /> */}
+            <Route path="/user/profile" element={<UserProfile />} />
+            <Route path="/user/search" element={<Search />} />
+            <Route path="/user/document/detail" element={<DocumentDetail />} />
+        </Routes>
+
+    )
+}
+
+export default UserRoute

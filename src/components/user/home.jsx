@@ -5,6 +5,7 @@ import logo from '../assets/images/logo.png';
 import UserRoutes from '../routers/UserRouters';
 import SidebarComponent from '../siderbar/siderbar';
 import Menu from '../menu/menu';
+import SliderComponent from '../slider/slider';
 
 
 const UserHome = () => {
@@ -16,7 +17,11 @@ const UserHome = () => {
       </div>
       <div className="w-full">
         <Menu />
+        <div>
+          <SliderComponent />
+        </div>
       </div>
+
     </div>
   );
 

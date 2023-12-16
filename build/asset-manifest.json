@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.86a35431.css",
+    "main.js": "/static/js/main.a46f7945.js",
+    "static/js/787.26977698.chunk.js": "/static/js/787.26977698.chunk.js",
+    "static/media/boxicons.svg": "/static/media/boxicons.c17adb11d64fadd1cd5a.svg",
+    "static/media/boxicons.eot": "/static/media/boxicons.092b78589f3f53e60030.eot",
+    "static/media/boxicons.woff": "/static/media/boxicons.0f4528cf3c75a4b361c0.woff",
+    "static/media/boxicons.ttf": "/static/media/boxicons.cbd149c55e2396cb52e7.ttf",
+    "static/media/banner2.jpg": "/static/media/banner2.8129379d1a03e98dfacb.jpg",
+    "static/media/default_background.jpg": "/static/media/default_background.61dff953b9d3d601c865.jpg",
+    "static/media/boxicons.woff2": "/static/media/boxicons.8d765747a5588f36ff61.woff2",
+    "static/media/logo.png": "/static/media/logo.ef7bfcda7327f4e4c10e.png",
+    "static/media/signin-image.jpg": "/static/media/signin-image.6f90f9010c6a618ff926.jpg",
+    "static/media/forgotpassword-image.jpg": "/static/media/forgotpassword-image.a76d36f87b29b5619b75.jpg",
+    "index.html": "/index.html",
+    "main.86a35431.css.map": "/static/css/main.86a35431.css.map",
+    "main.a46f7945.js.map": "/static/js/main.a46f7945.js.map",
+    "787.26977698.chunk.js.map": "/static/js/787.26977698.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.86a35431.css",
+    "static/js/main.a46f7945.js"
+  ]
+}

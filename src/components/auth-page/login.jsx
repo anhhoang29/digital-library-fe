@@ -107,7 +107,7 @@ function Login() {
 
           setStatus(1);
           setTimeout(() => {
-            // navigate("/user");
+            navigate("/user");
             setStatus(0);
           }, 2000);
         }

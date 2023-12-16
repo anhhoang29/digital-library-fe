@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from '../../assets/images/logo.png';
 
 function Profile() {
-  
+
   return (
     <div className="w-[1920px] h-[1080px] relative bg-white">
       <div className="w-[1544px] h-[1011px] left-[341px] top-[48px] absolute rounded-[10px]">

@@ -18,8 +18,8 @@ const UserRoute = () => {
             <Route path="/user/profile" element={<UserProfile />} />
             <Route path="/user/search" element={<Search />} />
             <Route path="/user/document/detail" element={<DocumentDetail />} />
+            {/* <Routhe path="/user/document/contribute" element={<DocumentContribute />} />"           */}
         </Routes>
-
     )
 }
 

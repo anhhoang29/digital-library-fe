@@ -13,7 +13,7 @@ import usePrivateAxios from "../../../api/usePrivateAxios";
 let selectedPage = 0;
 
 const PendingDocuments = () => {
-    const tableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
+    const tableHead = ["", "Tên", "Giới thiệu", ""];
 
     const renderHead = (item, index) => (
         <th key={index} className="cursor-pointer">
@@ -22,21 +22,15 @@ const PendingDocuments = () => {
     );
 
     const renderBody = (item, index) => (
-        <tr key={index}>
+        <tr key={index} className="cursor-pointer">
             <td className="text-center font-bold" onClick={() => handleDetail(item.slug)}>
-                {selectedPage * 20 + index + 1}
+                {selectedPage * 10 + index + 1}
             </td>
             <td className="max-w-xs" onClick={() => handleDetail(item.slug)}>
                 {item.docName}
             </td>
-            <td className="max-w-xs" onClick={() => handleDetail(item.slug)}>
-                {item.docIntroduction}
-            </td>
-            <td className="max-w-xs text-center" onClick={() => handleDetail(item.slug)}>
-                {item.deleted ? "Đã xoá" : "Chưa xoá"}
-            </td>
-            <td className="max-w-xs text-center" onClick={() => handleDetail(item.slug)}>
-                {item.totalView}
+            <td className="max-w-xl" onClick={() => handleDetail(item.slug)}>
+                <p className="truncate whitespace-normal leading-6 line-clamp-3">{item.docIntroduction}</p>
             </td>
             <td className="text-center">
                 <div className="flex space-x-0">
@@ -97,7 +91,7 @@ const PendingDocuments = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -136,7 +130,7 @@ const PendingDocuments = () => {
                 selectedPage = 0;
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);

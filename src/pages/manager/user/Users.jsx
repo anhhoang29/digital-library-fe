@@ -12,8 +12,6 @@ import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileImage from "../../../assets/images/default_profile.jpg";
 import UserModal from "../../../components/management/manager/modal/user/UserModal";
 
-import { useSelector } from "react-redux";
-
 let selectedPage = 0;
 
 const ManagerUsers = () => {
@@ -35,7 +33,7 @@ const ManagerUsers = () => {
     const renderBody = (item, index) => (
         <tr key={index} className="cursor-pointer">
             <td className="text-center font-bold" onClick={() => handleDetail(item.userId)}>
-                {selectedPage * 20 + index + 1}
+                {selectedPage * 15 + index + 1}
             </td>
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12" />
@@ -49,8 +47,8 @@ const ManagerUsers = () => {
             <td className="max-w-xs" onClick={() => handleDetail(item.userId)}>
                 {item.email}
             </td>
-            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
-                {item.role && <Badge icon={HiOutlineBadgeCheck}>{roleList[item.role.roleName]}</Badge>}
+            <td className="max-w-xs text-center m-auto" onClick={() => handleDetail(item.userId)}>
+                <div className="m-auto w-fit">{item.role && <Badge icon={HiOutlineBadgeCheck}>{roleList[item.role.roleName]}</Badge>}</div>
             </td>
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 <div className="m-auto w-fit">
@@ -77,7 +75,7 @@ const ManagerUsers = () => {
 
     const navigate = useNavigate();
 
-    const user = useSelector((state) => state.LoginReducer.user);
+    const user = JSON.parse(sessionStorage.getItem("profile"));
 
     const handleDetail = (userId) => {
         navigate(`/manager/users/${userId}`);
@@ -143,7 +141,7 @@ const ManagerUsers = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/manager/login");
+                // navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -164,7 +162,7 @@ const ManagerUsers = () => {
                 setUserList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/manager/login");
+                // navigate("/manager/login");
             }
         } catch (error) {
             console.log(error);
@@ -178,6 +176,11 @@ const ManagerUsers = () => {
             setIsLoading(false);
             setOpenModal(false);
             if (response.status === 200) {
+                setCurrentPage(1);
+                selectedPage = 0;
+                if (isLatestRoute) getLatestUserList(currentPage);
+                else getUserList(currentPage);
+
                 setStatus(1);
                 setTimeout(() => {
                     setStatus(0);
@@ -191,6 +194,12 @@ const ManagerUsers = () => {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const refreshUserList = () => {
+        selectedPage = 0;
+        setCurrentPage(1);
+        isLatestRoute ? getLatestUserList(currentPage) : getUserList(currentPage);
     };
 
     return (
@@ -235,12 +244,12 @@ const ManagerUsers = () => {
                 </Modal.Body>
             </Modal>
 
-            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshUserList={() => (isLatestRoute ? getLatestUserList(1) : getUserList(1))} />
+            <UserModal openUserModal={openUserModal} userId={userId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshUserList={refreshUserList} />
 
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed">
                     <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
-                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
+                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi! Xin vui lòng thử lại!</div>
                 </Toast>
             )}
 

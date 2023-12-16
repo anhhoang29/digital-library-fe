@@ -50,17 +50,13 @@ const ManagerDetailDocument = () => {
                     <div className="card w-1/3 mr-5">
                         <div className="card__body">
                             <div className="mb-8 ">
-                                <h2 className="max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-gray-400 md:text-2xl">{document && document.docName}</h2>
+                                <h2 className="max-w-xl mt-2 mb-6 text-2xl text-justify font-bold dark:text-gray-400 md:text-2xl">{document && document.docName}</h2>
                                 <Rating>
                                     <Rating.Star />
-                                    <p className="ml-2 text-sm font-bold text-gray-900 dark:text-white">4.95</p>
-                                    <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
-                                    <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
-                                        73 reviews
-                                    </a>
+                                    <p className="ml-2 text-sm font-bold text-gray-900 dark:text-white">{document && document.averageRating}</p>
                                 </Rating>
 
-                                <p className="max-w-md mb-2 mt-4 text-gray-700 dark:text-gray-400 text-sm">{document && document.docIntroduction}</p>
+                                <p className="max-w-md mb-2 mt-4 text-justify text-gray-700 dark:text-gray-400 text-sm">{document && document.docIntroduction}</p>
                             </div>
 
                             <div className="mb-5">
@@ -133,12 +129,11 @@ const ManagerDetailDocument = () => {
                                 <div className="block mb-2 text-base font-medium text-sky-500 dark:text-white">{document && moment(document.updatedAt).format("DD-MM-yyyy HH:mm")}</div>
                             </div>
 
-                            <div className="mb-5">
+                            {/* <div className="mb-5">
                                 <div className="flex items-center mb-2 font-bold">
                                     <HiXCircle className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
                                     <span className="block text-base font-medium dark:text-white">Trạng thái</span>
                                 </div>
-                                {/* <div className="block mb-2 text-base font-medium text-sky-500 dark:text-white">{document && document.field.fieldName}</div> */}
                                 {document && !document.deleted && (
                                     <Button color="success" pill>
                                         Đang hoạt động
@@ -149,7 +144,7 @@ const ManagerDetailDocument = () => {
                                         Đã xoá
                                     </Button>
                                 )}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 

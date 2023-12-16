@@ -1,0 +1,10 @@
+[
+    {
+        "value": "true",
+        "name": "Nội bộ"
+    },
+    {
+        "value": "false",
+        "name": "Công khai"
+    }
+]

@@ -17,8 +17,9 @@ const ManagerEditDocument = () => {
 
     const { slug } = useParams();
 
-    const currentUser = useSelector((state) => state.LoginReducer.user);
-
+    // const currentUser = useSelector((state) => state.LoginReducer.user);
+    const currentUser = JSON.parse(sessionStorage.getItem("profile"));
+    
     const [document, setDocument] = useState(null);
 
     const navigate = useNavigate();
@@ -218,7 +219,7 @@ const ManagerEditDocument = () => {
             {status === -1 && (
                 <Toast className="top-1/4 right-5 w-100 fixed z-50">
                     <HiExclamation className="h-5 w-5 text-amber-400 dark:text-amber-300" />
-                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi!</div>
+                    <div className="pl-4 text-sm font-normal">Đã xảy ra lỗi! Xin vui lòng thử lại!</div>
                 </Toast>
             )}
 
@@ -369,7 +370,7 @@ const ManagerEditDocument = () => {
                                 </div>
 
                                 <div className="flex flex-wrap gap-2">
-                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate("/manager/documents")}>
+                                    <Button disabled={isLoading} color="failure" className="w-auto" onClick={() => navigate(-1)}>
                                         <HiChevronLeft className="mr-2 h-5 w-5" />
                                         Huỷ bỏ
                                     </Button>

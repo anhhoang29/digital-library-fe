@@ -15,6 +15,7 @@ import Organizations from "../../pages/admin/organization/Organizations.jsx";
 import DetailUser from "../../pages/admin/user/DetailUser.jsx";
 import Users from "../../pages/admin/user/Users.jsx";
 
+import Page404 from "../../pages/404Page.jsx";
 import ManagerDashboard from "../../pages/manager/Dashboard.jsx";
 import ManagerProfile from "../../pages/manager/Profile.jsx";
 import ManagerDetailDocument from "../../pages/manager/document/DetailDocument.jsx";
@@ -22,6 +23,7 @@ import ManagerDocuments from "../../pages/manager/document/Documents.jsx";
 import ManagerEditDocument from "../../pages/manager/document/EditDocument.jsx";
 import ManagerNewDocument from "../../pages/manager/document/NewDocument.jsx";
 import ManagerPendingDocuments from "../../pages/manager/document/PendingDocument.jsx";
+import Reviews from "../../pages/manager/review/Reviews.jsx";
 import ManagerDetailUser from "../../pages/manager/user/DetailUser.jsx";
 import ManagerUsers from "../../pages/manager/user/Users.jsx";
 
@@ -52,8 +54,11 @@ const ManagementRoutes = () => {
             <Route path="/manager/users/:userId" element={<ManagerDetailUser />} />
             <Route path="/manager/users" element={<ManagerUsers />} />
             <Route path="/manager/documents" element={<ManagerDocuments />} />
+            <Route path="/manager/reviews" element={<Reviews />} />
             <Route path="/manager/profile" element={<ManagerProfile />} />
             <Route path="/manager/home" element={<ManagerDashboard />} />
+
+            <Route path="*" element={<Page404 />} />
         </Routes>
     );
 };

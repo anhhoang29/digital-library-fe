@@ -19,6 +19,8 @@ tr {
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 2px solid var(--second-bg);
+    line-height: 1.5rem;
+    height: 4.5rem;
 }
 
 th,

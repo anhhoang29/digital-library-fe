@@ -10,10 +10,16 @@ const usePrivateAxios = () => {
         const requestInterceptor = privateAxios.interceptors.request.use(
             (config) => {
                 const accessToken = localStorage.getItem("accessToken");
+                const user = JSON.parse(sessionStorage.getItem("profile"));
 
-                if (!accessToken) navigate("/admin/login");
-                else config.headers.Authorization = `Bearer ${accessToken}`;
-
+                if (!accessToken) {
+                    if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
+                    else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    sessionStorage.setItem("entryMessage", "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại!");
+                } else {
+                    config.headers.Authorization = `Bearer ${accessToken}`;
+                    sessionStorage.removeItem("entryMessage");
+                }
                 return config;
             },
             (error) => Promise.reject(error),
@@ -21,10 +27,19 @@ const usePrivateAxios = () => {
 
         const responseInterceptor = privateAxios.interceptors.response.use(
             (response) => {
-                if (response.data.status === 401) {
-                    if (response.data.message === "User unauthorized. Please log in first.") navigate("/admin/login");
-                } else if (response.data.status === 403) navigate("/admin/login");
+                const user = JSON.parse(sessionStorage.getItem("profile"));
 
+                if (response.data.status === 401 || response.data.status === 403) {
+                    if (response.data.status === 401) {
+                        sessionStorage.setItem("entryMessage", "Vui lòng đăng nhập trước!");
+                    } else if (response.data.status === 403) {
+                        sessionStorage.setItem("entryMessage", "Tài khoản không có quyền truy cập!");
+                    }
+                    if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
+                    else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                } else {
+                    sessionStorage.removeItem("entryMessage");
+                }
                 return response;
             },
             (error) => {

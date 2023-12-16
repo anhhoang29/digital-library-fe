@@ -2,8 +2,8 @@ import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Datepicker, FileInput, Label, Modal, Pagination, TextInput, Toast, Spinner, Badge } from "flowbite-react";
-import { HiAdjustments, HiAtSymbol, HiCake, HiDocumentRemove, HiX, HiOutlineCheck, HiPhone, HiUser, HiCheck } from "react-icons/hi";
+import { Badge, Button, Datepicker, FileInput, Label, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
+import { HiAdjustments, HiAtSymbol, HiCake, HiCheck, HiDocumentRemove, HiOutlineCheck, HiPhone, HiUser, HiX } from "react-icons/hi";
 
 import ActionButton from "../../components/management/action-button/ActionButton";
 import Select from "../../components/management/select/Select";
@@ -42,7 +42,7 @@ const Profile = () => {
     const renderBody = (item, index) => (
         <tr key={index}>
             <td className="text-center font-bold" onClick={() => handleDetail(item.slug)}>
-                {selectedPage * 20 + index + 1}
+                {selectedPage * 10 + index + 1}
             </td>
             <td className="max-w-xs text-justify" onClick={() => handleDetail(item.slug)}>
                 {item.docName}
@@ -102,7 +102,7 @@ const Profile = () => {
     const [isFileValid, setIsFileValid] = useState(true);
     const [fileMessage, setFileMessage] = useState("");
     const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
-    const [message, setMessage] = useState("Đã xảy ra lỗi!");
+    const [message, setMessage] = useState("Đã xảy ra lỗi! Xin vui lòng thử lại!");
 
     const [user, setUser] = useState(null);
 
@@ -145,7 +145,7 @@ const Profile = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/admin/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -187,7 +187,7 @@ const Profile = () => {
                 getUploadedDocumentList(1);
             } else {
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -320,6 +320,8 @@ const Profile = () => {
                     }, 4000);
 
                     setUser(response.data);
+                    sessionStorage.removeItem("profile");
+                    sessionStorage.setItem("profile", JSON.stringify(response.data));
 
                     setLastName(response.data.lastName);
                     setFirstName(response.data.firstName);
@@ -332,7 +334,7 @@ const Profile = () => {
 
                     if (response.message === "Email already registered") setMessage("Email đã tồn tại!");
                     else if (response.message === "User not found") setMessage("Người dùng không tồn tại!");
-                    else setMessage("Đã xảy ra lỗi!");
+                    else setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
 
                     setTimeout(() => {
                         setStatus(0);
@@ -341,7 +343,7 @@ const Profile = () => {
             } catch (error) {
                 setIsLoadingInfo(false);
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
@@ -378,7 +380,7 @@ const Profile = () => {
                     setUser(response.data);
                 } else {
                     setStatus(-1);
-                    setMessage("Đã xảy ra lỗi!");
+                    setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
 
                     setTimeout(() => {
                         setStatus(0);
@@ -387,7 +389,7 @@ const Profile = () => {
             } catch (error) {
                 setIsLoadingAvatar(false);
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 2000);
@@ -429,7 +431,7 @@ const Profile = () => {
                     if (response.message === "Password incorrect") setMessage("Mật khẩu cũ không đúng!");
                     else if (response.message === "Passwords not matched") setMessage("Mật khẩu mới không khớp!");
                     else if (response.message === "User not found") setMessage("Người dùng không tồn tại!");
-                    else setMessage("Đã xảy ra lỗi!");
+                    else setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
 
                     setTimeout(() => {
                         setStatus(0);
@@ -438,7 +440,7 @@ const Profile = () => {
             } catch (error) {
                 setIsLoadingPassword(false);
                 setStatus(-1);
-                setMessage("Đã xảy ra lỗi!");
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);

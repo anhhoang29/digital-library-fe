@@ -1,0 +1,14 @@
+[
+    {
+        "number": "-1",
+        "name": "Đã từ chối"
+    },
+    {
+        "number": "0",
+        "name": "Đang đợi duyệt"
+    },
+    {
+        "number": "1",
+        "name": "Đã duyệt"
+    }
+]

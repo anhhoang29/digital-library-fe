@@ -1,6 +1,31 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+
 
 function Menu(props) {
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    useEffect(() => {
+        // Cập nhật ngày giờ mỗi giây
+        const intervalId = setInterval(() => {
+            setCurrentDate(new Date());
+        }, 1000);
+
+        // Hủy bỏ interval khi component bị unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const formattedTime = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+    }).format(currentDate);
+
+    const formattedDate = new Intl.DateTimeFormat("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    }).format(currentDate);
+
     return (
         // pl-10 w-full bg-gradient-to-b from-white via-gray-100 to-gray-100 rounded-tr-[10px] border justify-end inline-flex
         <div className="pl-12 pr-7 py-7 bg-gradient-to-b rounded-none max-md:px-5">
@@ -50,7 +75,7 @@ function Menu(props) {
                                     alt="image3"
                                 />
                                 <div className="text-neutral-600 text-center text-base leading-5 tracking-tighter grow whitespace-nowrap">
-                                    09:00 AM
+                                    {formattedTime}
                                 </div>
                             </div>
                             <div className="items-stretch flex justify-between gap-1.5">
@@ -61,7 +86,7 @@ function Menu(props) {
                                     alt="image4"
                                 />
                                 <div className="text-neutral-600 text-center text-base leading-5 tracking-tighter grow whitespace-nowrap">
-                                    4-Mar-2023
+                                    {formattedDate}
                                 </div>
                             </div>
                         </div>

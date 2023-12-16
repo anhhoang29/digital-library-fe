@@ -10,7 +10,7 @@ const SidebarItem = [
     {
         name: "Tìm kiếm",
         icon: "https://cdn.builder.io/api/v1/image/assets%2FTEMP%2F09e67718945c1c8f4bfae2687d2a8a538c68d32aa5c48695b2dfde70a99e7022?apiKey=8f3ef2aee7df426ebef0e2cd7797def8&",
-        to: "/search",
+        to: "/user/search",
     },
     {
         name: "Sách của tôi",

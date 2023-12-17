@@ -125,3 +125,22 @@ export const searchDocumentsByOrganization = async (org, config) => {
         throw error;
     }
 };
+
+export const getAllDocumentsForGuest = async (page, size, order, sortOrder, category, field, organization) => {
+    try {
+        const response = await axios.get("/documents/public", {
+            params: {
+                page: page || 0,
+                size: size || 20,
+                order: order || "updatedAt",
+                sortOrder: sortOrder || "desc",
+                category: category || "all",
+                field: field || "all",
+                organization: organization || "all",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

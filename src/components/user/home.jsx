@@ -6,6 +6,7 @@ import UserRoutes from '../routers/UserRouters';
 import SidebarComponent from '../siderbar/siderbar';
 import Menu from '../menu/menu';
 import SliderComponent from '../slider/slider';
+import DocumentList from '../document/document';
 
 
 const UserHome = () => {
@@ -20,8 +21,10 @@ const UserHome = () => {
         <div>
           <SliderComponent />
         </div>
+        <div className='block'>
+          <DocumentList />
+        </div>
       </div>
-
     </div>
   );
 

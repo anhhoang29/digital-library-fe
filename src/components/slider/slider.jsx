@@ -1,22 +1,21 @@
-import exp from 'constants';
 import { React } from 'react';
 
 const SliderList = [
     {
         id: 1,
-        title:"Today's Quote",
+        title: "Today's Quote",
         text: "Đọc sách giúp bạn có thêm nhiều kiến thức và kinh nghiệm",
         author: "Bill Gates",
     },
     {
         id: 2,
-        title:"Today's Quote",
+        title: "Today's Quote",
         text: "Đọc sách là cách tốt nhất để mở rộng tâm trí của bạn",
         author: "Michelle Obama",
     },
     {
         id: 3,
-        title:"Today's Quote",
+        title: "Today's Quote",
         text: "Đọc sách là cách tốt nhất để mở rộng tâm trí của bạn",
         author: "Michelle Obama",
     }
@@ -24,7 +23,7 @@ const SliderList = [
 
 function SliderComponent(props) {
     return (
-        <div className="flex max-w-[547px] flex-col items-stretch py-9 rounded-xl">
+        <div className="ml-12 flex max-w-[547px] flex-col items-stretch py-9 rounded-xl bg-gradient-to-b from-yellow-400 to-red-500">
             <header className="flex w-full flex-col px-9 items-end max-md:max-w-full max-md:px-5">
                 <h2 className="text-white text-2xl font-medium leading-8 self-stretch max-md:max-w-full">
                     Today's Quote

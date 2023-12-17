@@ -183,7 +183,6 @@ const Documents = () => {
             setIsFetching(false);
             if (response.status === 200) {
                 setOrganizationList(response.data.content);
-                setTotalPages(response.data.totalPages);
             } else {
                 // navigate("/admin/login");
             }

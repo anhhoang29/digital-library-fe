@@ -125,3 +125,40 @@ export const searchDocumentsByOrganization = async (org, config) => {
         throw error;
     }
 };
+
+export const getDocumentsForStudent = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/students", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getDocumentsForGuest = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/public", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const searchDocumentsForStudent = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/students/search", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const searchDocumentsForGuest = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/public/search", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+

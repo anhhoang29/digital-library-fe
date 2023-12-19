@@ -162,3 +162,11 @@ export const searchDocumentsForGuest = async (config) => {
     }
 };
 
+export const getMyUploadedDocuments = async (config) => {
+    try {
+        const response = await privateAxios.get("/documents/myuploads", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

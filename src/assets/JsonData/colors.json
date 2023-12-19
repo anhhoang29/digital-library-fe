@@ -1,0 +1,37 @@
+[
+    {
+        "bg": "#fb7185",
+        "hover": "#f43f5e",
+        "active": "#e11d48"
+    },
+    {
+        "bg": "#22d3ee",
+        "hover": "#06b6d4",
+        "active": "#0891b2"
+    },
+    {
+        "bg": "#2dd4bf",
+        "hover": "#14b8a6",
+        "active": "#0d9488"
+    },
+    {
+        "bg": "#4ade80",
+        "hover": "#22c55e",
+        "active": "#16a34a"
+    },
+    {
+        "bg": "#f87171",
+        "hover": "#ef4444",
+        "active": "#dc2626"
+    },
+    {
+        "bg": "#34d399",
+        "hover": "#10b981",
+        "active": "#059669"
+    }     ,
+    {
+        "bg": "#fb923c",
+        "hover": "#f97316",
+        "active": "#ea580c"
+    }
+]

@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Pagination, Toast } from "flowbite-react";
 import { HiOutlineCheck, HiX } from "react-icons/hi";
 
-import { getLikedDocuments, likeDocument } from "../../../api/main/likeAPI";
+import { getSavedDocuments, saveDocument } from "../../../api/main/saveAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 import DocumentCard from "../../../components/student/card/Card";
 
-const LikedDocument = () => {
+const SavedDocument = () => {
     usePrivateAxios();
 
     const navigate = useNavigate();
@@ -25,16 +25,16 @@ const LikedDocument = () => {
     const [status, setStatus] = useState(0);
 
     useEffect(() => {
-        getLikedList(currentPage);
+        getSavedList(currentPage);
     }, [currentPage, search]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
     };
 
-    const getLikedList = async (page) => {
+    const getSavedList = async (page) => {
         try {
-            const response = await getLikedDocuments({
+            const response = await getSavedDocuments({
                 params: {
                     page: page - 1,
                     size: 12,
@@ -50,15 +50,15 @@ const LikedDocument = () => {
         } catch (error) {}
     };
 
-    const handleLike = async (slug) => {
+    const handleSave= async (slug) => {
         try {
-            const response = await likeDocument(slug);
+            const response = await saveDocument(slug);
 
             if (response.status === 200) {
-                setMessage("Đã xoá khỏi danh sách yêu thích!");
+                setMessage("Đã xoá khỏi danh sách đã lưu!");
 
                 setCurrentPage(1);
-                getLikedList(currentPage);
+                getSavedList(currentPage);
 
                 setStatus(1);
                 setTimeout(() => {
@@ -95,7 +95,7 @@ const LikedDocument = () => {
             <div className="flex-1 p-4 bg-gray-50 h-full">
                 <div className="rounded-lg bg-white py-8 px-8 ">
                     <div className="mb-5 flex items-center">
-                        <p className="text-2xl font-medium text-green-400">Danh sách yêu thích</p>
+                        <p className="text-2xl font-medium text-green-400">Danh sách đã lưu</p>
 
                         <div className="relative rounded-full ml-auto w-1/4">
                             <input
@@ -121,7 +121,7 @@ const LikedDocument = () => {
 
                     {documentList.length === 0 && (
                         <p className="text-lg font-medium ">
-                            Bạn chưa thích tài liệu nào! &nbsp;
+                            Bạn chưa lưu tài liệu nào! &nbsp;
                             <span className="text-green-400 hover:text-green-500 cursor-pointer" onClick={() => navigate("/documents")}>
                                 Khám phá ngay!
                             </span>
@@ -130,7 +130,7 @@ const LikedDocument = () => {
 
                     <div className="grid grid-cols-4 gap-8">
                         {documentList.map((document) => (
-                            <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} type="LIKE" action={() => handleLike(document.slug)} />
+                            <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} type="SAVE" action={() => handleSave(document.slug)} />
                         ))}
                     </div>
 
@@ -145,4 +145,4 @@ const LikedDocument = () => {
     );
 };
 
-export default LikedDocument;
+export default SavedDocument;

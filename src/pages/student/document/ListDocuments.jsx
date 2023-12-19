@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Pagination, Spinner } from "flowbite-react";
 
@@ -22,6 +22,9 @@ let selectedPage = 0;
 const ListDocument = () => {
     const navigate = useNavigate();
 
+    const { organizationSlug , categorySlug , fieldSlug , searchQuery} = useParams();
+
+    const accessToken = localStorage.getItem("accessToken");
     const user = JSON.parse(sessionStorage.getItem("profile"));
 
     usePrivateAxios();
@@ -30,9 +33,9 @@ const ListDocument = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
     const [order, setOrder] = useState("updatedAt");
-    const [category, setCategory] = useState("all");
-    const [field, setField] = useState("all");
-    const [organization, setOrganization] = useState("all");
+    const [category, setCategory] = useState(categorySlug ? categorySlug : "all");
+    const [field, setField] = useState(fieldSlug ? fieldSlug : "all");
+    const [organization, setOrganization] = useState(organizationSlug ? organizationSlug : "all");
 
     const [documentList, setDocumentList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
@@ -45,13 +48,17 @@ const ListDocument = () => {
     const [isFetching, setIsFetching] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [docId, setDocId] = useState("");
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(searchQuery ? searchQuery : "");
 
     useEffect(() => {
         getCategoryList();
         getFieldList();
         getOrganizationList();
     }, []);
+
+    // useEffect(() => {
+    //     if (organizationSlug) setOrganization(organizationSlug);
+    // }, [organizationSlug]);
 
     useEffect(() => {
         getDocumentList(currentPage);
@@ -123,7 +130,7 @@ const ListDocument = () => {
 
             let response = null;
 
-            if (user) {
+            if (user && accessToken) {
                 response = await searchDocumentsForStudent({
                     params: {
                         page: page - 1,
@@ -174,7 +181,6 @@ const ListDocument = () => {
 
     const handleDetail = (slug) => {
         navigate(`/documents/${slug}`);
-        alert("HHHH")
     };
 
     return (
@@ -263,7 +269,8 @@ const ListDocument = () => {
                     </div>
 
                     <p className="mb-4">
-                        Kết quả <span className="text-cyan-600 font-semibold">{currentPage * 10 - 9}</span> đến <span className="text-cyan-600 font-semibold">{currentPage * 10}</span> trong khoảng <span className="text-cyan-600 font-semibold">{totalRecords}</span>
+                        Kết quả <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? (currentPage - 1) * 10 + 1 : 0}</span> đến <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? documentList.length + (currentPage - 1) * 10 : 0}</span> trong khoảng{" "}
+                        <span className="text-cyan-600 font-semibold">{totalRecords}</span>
                     </p>
 
                     <div className="flex flex-col gap-y-5">

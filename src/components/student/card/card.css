@@ -1,3 +1,20 @@
 .p-6 {
     padding: 0;
 }
+
+.card-organization:hover{
+ background-color:var(--hover-color) !important;
+}
+
+.card-organization:active{
+ background-color:var(--active-color) !important;
+}
+
+
+.key-card:hover{
+ background-color:var(--hover-color) !important;
+}
+
+.key-card:active{
+ background-color:var(--active-color) !important;
+}

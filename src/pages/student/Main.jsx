@@ -8,11 +8,9 @@ import UserRoute from "../../components/routers/UserRouters";
 const Main = () => {
     return (
         <div className="relative">
-            <div className="py-4 sticky top-0 bg-white w-full z-40">
+            <div className="py-4 sticky top-0 bg-white w-full z-40  border-b">
                 <CustomNavbar />
             </div>
-
-            <hr />
 
             <div className="h-full ">
                 <div className="w-[18%] bg-white border-r h-full fixed">

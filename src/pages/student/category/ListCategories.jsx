@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import KeyCard from "../../../components/student/card/KeyCard";
 
 import categoryImage from "../../../assets/images/category.webp";
 
+import { getAccessibleCategories } from "../../../api/main/categoryAPI";
+
 const ListCategories = () => {
+    const [categoryList, setCategoryList] = useState([]);
+
+    useEffect(() => {
+        getCategoryList();
+    }, []);
+
+    const getCategoryList = async () => {
+        try {
+            const response = await getAccessibleCategories({
+                params: {
+                    page: 0,
+                    size: 100,
+                },
+            });
+            if (response.status === 200) {
+                setCategoryList(response.data);
+            } else {
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
             <div className="bg-gray-50 h-full w-full overflow-auto">
@@ -15,14 +40,9 @@ const ListCategories = () => {
                     </div>
 
                     <div className="grid grid-cols-5 gap-8 mb-20">
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
-                        <KeyCard />
+                        {categoryList.map((category) => (
+                            <KeyCard name={category.categoryName} slug={category.slug} path="/categories/" icon="category"/>
+                        ))}
                     </div>
                 </div>
             </div>

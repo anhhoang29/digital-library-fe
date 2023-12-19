@@ -1,0 +1,11 @@
+.tab-bar .tab-verified .text-blue-600 {
+    color: #22c55e
+}
+
+.tab-bar .tab-pending .text-blue-600 {
+    color: #eab308
+}
+
+.tab-bar .tab-rejected .text-blue-600 {
+    color: #ef4444
+}

@@ -1,14 +1,30 @@
 import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { HiOutlineTag } from "react-icons/hi";
+import { HiOutlineLibrary } from "react-icons/hi";
+
+import colors from "../../../assets/JsonData/colors.json";
 
 const OrganizationCard = (props) => {
+    const { orgName, slug } = props;
+
+    const navigate = useNavigate();
+
+    const randomIndex = Math.floor(Math.random() * colors.length);
+
+    const [randomColor, setRandomColor] = useState(colors[randomIndex]);
+
     return (
         <>
-            <div className="flex justify-around w-fit items-center rounded-full shadow-lg bg-green-400 h-auto p-4 hover:bg-green-200 cursor-pointer">
-                <HiOutlineTag className="h-5 w-5 text-bold text-white mr-2" />
+            <div
+                className="card-organization flex justify-around w-fit items-center rounded-full shadow-lg h-auto p-4 cursor-pointer"
+                style={{ backgroundColor: randomColor.bg, "--hover-color":randomColor.hover, "--active-color":randomColor.active}}
+                onClick={() => {navigate("/institutions/" + slug)}}
+                >
+                <HiOutlineLibrary className="h-5 w-5 text-bold text-white mr-2" />
 
-                <h4 class="text-base text-white text-center font-medium">Trường Đại học Sư phạm Kỹ thuật TP HCM</h4>
+                <h4 class="text-sm text-white text-center font-medium">{orgName}</h4>
             </div>
         </>
     );

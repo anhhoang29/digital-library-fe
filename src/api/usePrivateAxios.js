@@ -15,10 +15,18 @@ const usePrivateAxios = () => {
                 if (!accessToken) {
                     if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
                     else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    else navigate("/login");
+
                     sessionStorage.setItem("entryMessage", "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại!");
                 } else {
-                    config.headers.Authorization = `Bearer ${accessToken}`;
-                    sessionStorage.removeItem("entryMessage");
+                    if (!user) {
+                        navigate("/login");
+
+                        sessionStorage.setItem("entryMessage", "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại!");
+                    } else {
+                        config.headers.Authorization = `Bearer ${accessToken}`;
+                        sessionStorage.removeItem("entryMessage");
+                    }
                 }
                 return config;
             },
@@ -37,6 +45,7 @@ const usePrivateAxios = () => {
                     }
                     if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
                     else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    if (user && user.role && user.role.roleName === "ROLE_STUDENT") navigate("/login");
                 } else {
                     sessionStorage.removeItem("entryMessage");
                 }

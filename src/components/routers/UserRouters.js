@@ -14,6 +14,7 @@ import StudentEditDocument from "../../pages/student/document/EditDocument";
 import SavedDocument from "../../pages/student/document/SavedDocuments";
 import UploadedDocument from "../../pages/student/document/UploadedDocuments";
 import ListFields from "../../pages/student/field/ListFields";
+import Error404 from "../../pages/student/error/Error404";
 // import Search from "../search/search";
 // import UserHome from "../user/home";
 // import UserProfile from "../user/profile";
@@ -39,10 +40,9 @@ const UserRoute = () => {
             <Route path="/institutions/:organizationSlug" element={<ListDocument />} />
             <Route path="/institutions" element={<ListOrganizations />} />
 
-            <Route path="/upload" element={<StudentNewDocument />} />
             <Route path="/users/:userId" element={<UserWall />} />
 
-            <Route path="/" element={<Home />} />
+            <Route path="/error-500" element={<UserWall />} />
         </Routes>
     );
 };

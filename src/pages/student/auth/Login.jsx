@@ -15,6 +15,8 @@ import { getProfile } from "../../../api/main/userAPI";
 
 import onlineLibrary from "../../../assets/images/online_library.webp";
 import "./login-form.css";
+import SimpleNavbar from "../../../components/student/navbar/SimpleNavbar";
+import CustomFooter from "../../../components/student/footer/Footer";
 
 const LOGIN_URL = "/auth/login";
 
@@ -138,9 +140,10 @@ const StudentLogin = () => {
             } catch (error) {
                 setStatus(-1);
                 setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setIsLoading(false);
+                
                 setTimeout(() => {
                     setStatus(0);
+                    setIsLoading(false);
                 }, 4000);
             }
         }
@@ -149,20 +152,7 @@ const StudentLogin = () => {
     return (
         <>
             <div className="py-4 sticky top-0 bg-white w-full z-20 border-b">
-                <Navbar fluid rounded className="w-full">
-                    <div className="ml-10">
-                        <Navbar.Brand href="https://flowbite-react.com">
-                            <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
-                            <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite React</span>
-                        </Navbar.Brand>
-                    </div>
-
-                    <Navbar.Collapse className="mr-10">
-                        <Navbar.Link href="#" active>
-                            Home
-                        </Navbar.Link>
-                    </Navbar.Collapse>
-                </Navbar>
+                <SimpleNavbar />
             </div>
 
             <div className="grid place-items-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -220,7 +210,7 @@ const StudentLogin = () => {
                                         <Label htmlFor="remember">Ghi nhớ tôi</Label>
                                     </div>
 
-                                    <Button color="success" type="submit" isProcessing={isLoading} className="w-full mt-6">
+                                    <Button color="success" type="submit" isProcessing={isLoading} className="flex w-full mt-6">
                                         Đăng nhập
                                     </Button>
                                 </form>
@@ -237,13 +227,22 @@ const StudentLogin = () => {
                                     </svg>
                                     Google
                                 </button>
-                                <p className="mt-4 text-right">
-                                    <Link className="text-sm font-medium text-red-600 dark:text-purple-400 hover:underline" to="/manager/forgot-password">
-                                        Quên mật khẩu?
-                                    </Link>
-                                </p>
+
+                                <div className="flex justify-between mt-4">
+                                    <p className="">
+                                        <Link className="text-sm font-medium text-green-400 dark:text-purple-400 hover:underline" to="/register">
+                                            Chưa có tài khoản? Đăng ký ngay
+                                        </Link>
+                                    </p>
+                                    <p className="">
+                                        <Link className="text-sm font-medium text-red-400 dark:text-purple-400 hover:underline" to="/forgot-password">
+                                            Quên mật khẩu?
+                                        </Link>
+                                    </p>
+                                </div>
+
                                 {status === -1 && (
-                                    <Toast className="top-5 right-5 fixed z-50">
+                                    <Toast className="top-[14%]  right-5 fixed z-50">
                                         <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
                                             <HiX className="h-5 w-5" />
                                         </div>
@@ -252,7 +251,7 @@ const StudentLogin = () => {
                                     </Toast>
                                 )}
                                 {status === 1 && (
-                                    <Toast className="top-5 right-5 fixed z-50">
+                                    <Toast className="top-[14%] right-5 fixed z-50">
                                         <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                                             <HiOutlineCheck className="h-5 w-5" />
                                         </div>
@@ -261,7 +260,7 @@ const StudentLogin = () => {
                                     </Toast>
                                 )}
                                 {entryMessage !== "" && entryMessage !== null && (
-                                    <Toast className="top-5 right-5 fixed z-50">
+                                    <Toast className="top-[14%]  right-5 fixed z-50">
                                         <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
                                             <HiX className="h-5 w-5" />
                                         </div>
@@ -273,6 +272,10 @@ const StudentLogin = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div>
+                <CustomFooter />
             </div>
         </>
     );

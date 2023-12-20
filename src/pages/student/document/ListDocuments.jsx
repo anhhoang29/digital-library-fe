@@ -42,12 +42,7 @@ const ListDocument = () => {
     const [fieldList, setFieldList] = useState([]);
     const [organizationList, setOrganizationList] = useState([]);
 
-    const [openModal, setOpenModal] = useState(false);
-    const [status, setStatus] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
-    const [isSearching, setIsSearching] = useState(false);
-    const [docId, setDocId] = useState("");
     const [search, setSearch] = useState(searchQuery ? searchQuery : "");
 
     useEffect(() => {
@@ -85,7 +80,7 @@ const ListDocument = () => {
                 // navigate("/admin/login");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -100,7 +95,7 @@ const ListDocument = () => {
                 // navigate("/admin/login");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -120,7 +115,7 @@ const ListDocument = () => {
                 // navigate("/admin/login");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -167,7 +162,7 @@ const ListDocument = () => {
                 // navigate("/admin/login");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -281,9 +276,11 @@ const ListDocument = () => {
 
                     <div className="flex justify-center mt-5 mb-2">{isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2 text-green-400" />}</div>
 
-                    <div className="flex overflow-x-auto sm:justify-center">
-                        <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons className="text-green-400" />
-                    </div>
+                    {documentList.length !== 0 && (
+                        <div className="flex overflow-x-auto sm:justify-center">
+                            <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                        </div>
+                    )}
                 </div>
             </div>
         </>

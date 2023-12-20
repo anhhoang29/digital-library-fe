@@ -4,6 +4,7 @@ import CustomNavbar from "../../components/student/navbar/Navbar";
 import CustomSidebar from "../../components/student/sidebar/Sidebar";
 
 import UserRoute from "../../components/routers/UserRouters";
+import CustomFooter from "../../components/student/footer/Footer";
 
 const Main = () => {
     return (
@@ -12,14 +13,18 @@ const Main = () => {
                 <CustomNavbar />
             </div>
 
-            <div className="h-full ">
-                <div className="w-[18%] bg-white border-r h-full fixed">
+            <div className="h-full flex">
+                <div className="w-[18%] bg-white border-r h-full ">
                     <CustomSidebar />
                 </div>
 
-                <div className="ml-[18%] h-full">
+                <div className="w-[82%] min-h-screen">
                     <UserRoute />
                 </div>
+            </div>
+
+            <div>
+                <CustomFooter />
             </div>
         </div>
     );

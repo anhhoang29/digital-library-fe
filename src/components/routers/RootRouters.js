@@ -15,6 +15,10 @@ import "../../App.css";
 import Main from "../../pages/student/Main";
 import StudentLogin from "../../pages/student/auth/Login";
 import Home from "../../pages/student/Home";
+import StudentForgotPassword from "../../pages/student/auth/ForgotPassword";
+import StudentRegister from "../../pages/student/auth/Register";
+import Error404 from "../../pages/student/error/Error404";
+import Error500 from "../../pages/student/error/Error500";
 
 const RootRouters = () => {
     usePrivateAxios();
@@ -22,23 +26,32 @@ const RootRouters = () => {
     const location = useLocation();
 
     return (
-        <TransitionGroup>
-            <CSSTransition key={location.pathname} classNames="slide" timeout={300}>
-                <Routes>
-                    <Route path="/login" element={<StudentLogin />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
-                    <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/manager/forgot-password" element={<ManagerForgotPassword />} />
-                    <Route path="/manager/login" element={<ManagerLogin />} />
-                    <Route path="/admin/*" element={<Layout />} />
-                    <Route path="/manager/*" element={<Layout />} />
-                    {/* <UserRoute path="/user/*" element={<Layout />} /> */}
-                    <Route path="/*" element={<Main />} />
-                </Routes>
-            </CSSTransition>
-        </TransitionGroup>
+        <Routes>
+            <Route path="/login" element={<StudentLogin />} />
+            <Route path="/register" element={<StudentRegister />} />
+            <Route path="/forgot-password" element={<StudentForgotPassword />} />
+
+            <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+
+            <Route path="/manager/forgot-password" element={<ManagerForgotPassword />} />
+            <Route path="/manager/login" element={<ManagerLogin />} />
+
+            <Route path="/admin/*" element={<Layout />} />
+            <Route path="/manager/*" element={<Layout />} />
+
+            <Route path="/home" element={<Home />} />
+
+            <Route path="/error-404" element={<Error404 />} />
+            <Route path="/error-500" element={<Error500 />} />
+
+            <Route path="/" element={<Home />} />
+            <Route path="/*" element={<Main />} />
+        </Routes>
     );
+
+    // const a =  </CSSTransition>
+    //     </TransitionGroup>
 };
 
 export default RootRouters;

@@ -137,7 +137,7 @@ export const getDocumentsForStudent = async (config) => {
 
 export const getDocumentsForGuest = async (config) => {
     try {
-        const response = await privateAxios.get("/documents/public", config);
+        const response = await axios.get("/documents/public", config);
         return response.data;
     } catch (error) {
         throw error;
@@ -155,7 +155,7 @@ export const searchDocumentsForStudent = async (config) => {
 
 export const searchDocumentsForGuest = async (config) => {
     try {
-        const response = await privateAxios.get("/documents/public/search", config);
+        const response = await axios.get("/documents/public/search", config);
         return response.data;
     } catch (error) {
         throw error;
@@ -165,6 +165,15 @@ export const searchDocumentsForGuest = async (config) => {
 export const getMyUploadedDocuments = async (config) => {
     try {
         const response = await privateAxios.get("/documents/myuploads", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getUploadedDocumentsForGuestAndStudent = async (userId, config) => {
+    try {
+        const response = await privateAxios.get(`/documents/view/user/${userId}`, config);
         return response.data;
     } catch (error) {
         throw error;

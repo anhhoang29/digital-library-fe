@@ -1,4 +1,4 @@
-import { privateAxios } from "../axios";
+import axios, { privateAxios } from "../axios";
 
 export const getAllFields = async (config) => {
     try {
@@ -12,7 +12,7 @@ export const getAllFields = async (config) => {
 
 export const getAccessibleFields = async (config) => {
     try {
-        const response = await privateAxios.get("/fields", config);
+        const response = await axios.get("/fields", config);
         return response.data;
     } catch (error) {
         throw error;

@@ -34,7 +34,7 @@ const ListFields = () => {
 
     return (
         <>
-            <div className="bg-gray-50 h-full w-fit overflow-auto">
+            <div className="bg-gray-50 h-full w-full overflow-auto">
                 <div className="px-[10%]">
                     <div className="grid place-items-center mt-20 mb-20">
                         <img src={fieldImage} alt="" width="20%" height="20%" />

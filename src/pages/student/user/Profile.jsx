@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button, Datepicker, FileInput, Label, TextInput, Toast } from "flowbite-react";
 import { HiAdjustments, HiOutlineCheck, HiX } from "react-icons/hi";
 
+import moment from "moment";
+
 import Select from "../../../components/management/select/Select";
 
 import { deleteADocument, getUploadedDocuments } from "../../../api/main/documentAPI";
@@ -15,6 +17,7 @@ let selectedPage = 0;
 
 const StudentProfile = () => {
     const genderList = [
+        { id: null, name: "Chọn giới tính"},
         { id: 0, name: "Nam" },
         { id: 1, name: "Nữ" },
         { id: 2, name: "Khác" },
@@ -23,7 +26,7 @@ const StudentProfile = () => {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [gender, setGender] = useState(0);
-    const [dateOfBirth, setDateOfBirth] = useState("1990-01-01");
+    const [dateOfBirth, setDateOfBirth] = useState("1900-01-01");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
 
@@ -70,7 +73,7 @@ const StudentProfile = () => {
                 setLastName(user.lastName);
                 setFirstName(user.firstName);
                 setGender(user.gender);
-                setDateOfBirth(user.dateOfBirth);
+                setDateOfBirth(user.dateOfBirth ? user.dateOfBirth : new Date());
                 setEmail(user.email);
                 setPhone(user.phone);
             } else {
@@ -336,7 +339,7 @@ const StudentProfile = () => {
             <div className="bg-gray-50 p-4">
                 <div className="flex">
                     <div className="flex flex-col w-2/3 ">
-                        <div className="bg-white rounded-lg h-min mr-5 p-4 shadow-lg">
+                        <div className="bg-white rounded-lg h-min mr-5 p-8 shadow-lg">
                             <div className="mb-9">
                                 <div className="flex items-center mb-2 font-bold">
                                     <HiAdjustments className="w-8 h-8 mr-3 dark:text-white" />
@@ -393,8 +396,10 @@ const StudentProfile = () => {
                                                 labelTodayButton="Hôm nay"
                                                 labelClearButton="Xoá"
                                                 id="dateOfBirth"
-                                                defaultDate={new Date(dateOfBirth)}
-                                                datepicker-format="dd/MM/yyyy"
+                                                // defaultDate={new Date(dateOfBirth)}
+                                                value={moment(new Date(dateOfBirth)).format("DD/MM/YYYY")}
+                                                // date={moment(new Date(dateOfBirth)).format("DD/MM/YYYY")}
+                                                // datepicker-format="dd/MM/yyyy"
                                                 onSelectedDateChanged={(date) => {
                                                     setDateOfBirth(date);
                                                 }}
@@ -420,7 +425,7 @@ const StudentProfile = () => {
                             </form>
                         </div>
 
-                        <div className="h-min mr-5 mt-4 rounded-lg p-4 bg-white shadow-lg">
+                        <div className="h-min mr-5 mt-4 rounded-lg p-8 bg-white shadow-lg">
                             <div className="block mb-2 text-xl font-medium dark:text-white">MẬT KHẨU</div>
 
                             <form onSubmit={handleSubmitPassword}>
@@ -460,35 +465,35 @@ const StudentProfile = () => {
                     <div className="flex flex-col w-1/3">
                         <div className="p-0 h-min rounded-lg shadow-lg bg-white">
                             <div className="flex flex-col items-center mt-5">
-                                <img alt="Profile" src={user && user.image ? user.image : profileImage} className="mb-3 mt-5 rounded-full border-solid border-4 border-gray w-28 h-28" />
+                                <img alt="Profile" src={user && user.image ? user.image : profileImage} className="mb-3 rounded-full border-solid border-4 border-gray w-28 h-28" />
 
-                                <h5 className="mb-2 text-2xl font-medium dark:text-white">
+                                <h5 className="text-2xl font-medium dark:text-white">
                                     {user && user.lastName} {user && user.firstName}
                                 </h5>
 
-                                <div className="profile-info mt-5">
+                                <div className="profile-info mt-5 mb-5">
                                     <div className="flex text-center font-bold">
-                                        <span className="block text-base uppercase font-medium dark:text-white">{user && user.organization && user.organization.orgName}</span>
+                                        <span className="block text-base uppercase text-green-400 font-medium dark:text-white">{user && user.organization && user.organization.orgName}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col profile-info h-full">
-                                <div className="flex gap-2">
-                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2">
-                                        <span className="text-center block text-base font-medium text-sky-500 dark:text-white">Đã tải lên</span>
+                            <div className="flex flex-col items-center m-auto profile-info h-full">
+                                
+                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                        <span className="text-center block text-base font-medium text-sky-500 dark:text-white">{user && user.totalDocuments} tài liệu</span>
                                     </div>
 
-                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2">
-                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">Đã tải lên</span>
+                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalViews} lượt xem</span>
                                     </div>
-                                </div>
+                               
 
-                                <div className="flex gap-2">
-                                    <div className="items-center  mb-2 font-bold bg-red-200 rounded-full w-1/2">
-                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">Đã tải lên</span>
+                                
+                                    <div className="items-center mb-5 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalLikes} lượt thích</span>
                                     </div>
-                                </div>
+                                
                             </div>
                         </div>
 

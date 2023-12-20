@@ -12,6 +12,9 @@ import { sendEmail, verify } from "../../../api/main/authAPI";
 import { resetPassword } from "../../../api/main/userAPI";
 import CustomFooter from "../../../components/student/footer/Footer";
 import SimpleNavbar from "../../../components/student/navbar/SimpleNavbar";
+
+import resetPasswordPic from "../../../assets/images/reset_password.webp";
+
 import "./login-form.css";
 
 const StudentForgotPassword = () => {
@@ -98,11 +101,7 @@ const StudentForgotPassword = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
@@ -140,11 +139,7 @@ const StudentForgotPassword = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
@@ -189,19 +184,14 @@ const StudentForgotPassword = () => {
                     }
                 }
             } catch (error) {
-                setIsLoading(false);
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
 
     return (
         <>
-            <div className="py-4 sticky top-0 bg-white w-full z-20 border-b">
+            <div className="sticky top-0 bg-white w-full z-20 border-b">
                 <SimpleNavbar />
             </div>
 
@@ -225,7 +215,9 @@ const StudentForgotPassword = () => {
                                                     type="email"
                                                     required
                                                 />
-                                                <Button type="submit">Lấy mã</Button>
+                                                <Button className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300" type="submit">
+                                                    Lấy mã
+                                                </Button>
                                             </div>
                                         </form>
                                         {emailMessage && (
@@ -250,7 +242,7 @@ const StudentForgotPassword = () => {
                                                     length={6}
                                                     required
                                                 />
-                                                <Button type="submit" color="success">
+                                                <Button type="submit" className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300">
                                                     Xác thực
                                                 </Button>
                                             </div>
@@ -305,7 +297,7 @@ const StudentForgotPassword = () => {
                                                 )}
                                             </label>
 
-                                            <Button color="success" type="submit" isProcessing={isLoading} className="w-full mt-6">
+                                            <Button color="success" type="submit" isProcessing={isLoading} className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300 w-full mt-6">
                                                 Khôi phục mật khẩu
                                             </Button>
                                         </form>
@@ -314,7 +306,7 @@ const StudentForgotPassword = () => {
                                     <hr className="mt-6 mb-4" />
 
                                     <p className="mt-4 text-right">
-                                        <Link className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline" to="/login">
+                                        <Link className="text-sm font-medium text-green-400 dark:text-purple-400 hover:underline" to="/login">
                                             Đăng nhập
                                         </Link>
                                     </p>
@@ -341,7 +333,7 @@ const StudentForgotPassword = () => {
                         </div>
 
                         <div className="flex p-6 sm:p-12 md:w-1/2">
-                            <img aria-hidden="true" className="object-cover ml-0 w-full h-full dark:hidden" src={require("../../../assets/images/forgotpassword-image.jpg")} alt="GGGG" />
+                            <img aria-hidden="true" className="object-cover ml-0 w-full h-full dark:hidden" src={resetPasswordPic} alt="Reset password icon" />
                         </div>
                     </div>
                 </div>

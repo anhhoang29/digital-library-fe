@@ -6,7 +6,7 @@ import loginAction from "../../../redux/actions/LoginAction";
 
 import axios from "../../../api/axios";
 
-import { Button, Checkbox, Label, Navbar, Toast } from "flowbite-react";
+import { Button, Checkbox, Label, Toast } from "flowbite-react";
 import { HiOutlineCheck, HiX } from "react-icons/hi";
 
 import { emailRegrex } from "../../../utils/regrex";
@@ -14,9 +14,9 @@ import { emailRegrex } from "../../../utils/regrex";
 import { getProfile } from "../../../api/main/userAPI";
 
 import onlineLibrary from "../../../assets/images/online_library.webp";
-import "./login-form.css";
-import SimpleNavbar from "../../../components/student/navbar/SimpleNavbar";
 import CustomFooter from "../../../components/student/footer/Footer";
+import SimpleNavbar from "../../../components/student/navbar/SimpleNavbar";
+import "./login-form.css";
 
 const LOGIN_URL = "/auth/login";
 
@@ -41,6 +41,7 @@ const StudentLogin = () => {
     useEffect(() => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("profile");
 
         setEntryMessage(sessionStorage.getItem("entryMessage"));
 
@@ -138,20 +139,14 @@ const StudentLogin = () => {
                     }
                 }
             } catch (error) {
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                
-                setTimeout(() => {
-                    setStatus(0);
-                    setIsLoading(false);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
 
     return (
         <>
-            <div className="py-4 sticky top-0 bg-white w-full z-20 border-b">
+            <div className="sticky top-0 bg-white w-full z-20 border-b">
                 <SimpleNavbar />
             </div>
 
@@ -167,7 +162,7 @@ const StudentLogin = () => {
                         </div> */}
 
                         <div className="w-full items-center p-5">
-                            <div className="w-full border-green-500 border-2 p-5 rounded-lg shadow-lg ">
+                            <div className="w-full border-green-400 border-2 p-5 rounded-lg shadow-lg ">
                                 <h1 className="mb-6 text-3xl font-semibold text-gray-700 dark:text-gray-200 z-50">Đăng nhập</h1>
                                 <form onSubmit={handleSubmit}>
                                     <label className="block text-sm">
@@ -210,14 +205,14 @@ const StudentLogin = () => {
                                         <Label htmlFor="remember">Ghi nhớ tôi</Label>
                                     </div>
 
-                                    <Button color="success" type="submit" isProcessing={isLoading} className="flex w-full mt-6">
+                                    <Button type="submit" isProcessing={isLoading} className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300 flex w-full mt-6">
                                         Đăng nhập
                                     </Button>
                                 </form>
                                 <hr className="mt-6 mb-4" />
                                 <button
                                     type="button"
-                                    className="flex justify-center w-full text-gray-800 bg-white border login-form-border hover:bg-gray-200 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center mr-2 transition-colors active:bg-gray-600 duration-150 focus:outline-none focus:shadow-outline-gray">
+                                    className="flex justify-center w-full text-gray-800 bg-white border login-form-border hover:bg-gray-200 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center mr-2 transition-colors active:bg-gray-300 duration-150 focus:outline-none focus:shadow-outline-gray">
                                     <svg className="w-4 h-4 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
                                         <path
                                             fillRule="evenodd"

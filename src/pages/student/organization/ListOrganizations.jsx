@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import OrganizationCard from "../../../components/student/card/OrganizationCard";
 
@@ -6,6 +7,8 @@ import { searchOrganizations } from "../../../api/main/organizationAPI";
 import institutionImage from "../../../assets/images/institution.png";
 
 const ListOrganizations = () => {
+    const navigate = useNavigate();
+
     const [organizationList, setOrganizationList] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -27,7 +30,7 @@ const ListOrganizations = () => {
             } else {
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -62,7 +65,7 @@ const ListOrganizations = () => {
 
                     <div className="grid grid-cols-2 gap-5 mb-20 place-items-center">
                         {organizationList.map((organization) => (
-                            <OrganizationCard key={organization.orgId} orgName={organization.orgName} slug={organization.slug}/>
+                            <OrganizationCard key={organization.orgId} orgName={organization.orgName} slug={organization.slug} />
                         ))}
                     </div>
                 </div>

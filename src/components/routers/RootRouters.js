@@ -19,6 +19,7 @@ import StudentForgotPassword from "../../pages/student/auth/ForgotPassword";
 import StudentRegister from "../../pages/student/auth/Register";
 import Error404 from "../../pages/student/error/Error404";
 import Error500 from "../../pages/student/error/Error500";
+import ManagerLayout from "../management/layout/ManagerLayout";
 
 const RootRouters = () => {
     usePrivateAxios();
@@ -38,7 +39,7 @@ const RootRouters = () => {
             <Route path="/manager/login" element={<ManagerLogin />} />
 
             <Route path="/admin/*" element={<Layout />} />
-            <Route path="/manager/*" element={<Layout />} />
+            <Route path="/manager/*" element={<ManagerLayout />} />
 
             <Route path="/home" element={<Home />} />
 

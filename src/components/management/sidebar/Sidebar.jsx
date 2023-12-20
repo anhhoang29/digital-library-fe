@@ -39,7 +39,7 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <div className="sidebar__logo">
-                <img src={logo2} alt="company logo" />
+                <img src={logo2} alt="company logo" className="w-[100px]"/>
             </div>
             {checkRoutes().map((item, index) => (
                 <Link to={item.route} key={index}>

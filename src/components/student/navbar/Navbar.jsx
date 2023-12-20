@@ -1,12 +1,11 @@
 import React from "react";
-import { useLocation , useNavigate, Link} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { Avatar, Dropdown, Navbar, Button } from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 
 import logo from "../../../assets/images/logo.png";
 const CustomNavbar = () => {
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const location = useLocation();
 
     const currentPath = location.pathname;
@@ -17,8 +16,7 @@ const CustomNavbar = () => {
         <Navbar fluid rounded className="w-full">
             <div className="ml-10">
                 <Navbar.Brand as={Link} to="/home" className="hover:text-black">
-                    <img src={logo} className="mr-3 h-10 sm:h-9" alt="WISDO Logo" />
-                    <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">DIGI LIB</span>
+                    <img src={logo} className="mr-3 h-16 sm:h-16" alt="WISDO Logo" />
                 </Navbar.Brand>
             </div>
 

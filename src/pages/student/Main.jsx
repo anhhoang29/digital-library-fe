@@ -9,7 +9,7 @@ import CustomFooter from "../../components/student/footer/Footer";
 const Main = () => {
     return (
         <div className="relative">
-            <div className="py-4 sticky top-0 bg-white w-full z-40  border-b">
+            <div className="sticky top-0 bg-white w-full z-40  border-b">
                 <CustomNavbar />
             </div>
 

@@ -18,12 +18,12 @@ const Home = () => {
 
     return (
         <div style={{ backgroundImage: `url(${bg})` }} className=" flex flex-col bg-cover bg-center">
-            <div className="py-4 sticky top-0 bg-transparent w-full z-40">
+            <div className="sticky top-0 bg-transparent w-full z-40">
                 <Navbar fluid rounded className="w-full bg-transparent">
                     <div className="ml-10">
                         <Navbar.Brand as={Link} to="/home" className="hover:text-black">
-                            <img src={logo} className="mr-3 h-10 sm:h-9" alt="Flowbite React Logo" />
-                            <span className="self-center text-white whitespace-nowrap text-3xl font-semibold dark:text-white">DIGITAL LIBRARY</span>
+                            <img src={logo} className="mr-3 h-20 sm:h-20" alt="Flowbite React Logo" />
+                            <span className="self-center text-white whitespace-nowrap text-3xl font-semibold dark:text-white">THƯ VIỆN SỐ</span>
                         </Navbar.Brand>
                     </div>
 

@@ -10,8 +10,8 @@ const SimpleNavbar = () => {
         <Navbar fluid rounded className="w-full">
             <div className="ml-10">
                 <Navbar.Brand as={Link} to="/home" className="hover:text-black">
-                    <img src={logo} className="mr-3 h-10 sm:h-9" alt="WISDO Logo" />
-                    <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">DIGI LIB</span>
+                    <img src={logo} className="mr-3 h-16 sm:h-16" alt="WISDO Logo" />
+                    {/* <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">THƯ VIỆN SỐ</span> */}
                 </Navbar.Brand>
             </div>
 

@@ -46,8 +46,11 @@ const SavedDocument = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
+                navigate("/error-500");
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const handleSave= async (slug) => {
@@ -72,7 +75,7 @@ const SavedDocument = () => {
                 }, 4000);
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 

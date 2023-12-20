@@ -84,7 +84,9 @@ const UploadedDocument = () => {
                 setTotalPages(response.data.totalPages);
             } else {
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const deleteDocument = async (docId) => {
@@ -110,7 +112,7 @@ const UploadedDocument = () => {
                 }, 2000);
             }
         } catch (error) {
-            console.log(error);
+           navigate("/error-500");
         }
     };
 
@@ -127,7 +129,9 @@ const UploadedDocument = () => {
                 setTotalPendingElements(response.data.totalElements);
             } else {
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const getTotalRejectedElements = async () => {
@@ -143,7 +147,9 @@ const UploadedDocument = () => {
                 setTotalRejectedElements(response.data.totalElements);
             } else {
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const getTotalApprovedElements = async () => {
@@ -159,7 +165,9 @@ const UploadedDocument = () => {
                 setTotalApprovedElements(response.data.totalElements);
             } else {
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const handleVerifiedTabClick = () => {

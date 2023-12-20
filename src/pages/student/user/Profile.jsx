@@ -8,7 +8,6 @@ import moment from "moment";
 
 import Select from "../../../components/management/select/Select";
 
-import { deleteADocument, getUploadedDocuments } from "../../../api/main/documentAPI";
 import { getProfile, updateAvatar, updatePassword, updateProfile } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileImage from "../../../assets/images/default_profile.jpg";
@@ -17,7 +16,7 @@ let selectedPage = 0;
 
 const StudentProfile = () => {
     const genderList = [
-        { id: null, name: "Chọn giới tính"},
+        { id: null, name: "Chọn giới tính" },
         { id: 0, name: "Nam" },
         { id: 1, name: "Nữ" },
         { id: 2, name: "Khác" },
@@ -76,10 +75,13 @@ const StudentProfile = () => {
                 setDateOfBirth(user.dateOfBirth ? user.dateOfBirth : new Date());
                 setEmail(user.email);
                 setPhone(user.phone);
+
+                sessionStorage.setItem("profile", JSON.stringify(user));
             } else {
+                navigate("/error-500");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -193,6 +195,7 @@ const StudentProfile = () => {
                     }, 4000);
 
                     setUser(response.data);
+
                     sessionStorage.setItem("profile", JSON.stringify(response.data));
 
                     setLastName(response.data.lastName);
@@ -213,12 +216,7 @@ const StudentProfile = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setIsLoadingInfo(false);
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
@@ -250,6 +248,8 @@ const StudentProfile = () => {
                         setStatus(0);
                     }, 4000);
                     setUser(response.data);
+
+                    sessionStorage.setItem("profile", JSON.stringify(response.data));
                 } else {
                     setStatus(-1);
                     setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
@@ -259,12 +259,7 @@ const StudentProfile = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setIsLoadingAvatar(false);
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 2000);
+                navigate("/error-500");
             }
         }
     };
@@ -310,12 +305,7 @@ const StudentProfile = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setIsLoadingPassword(false);
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         }
     };
@@ -479,21 +469,17 @@ const StudentProfile = () => {
                             </div>
 
                             <div className="flex flex-col items-center m-auto profile-info h-full">
-                                
-                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
-                                        <span className="text-center block text-base font-medium text-sky-500 dark:text-white">{user && user.totalDocuments} tài liệu</span>
-                                    </div>
+                                <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                    <span className="text-center block text-base font-medium text-sky-500 dark:text-white">{user && user.totalDocuments} tài liệu</span>
+                                </div>
 
-                                    <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
-                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalViews} lượt xem</span>
-                                    </div>
-                               
+                                <div className="items-center mb-2 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                    <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalViews} lượt xem</span>
+                                </div>
 
-                                
-                                    <div className="items-center mb-5 font-bold bg-red-200 rounded-full w-1/2 py-1">
-                                        <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalLikes} lượt thích</span>
-                                    </div>
-                                
+                                <div className="items-center mb-5 font-bold bg-red-200 rounded-full w-1/2 py-1">
+                                    <span className="block text-center text-base font-medium text-sky-500 dark:text-white">{user && user.totalLikes} lượt thích</span>
+                                </div>
                             </div>
                         </div>
 

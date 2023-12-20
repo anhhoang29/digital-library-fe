@@ -8,7 +8,7 @@ import { emailRegrex } from "../../../utils/regrex";
 
 import { signup } from "../../../api/main/authAPI";
 import { getAccessibleOrganizations } from "../../../api/main/organizationAPI";
-import onlineLibrary from "../../../assets/images/online_library.webp";
+import onlineLibrary from "../../../assets/images/online_library_2.webp";
 import Select from "../../../components/management/select/Select";
 import "./login-form.css";
 import SimpleNavbar from "../../../components/student/navbar/SimpleNavbar";
@@ -153,15 +153,15 @@ const StudentRegister = () => {
                     }, 4000);
                 }
             } catch (error) {
-                //navigate 500
+                navigate("/error-500");
             }
         }
     };
 
     return (
         <>
-            <div className="py-4 sticky top-0 bg-white w-full z-20 border-b">
-                <SimpleNavbar/>
+            <div className="sticky top-0 bg-white w-full z-20 border-b">
+                <SimpleNavbar />
             </div>
 
             <div className="grid place-items-center min-h-screen bg-gray-50 dark:bg-gray-900 pb-10">
@@ -294,14 +294,14 @@ const StudentRegister = () => {
                                         )}
                                     </label>
 
-                                    <Button color="success" type="submit" isProcessing={isLoading} className="w-full mt-6">
+                                    <Button type="submit" isProcessing={isLoading} className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300 w-full mt-6">
                                         Đăng ký
                                     </Button>
                                 </form>
                                 <hr className="mt-6 mb-4" />
                                 <button
                                     type="button"
-                                    className="flex justify-center w-full text-gray-800 bg-white border login-form-border hover:bg-gray-200 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center mr-2 transition-colors active:bg-gray-600 duration-150 focus:outline-none focus:shadow-outline-gray">
+                                    className="flex justify-center w-full text-gray-800 bg-white border login-form-border hover:bg-gray-200 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center mr-2 transition-colors active:bg-gray-300 duration-150 focus:outline-none focus:shadow-outline-gray">
                                     <svg className="w-4 h-4 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
                                         <path
                                             fillRule="evenodd"
@@ -342,7 +342,7 @@ const StudentRegister = () => {
                 </div>
             </div>
 
-             <div>
+            <div>
                 <CustomFooter />
             </div>
         </>

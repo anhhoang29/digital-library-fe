@@ -7,13 +7,13 @@ import moment from "moment";
 
 import DocumentCard from "../../../components/student/card/Card";
 
-import { getUploadedDocumentsForGuestAndStudent } from "../../../api/main/documentAPI";
+import { getUploadedDocumentsForGuest, getUploadedDocumentsForStudent } from "../../../api/main/documentAPI";
 import { getAUser } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileBackground from "../../../assets/images/default_background.jpg";
 import profileImage from "../../../assets/images/default_profile.jpg";
 
-import "../document/document.css"
+import "../document/document.css";
 
 const UserWall = () => {
     const { userId } = useParams();
@@ -48,26 +48,44 @@ const UserWall = () => {
 
     const getDocumentList = async (page) => {
         try {
+            const accessToken = localStorage.getItem("accessToken");
+            const user = JSON.parse(sessionStorage.getItem("profile"));
+
             setIsFetching(true);
-            const response = await getUploadedDocumentsForGuestAndStudent(userId, {
-                params: {
-                    page: page - 1,
-                    size: 12,
-                    order: "updatedAt",
-                    category: "all",
-                    field: "all",
-                    s: search,
-                },
-            });
+            let response = null;
+            if (user && accessToken) {
+                response = await getUploadedDocumentsForStudent(userId, {
+                    params: {
+                        page: page - 1,
+                        size: 12,
+                        order: "updatedAt",
+                        category: "all",
+                        field: "all",
+                        s: search,
+                    },
+                });
+            } else {
+                response = await getUploadedDocumentsForGuest(userId, {
+                    params: {
+                        page: page - 1,
+                        size: 12,
+                        order: "updatedAt",
+                        category: "all",
+                        field: "all",
+                        s: search,
+                    },
+                });
+            }
             // setIsFetching(false);
             if (response.status === 200) {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
                 setTotalRecords(response.data.totalElements);
             } else {
+                navigate("/error-404");
             }
         } catch (error) {
-            // 500
+            navigate("/error-500");
         }
     };
 
@@ -79,15 +97,11 @@ const UserWall = () => {
                 const user = response.data;
                 setUser(user);
             } else {
-                // 404
+                navigate("/error-404");
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
-    };
-
-    const handleDetail = (slug) => {
-        navigate(`/manager/documents/${slug}`);
     };
 
     return (

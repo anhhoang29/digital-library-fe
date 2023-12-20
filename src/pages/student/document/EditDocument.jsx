@@ -44,15 +44,20 @@ const StudentEditDocument = () => {
 
     const getDocumentBySlug = async () => {
         try {
-            const response = await getADocument(slug);
+                    const accessToken = localStorage.getItem("accessToken");
+            const response = await getADocument(slug, {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            });
 
             if (response.status === 200) {
                 setDocument(response.data);
             } else {
-                // navigate 404
+                navigate("/error-404")
             }
         } catch (error) {
-            console.log(error);
+            navigate("/error-500");
         }
     };
 
@@ -236,7 +241,7 @@ const StudentEditDocument = () => {
                     }, 2000);
                 }
             } catch (error) {
-                console.log(error);
+                navigate("/error-500");
             }
         }
     };
@@ -258,7 +263,7 @@ const StudentEditDocument = () => {
                 {status === 1 && (
                     <Toast className="top-1/4 right-5 fixed w-100 z-50">
                         <HiOutlineCloudUpload className="h-5 w-5 text-green-600 dark:text-green-500" />
-                        <div className="pl-4 text-sm font-normal">Tải lên thành công!</div>
+                        <div className="pl-4 text-sm font-normal">Cập nhật thành công!</div>
                     </Toast>
                 )}
 

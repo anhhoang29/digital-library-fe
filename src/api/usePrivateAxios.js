@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { privateAxios } from "./axios";
 // import useRefreshToken from "./useRefreshToken";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const usePrivateAxios = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const currentPath = location.pathname;
 
     useEffect(() => {
         const requestInterceptor = privateAxios.interceptors.request.use(
@@ -13,14 +16,16 @@ const usePrivateAxios = () => {
                 const user = JSON.parse(sessionStorage.getItem("profile"));
 
                 if (!accessToken) {
-                    if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
-                    else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    if (currentPath.includes("/admin")) navigate("/admin/login");
+                    else if (currentPath.includes("/manager")) navigate("/manager/login");
                     else navigate("/login");
 
                     sessionStorage.setItem("entryMessage", "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại!");
                 } else {
                     if (!user) {
-                        navigate("/login");
+                        if (currentPath.includes("/admin")) navigate("/admin/login");
+                        else if (currentPath.includes("/manager")) navigate("/manager/login");
+                        else navigate("/login");
 
                         sessionStorage.setItem("entryMessage", "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại!");
                     } else {

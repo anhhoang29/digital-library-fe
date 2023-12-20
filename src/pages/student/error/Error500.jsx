@@ -10,7 +10,7 @@ const Error500 = () => {
 
     return (
         <div className="relative flex flex-col h-screen">
-            <div className="py-4 sticky top-0 bg-white w-full z-40  border-b">
+            <div className="sticky top-0 bg-white w-full z-40  border-b">
                 <CustomNavbar />
             </div>
 

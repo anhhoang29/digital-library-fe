@@ -46,8 +46,11 @@ const LikedDocument = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
+                navigate("/error-500");
             }
-        } catch (error) {}
+        } catch (error) {
+            navigate("/error-500");
+        }
     };
 
     const handleLike = async (slug) => {
@@ -72,7 +75,7 @@ const LikedDocument = () => {
                 }, 4000);
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500")
         }
     };
 

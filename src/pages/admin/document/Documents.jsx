@@ -134,7 +134,7 @@ const Documents = () => {
             if (isLatestRoute) getLatestDocumentList(currentPage);
             else getDocumentList(currentPage);
         }
-    }, [category, field, organization, deleted, internal, verifiedStatus]);
+    }, [category, field, organization, deleted, internal, verifiedStatus, search]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -320,10 +320,19 @@ const Documents = () => {
 
                 <div className="ml-auto w-auto max-h-full flex items-center">
                     <div className="relative">
-                        <TextInput id="search" type="search" icon={HiDocumentSearch} placeholder="Nhập để tìm kiếm" required className="max-w-2xl w-96" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }} onChange={(e) => setSearch(e.target.value)} />
-                        <Button className="absolute right-0 top-0 bottom-0 px-2 hover:text-gray-200" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", backgroundColor: "var(--main-color)" }} onClick={handleSearch}>
-                            Tìm kiếm
-                        </Button>
+                        <TextInput
+                            id="search"
+                            type="search"
+                            icon={HiDocumentSearch}
+                            placeholder="Nhập để tìm kiếm"
+                            required
+                            className="max-w-2xl w-96"
+                            style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                handleSearch();
+                            }}
+                        />
                     </div>
                 </div>
             </div>

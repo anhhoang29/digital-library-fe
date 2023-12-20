@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import KeyCard from "../../../components/student/card/KeyCard";
 
@@ -8,6 +9,8 @@ import fieldImage from "../../../assets/images/field.png";
 import { getAccessibleFields } from "../../../api/main/fieldAPI";
 
 const ListFields = () => {
+
+        const navigate = useNavigate();
 
         const [fieldList, setFieldList] = useState([]);
 
@@ -28,7 +31,7 @@ const ListFields = () => {
                 } else {
                 }
             } catch (error) {
-                console.log(error);
+                navigate("/error-500");
             }
         };
 

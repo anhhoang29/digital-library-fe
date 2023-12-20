@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { Avatar, Button, Label, Textarea, Toast } from "flowbite-react";
-import { HiChartPie, HiHeart, HiIdentification, HiOutlineBookmark, HiOutlineCalendar, HiOutlineCheck, HiOutlineCloudDownload, HiOutlineEye, HiOutlineHeart, HiOutlinePaperAirplane, HiOutlineReply, HiX } from "react-icons/hi";
+import { HiHeart, HiOutlineBookmark, HiOutlineCalendar, HiOutlineCheck, HiOutlineCloudDownload, HiOutlineColorSwatch, HiOutlineEye, HiOutlineHeart, HiOutlineLibrary, HiOutlinePaperAirplane, HiOutlineReply, HiOutlineTag, HiX } from "react-icons/hi";
 
 import moment from "moment/moment";
 
-import { getADocument } from "../../../api/main/documentAPI";
+import { getADocument, getADocumentForGuest } from "../../../api/main/documentAPI";
 import { checkLikedStatus, likeDocument } from "../../../api/main/likeAPI";
 import { checkSavedStatus, saveDocument } from "../../../api/main/saveAPI";
 
@@ -48,16 +48,22 @@ const DetailDocument = () => {
     }, []);
 
     const getDocumentBySlug = async () => {
+        const accessToken = localStorage.getItem("accessToken");
+        const user = JSON.parse(sessionStorage.getItem("profile"))
         try {
-            const response = await getADocument(slug);
+            let response = null;
+            
+            if(user && accessToken) response = await getADocument(slug);
+            else response = await getADocumentForGuest(slug);
 
             if (response.status === 200) {
                 setDocument(response.data);
             } else {
-                //navigate to 404
+                navigate("/error-404");
             }
         } catch (error) {
-            // navigate to 500
+            // alert("aaaa")
+            navigate("/error-500");
         }
     };
 
@@ -68,10 +74,10 @@ const DetailDocument = () => {
             if (response.status === 200) {
                 setReviewList(response.data);
             } else {
-                //navigate to 404
+                navigate("/error-404");
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 
@@ -83,10 +89,10 @@ const DetailDocument = () => {
                 if (response.message === "Liked") setIsLiked(true);
                 else setIsLiked(false);
             } else {
-                //navigate to 404
+                navigate("/error-404");
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 
@@ -98,10 +104,10 @@ const DetailDocument = () => {
                 if (response.message === "Saved") setIsSaved(true);
                 else setIsSaved(false);
             } else {
-                //navigate to 404
+                navigate("/error-404");
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 
@@ -113,10 +119,10 @@ const DetailDocument = () => {
                 if (response.message === "Reviewed") setIsReviewed(true);
                 else setIsReviewed(false);
             } else {
-                //navigate to 404
+                navigate("/error-404");
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 
@@ -145,7 +151,7 @@ const DetailDocument = () => {
                 }, 4000);
             }
         } catch (error) {
-            // navigate to 500
+            navigate("/error-500");
         }
     };
 
@@ -190,7 +196,7 @@ const DetailDocument = () => {
     };
 
     const handleShare = () => {
-        const shareLink = window.location.href
+        const shareLink = window.location.href;
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -236,12 +242,7 @@ const DetailDocument = () => {
                     }, 4000);
                 }
             } catch (error) {
-                setIsLoading(false);
-                setStatus(-1);
-                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
-                setTimeout(() => {
-                    setStatus(0);
-                }, 4000);
+                navigate("/error-500");
             }
         } else {
             setIsStarValid(false);
@@ -282,9 +283,9 @@ const DetailDocument = () => {
 
                         <div className="flex">
                             <div className="w-4/5 flex gap-8 items-center">
-                                <div className="flex items-center font-bold">
+                                <div className="flex items-center font-bold cursor-pointer " onClick={() => navigate("/users/" + document.userUploaded.userId)}>
                                     <HiOutlinePaperAirplane className="w-5 h-5 mr-1 text-gray-500 dark:text-white" />
-                                    <span className="block text-base font-normal text-cyan-500 dark:text-white">
+                                    <span className="block text-base font-normal text-cyan-500 hover:text-cyan-700">
                                         {document && document.userUploaded && document.userUploaded.lastName} {document && document.userUploaded && document.userUploaded.firstName}
                                     </span>
                                 </div>
@@ -309,6 +310,7 @@ const DetailDocument = () => {
                                 <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400" style={{ fontSize: "3.75rem" }}>
                                     {document && document.averageRating}
                                 </h1>
+                                <p className="mt-2">({document && document.totalReviews} đánh giá)</p>
                             </div>
                         </div>
                     </div>
@@ -316,26 +318,32 @@ const DetailDocument = () => {
                     <div className="bg-white rounded-lg shadow-md p-5 w-1/4 h-fit">
                         <div className="mb-5">
                             <div className="flex items-center mb-2 font-bold">
-                                <HiChartPie className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
+                                <HiOutlineLibrary className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
                                 <span className="block text-base font-medium dark:text-white">Trường</span>
                             </div>
-                            <div className="block mb-2 text-base font-medium text-green-400 dark:text-white">{document && document.organization && document.organization.orgName}</div>
+                            <div className="block mb-2 text-base font-medium text-green-400 dark:text-white hover:text-green-600 cursor-pointer" onClick={() => navigate("/institutions/" + document.organization.slug)}>
+                                {document && document.organization && document.organization.orgName}
+                            </div>
                         </div>
 
                         <div className="mb-5">
                             <div className="flex items-center mb-2 font-bold">
-                                <HiIdentification className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
+                                <HiOutlineTag className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
                                 <span className="block text-base font-medium dark:text-white">Danh mục</span>
                             </div>
-                            <div className="block text-base font-medium text-green-400 dark:text-white">{document && document.category && document.category.categoryName}</div>
+                            <div className="block text-base font-medium text-green-400 dark:text-white hover:text-green-600 cursor-pointer" onClick={() => navigate("/categories/" + document.category.slug)}>
+                                {document && document.category && document.category.categoryName}
+                            </div>
                         </div>
 
                         <div className="">
                             <div className="flex items-center mb-2 font-bold">
-                                <HiIdentification className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
+                                <HiOutlineColorSwatch className="w-5 h-5 mr-3 text-gray-800 dark:text-white" />
                                 <span className="block text-base font-medium dark:text-white">Lĩnh vực</span>
                             </div>
-                            <div className="block text-base font-medium text-green-400 dark:text-white">{document && document.field && document.field.fieldName}</div>
+                            <div className="block text-base font-medium text-green-400 dark:text-white hover:text-green-600 cursor-pointer" onClick={() => navigate("/fields/" + document.field.slug)}>
+                                {document && document.field && document.field.fieldName}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -372,10 +380,7 @@ const DetailDocument = () => {
 
                 <div className="flex gap-5">
                     <div className="bg-white rounded-lg shadow-md p-5 w-3/4 h-fit">
-                        {reviewList.length === 0 && 
-                        <p className="text-sm font-medium">
-                                            Chưa có đánh giá!
-                                        </p>}
+                        {reviewList.length === 0 && <p className="text-sm font-medium">Chưa có đánh giá!</p>}
                         <div className="grid grid-cols-2 gap-5">
                             {reviewList.map((review, index) => (
                                 <div className="shadow-lg rounded-lg border p-3">

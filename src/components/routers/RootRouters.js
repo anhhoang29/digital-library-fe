@@ -21,6 +21,8 @@ import StudentRegister from "../../pages/student/auth/Register";
 import Error404 from "../../pages/student/error/Error404";
 import Error500 from "../../pages/student/error/Error500";
 import ManagerLayout from "../management/layout/ManagerLayout";
+import Login from "../../pages/student/auth/Login";
+import SignUp from "../../pages/student/auth/Register";
 
 const RootRouters = () => {
     usePrivateAxios();

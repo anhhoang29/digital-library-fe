@@ -4,7 +4,7 @@ const Select = (props) => {
     const { selectName, options, selectedValue, onChangeHandler, name, field} = props;
     return (
         <div className="mb-2 max-w-full">
-            <label htmlFor="hs-select-label" className="block text-sm font-medium mb-2 dark:text-white">
+            <label htmlFor="hs-select-label" className="block text-sm text-gray-700 font-medium mb-2 dark:text-white">
                 {selectName}
             </label>
             <select

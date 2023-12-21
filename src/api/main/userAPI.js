@@ -39,7 +39,7 @@ export const updateUser = async (userId, data, config) => {
 
 export const getAUser = async (userId, config) => {
     try {
-        const response = await privateAxios.get(`/users/${userId}`, config);
+        const response = await axios.get(`/users/${userId}`, config);
         return response.data;
     } catch (error) {
         throw error;

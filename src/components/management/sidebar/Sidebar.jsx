@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import "./sidebar.css";
 
-import logo2 from "../../../components/assets/images/logo.png";
+import logo2 from "../../../assets/images/logo.png";
 
 import manager_sidebar_items from "../../../assets/JsonData/manager_sidebar_routes.json";
 import sidebar_items from "../../../assets/JsonData/sidebar_routes.json";
@@ -39,7 +39,7 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <div className="sidebar__logo">
-                <img src={logo2} alt="company logo" />
+                <img src={logo2} alt="company logo" className="w-[100px]"/>
             </div>
             {checkRoutes().map((item, index) => (
                 <Link to={item.route} key={index}>

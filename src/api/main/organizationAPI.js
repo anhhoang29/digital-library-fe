@@ -19,6 +19,15 @@ export const getAccessibleOrganizations = async (config) => {
     }
 };
 
+export const searchOrganizations = async (config) => {
+    try {
+        const response = await axios.get("/organizations/search", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getAOrganization = async (organizationId, config) => {
     try {
         const response = await privateAxios.get(`/organizations/${organizationId}`, config);

@@ -7,12 +7,11 @@ import Table from "../../../components/management/table/Table";
 import ActionButton from "../../../components/management/action-button/ActionButton";
 
 import { Badge, Button, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
-import { HiCheck, HiDocumentRemove, HiDocumentSearch, HiOutlineCheck, HiX, HiOutlineDotsHorizontal } from "react-icons/hi";
+import { HiCheck, HiDocumentRemove, HiDocumentSearch, HiOutlineCheck, HiOutlineDotsHorizontal, HiX } from "react-icons/hi";
 
 import { deleteADocument, getAllDocumentsByOrganizations, getLatestDocumentsByOrganization, searchDocumentsByOrganization } from "../../../api/main/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
-import { useSelector } from "react-redux";
 import { getAllCategories } from "../../../api/main/categoryAPI";
 import { getAllFields } from "../../../api/main/fieldAPI";
 
@@ -134,7 +133,7 @@ const ManagerDocuments = () => {
             if (isLatestRoute) getLatestDocumentList(currentPage);
             else getDocumentList(currentPage);
         }
-    }, [category, field, deleted, internal, verifiedStatus]);
+    }, [category, field, deleted, internal, verifiedStatus, search]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -264,7 +263,7 @@ const ManagerDocuments = () => {
                 setTimeout(() => {
                     setStatus(0);
                 }, 2000);
-                
+
                 if (isSearching) getDocumentListWithSearch(currentPage);
                 else {
                     if (isLatestRoute) getLatestDocumentList(currentPage);
@@ -304,10 +303,22 @@ const ManagerDocuments = () => {
 
                 <div className="ml-auto w-auto max-h-full flex items-center">
                     <div className="relative">
-                        <TextInput id="search" type="search" icon={HiDocumentSearch} placeholder="Nhập để tìm kiếm" required className="max-w-2xl w-96" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }} onChange={(e) => setSearch(e.target.value)} />
-                        <Button className="absolute right-0 top-0 bottom-0 px-2 hover:text-gray-200" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", backgroundColor: "var(--main-color)" }} onClick={handleSearch}>
+                        <TextInput
+                            id="search"
+                            type="search"
+                            icon={HiDocumentSearch}
+                            placeholder="Nhập để tìm kiếm"
+                            required
+                            className="max-w-2xl w-96"
+                            style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                handleSearch();
+                            }}
+                        />
+                        {/* <Button className="absolute right-0 top-0 bottom-0 px-2 hover:text-gray-200" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", backgroundColor: "var(--main-color)" }} onClick={handleSearch}>
                             Tìm kiếm
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
             </div>

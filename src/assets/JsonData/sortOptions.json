@@ -1,0 +1,22 @@
+[
+    {
+        "order": "updatedAt",
+        "sortOrder": "desc",
+        "name": "Mới nhất"
+    },
+    {
+        "order": "totalView",
+        "sortOrder": "desc",
+        "name": "Được xem nhiều nhất"
+    },
+    {
+        "order": "averageRating",
+        "sortOrder": "desc",
+        "name": "Đánh giá cao nhất"
+    },
+    {
+        "order": "totalFavorite",
+        "sortOrder": "desc",
+        "name": "Được thích nhất"
+    }
+]

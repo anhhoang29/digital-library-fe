@@ -28,6 +28,15 @@ export const login = async (data, config) => {
     }
 };
 
+export const signup = async (data, config) => {
+    try {
+        const response = await axios.post("/auth/signup", data, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const register = async (data, config) => {
     try {
         const response = await axios.post(SIGN_UP_URL, data, config);

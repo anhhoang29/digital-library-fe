@@ -13,7 +13,7 @@ import TopNav from "../topnav/TopNav";
 import { useDispatch, useSelector } from "react-redux";
 
 import ThemeAction from "../../../redux/actions/ThemeAction";
-import ManagementRoutes from "../../routers/ManagementRouters";
+import AdminRoutes from "../../routers/AdminRouters";
 
 const Layout = () => {
     const themeReducer = useSelector((state) => state.ThemeReducer);
@@ -36,7 +36,7 @@ const Layout = () => {
             <div className="layout__content">
                 <TopNav />
                 <div className="layout__content-main">
-                    <ManagementRoutes />
+                    <AdminRoutes />
                 </div>
             </div>
         </div>

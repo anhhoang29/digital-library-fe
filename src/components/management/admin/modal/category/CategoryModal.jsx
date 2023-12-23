@@ -20,10 +20,10 @@ const CategoryModal = (props) => {
 
     useEffect(() => {
         if (triggerModal !== 0) {
-            setOpenModal(true);
             if (!isCreatingNew) {
                 getCategoryByCategoryId();
             }
+            setOpenModal(true);
         }
     }, [triggerModal]);
 

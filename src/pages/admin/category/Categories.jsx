@@ -59,8 +59,24 @@ const Categories = () => {
             <td className="w-1/12 text-center">
                 <div className="flex space-x-0">
                     {/* <ActionButton onClick={() => handleDetail(item.categoryId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" /> */}
-                    <ActionButton onClick={() => handleEdit(item.categoryId)} icon="bx bx-edit" color="yellow" content="Chỉnh sửa danh mục" />
-                    <ActionButton onClick={() => handleDelete(item.categoryId)} icon="bx bx-trash" color="red" content="Xoá danh mục" />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(item.categoryId);
+                        }}
+                        icon="bx bx-edit"
+                        color="yellow"
+                        content="Chỉnh sửa danh mục"
+                    />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.categoryId);
+                        }}
+                        icon="bx bx-trash"
+                        color="red"
+                        content="Xoá danh mục"
+                    />
                 </div>
             </td>
         </tr>

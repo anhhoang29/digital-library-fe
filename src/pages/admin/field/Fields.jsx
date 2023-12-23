@@ -59,8 +59,24 @@ const Fields = () => {
             <td className="w-1/12 text-center">
                 <div className="flex space-x-0">
                     {/* <ActionButton onClick={() => handleDetail(item.fieldId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" /> */}
-                    <ActionButton onClick={() => handleEdit(item.fieldId)} icon="bx bx-edit" color="yellow" content="Chỉnh sửa lĩnh vực" />
-                    <ActionButton onClick={() => handleDelete(item.fieldId)} icon="bx bx-trash" color="red" content="Xoá lĩnh vực" />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(item.fieldId);
+                        }}
+                        icon="bx bx-edit"
+                        color="yellow"
+                        content="Chỉnh sửa lĩnh vực"
+                    />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.fieldId);
+                        }}
+                        icon="bx bx-trash"
+                        color="red"
+                        content="Xoá lĩnh vực"
+                    />
                 </div>
             </td>
         </tr>

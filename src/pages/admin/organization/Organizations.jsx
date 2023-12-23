@@ -59,8 +59,24 @@ const Organizations = () => {
             <td className="w-1/12 text-center">
                 <div className="flex space-x-0">
                     {/* <ActionButton onClick={() => handleDetail(item.orgId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" /> */}
-                    <ActionButton onClick={() => handleEdit(item.orgId)} icon="bx bx-edit" color="yellow" content="Chỉnh sửa trường" />
-                    <ActionButton onClick={() => handleDelete(item.orgId)} icon="bx bx-trash" color="red" content="Xoá trường" />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(item.orgId);
+                        }}
+                        icon="bx bx-edit"
+                        color="yellow"
+                        content="Chỉnh sửa trường"
+                    />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.orgId);
+                        }}
+                        icon="bx bx-trash"
+                        color="red"
+                        content="Xoá trường"
+                    />
                 </div>
             </td>
         </tr>

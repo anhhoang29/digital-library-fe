@@ -41,9 +41,9 @@
       opacity: 0;
       transition: all 0.2s ease-in-out;
     }
-    &:hover {
+    /* &:hover {
       span {
         top: 100%;
         opacity: 0.9;
       }
-    }
+    } */

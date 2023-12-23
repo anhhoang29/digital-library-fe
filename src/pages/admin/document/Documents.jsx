@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate, useParams } from "react-router-dom";
 
 import ActionButton from "../../../components/management/action-button/ActionButton";
 import SelectFilter from "../../../components/management/select/SelectFilter";
 import Table from "../../../components/management/table/Table";
 
-import { Badge, Button, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
-import { HiCheck, HiDocumentRemove, HiDocumentSearch, HiOutlineCheck, HiOutlineDotsHorizontal, HiX } from "react-icons/hi";
+import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
+import { HiCheck, HiDocumentRemove, HiOutlineCheck, HiOutlineDotsHorizontal, HiX } from "react-icons/hi";
 
 import { getAllCategories } from "../../../api/main/categoryAPI";
-import { deleteADocument, getAllDocuments, getLatestDocuments, searchDocuments } from "../../../api/main/documentAPI";
+import { deleteADocument, getAllDocuments, getLatestDocuments } from "../../../api/main/documentAPI";
 import { getAllFields } from "../../../api/main/fieldAPI";
 import { getAllOrganizations } from "../../../api/main/organizationAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
@@ -72,6 +72,8 @@ const Documents = () => {
 
     const isLatestRoute = useMatch("/admin/documents/latest");
 
+    const { fieldSlug, categorySlug, organizationSlug } = useParams();
+
     usePrivateAxios();
 
     const handleDetail = (slug) => {
@@ -89,9 +91,9 @@ const Documents = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [category, setCategory] = useState("all");
-    const [field, setField] = useState("all");
-    const [organization, setOrganization] = useState("all");
+    const [category, setCategory] = useState(categorySlug ? categorySlug : "all");
+    const [field, setField] = useState(fieldSlug ? fieldSlug : "all");
+    const [organization, setOrganization] = useState(organizationSlug ? organizationSlug : "all");
     const [deleted, setDeleted] = useState("all");
     const [internal, setInternal] = useState("all");
     const [verifiedStatus, setVerifiedStatus] = useState("all");
@@ -105,7 +107,6 @@ const Documents = () => {
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
-    const [isSearching, setIsSearching] = useState(false);
     const [docId, setDocId] = useState("");
     const [search, setSearch] = useState("");
 
@@ -116,25 +117,21 @@ const Documents = () => {
     }, []);
 
     useEffect(() => {
-        if (isSearching) {
-            getDocumentListWithSearch(currentPage);
-        } else {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else {
-                getDocumentList(currentPage);
-            }
+        if (isLatestRoute) getLatestDocumentList(currentPage);
+        else {
+            getDocumentList(currentPage);
         }
     }, [currentPage]);
 
     useEffect(() => {
         setCurrentPage(1);
-        if (isSearching) {
-            getDocumentListWithSearch(currentPage);
-        } else {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else getDocumentList(currentPage);
-        }
+        if (isLatestRoute) getLatestDocumentList(currentPage);
+        else getDocumentList(currentPage);
     }, [category, field, organization, deleted, internal, verifiedStatus, search]);
+
+    useEffect(() => {
+        selectedPage = currentPage - 1;
+    }, [currentPage]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -144,10 +141,17 @@ const Documents = () => {
     const getCategoryList = async () => {
         try {
             setIsFetching(true);
-            const response = await getAllCategories();
+            const response = await getAllCategories({
+                params: {
+                    page: 0,
+                    size: 1000,
+                    s: "",
+                    deleted: "all",
+                },
+            });
             setIsFetching(false);
             if (response.status === 200) {
-                setCategoryList(response.data);
+                setCategoryList(response.data.content);
             } else {
                 // navigate("/admin/login");
             }
@@ -159,10 +163,17 @@ const Documents = () => {
     const getFieldList = async () => {
         try {
             setIsFetching(true);
-            const response = await getAllFields();
+            const response = await getAllFields({
+                params: {
+                    page: 0,
+                    size: 1000,
+                    s: "",
+                    deleted: "all",
+                },
+            });
             setIsFetching(false);
             if (response.status === 200) {
-                setFieldList(response.data);
+                setFieldList(response.data.content);
             } else {
                 // navigate("/admin/login");
             }
@@ -177,14 +188,17 @@ const Documents = () => {
             const response = await getAllOrganizations({
                 params: {
                     page: 0,
-                    size: 100,
+                    size: 1000,
+                    s: "",
+                    deleted: "all",
                 },
             });
+
             setIsFetching(false);
             if (response.status === 200) {
                 setOrganizationList(response.data.content);
             } else {
-                // navigate("/admin/login");
+                //navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -205,6 +219,7 @@ const Documents = () => {
                     deleted: deleted,
                     internal: internal,
                     status: verifiedStatus,
+                    s: search,
                 },
             });
             setIsFetching(false);
@@ -226,28 +241,6 @@ const Documents = () => {
                 params: {
                     page: page - 1,
                     size: 15,
-                },
-            });
-            setIsFetching(false);
-            if (response.status === 200) {
-                setDocumentList(response.data.content);
-                setTotalPages(response.data.totalPages);
-            } else {
-                // navigate("/admin/login");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const getDocumentListWithSearch = async (page) => {
-        try {
-            setIsFetching(true);
-            const response = await searchDocuments({
-                params: {
-                    page: page - 1,
-                    size: 15,
-                    order: "updatedAt",
                     category: category,
                     field: field,
                     organization: organization,
@@ -281,11 +274,8 @@ const Documents = () => {
                     setStatus(0);
                 }, 2000);
 
-                if (isSearching) getDocumentListWithSearch(currentPage);
-                else {
-                    if (isLatestRoute) getLatestDocumentList(currentPage);
-                    else getDocumentList(currentPage);
-                }
+                if (isLatestRoute) getLatestDocumentList(currentPage);
+                else getDocumentList(currentPage);
             } else {
                 setStatus(-1);
                 setTimeout(() => {
@@ -297,43 +287,15 @@ const Documents = () => {
         }
     };
 
-    const handleSearch = () => {
-        if (search === "") {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else getDocumentList(currentPage);
-        } else {
-            setIsSearching(true);
-            getDocumentListWithSearch(1);
-        }
-    };
-
     return (
         <div>
-            <h2 className="page-header">tài liệu</h2>
+            <h2 className="page-header">{isLatestRoute ? "tài liệu mới" : "tài liệu"}</h2>
             <div className="flex h-fit">
                 <div>
                     <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/admin/documents/new")}>
                         <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
                         Thêm tài liệu
                     </Button>
-                </div>
-
-                <div className="ml-auto w-auto max-h-full flex items-center">
-                    <div className="relative">
-                        <TextInput
-                            id="search"
-                            type="search"
-                            icon={HiDocumentSearch}
-                            placeholder="Nhập để tìm kiếm"
-                            required
-                            className="max-w-2xl w-96"
-                            style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                handleSearch();
-                            }}
-                        />
-                    </div>
                 </div>
             </div>
 
@@ -379,7 +341,7 @@ const Documents = () => {
                                 />
                             </div>
 
-                            <div className="flex flex-wrap gap-10 mt-4">
+                            <div className="flex flex-wrap gap-10 mt-4 items-end">
                                 <SelectFilter
                                     selectName="Trạng thái"
                                     options={verifiedStatusList}
@@ -403,6 +365,27 @@ const Documents = () => {
                                     field="value"
                                     required
                                 />
+
+                                <div className="relative rounded-lg ml-auto w-1/3">
+                                    <input
+                                        type="text"
+                                        id="list-search"
+                                        className="text-sm text-black block w-full p-3 ps-5 border border-gray-300 bg-white focus:ring-0 focus:border-green-400 rounded-lg"
+                                        placeholder="Tìm kiếm"
+                                        onChange={(e) => {
+                                            setCurrentPage(1);
+                                            setSearch(e.target.value);
+                                        }}
+                                        value={search}
+                                        required
+                                    />
+
+                                    <div className="absolute inset-y-0 end-0 flex items-center pe-5 cursor-pointer rounded-lg">
+                                        <svg className="w-4 h-4 text-green-400 hover:text-green-200 focus:text-green-200 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -413,12 +396,14 @@ const Documents = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
+                            {documentList.length === 0 && <p className="mt-2 mb-4 font-medium">Không có kết quả!</p>}
+
                             <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={documentList} renderBody={(item, index) => renderBody(item, index)} />
 
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons style={{ color: "var(--main-color)" }} />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons style={{ color: "var(--main-color)" }} />
                             </div>
                         </div>
                     </div>

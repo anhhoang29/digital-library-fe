@@ -9,7 +9,7 @@ import usePrivateAxios from "../../../api/usePrivateAxios";
 
 import DocumentCard from "../../../components/student/card/Card";
 
-import "./document.css"
+import "./document.css";
 
 const UploadedDocument = () => {
     usePrivateAxios();
@@ -112,7 +112,7 @@ const UploadedDocument = () => {
                 }, 2000);
             }
         } catch (error) {
-           navigate("/error-500");
+            navigate("/error-500");
         }
     };
 
@@ -156,7 +156,7 @@ const UploadedDocument = () => {
         try {
             const response = await getMyUploadedDocuments({
                 params: {
-                    status: -1,
+                    status: 1,
                     s: "",
                 },
             });
@@ -276,7 +276,7 @@ const UploadedDocument = () => {
                                             aria-selected="false"
                                             onClick={handleRejectedTabClick}>
                                             <HiX />
-                                            Bị từ chối ({totalRejectedElements})
+                                            Đã từ chối ({totalRejectedElements})
                                         </button>
                                     </li>
                                 </div>
@@ -319,13 +319,13 @@ const UploadedDocument = () => {
 
                                 <div className="grid grid-cols-4 gap-8 mt-10 w-full">
                                     {documentList.map((document) => (
-                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} type="CRUD" action={() => handleDelete(document.docId)} />
+                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} reason={document.note} type="RUD" action={() => handleDelete(document.docId)} />
                                     ))}
                                 </div>
 
                                 {documentList.length !== 0 && (
                                     <div className="flex overflow-x-auto sm:justify-center mt-4">
-                                        <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                        <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                                     </div>
                                 )}
                             </div>
@@ -365,7 +365,7 @@ const UploadedDocument = () => {
 
                                 <div className="grid grid-cols-4 gap-8 mt-10 w-full">
                                     {documentList.map((document) => (
-                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} type="CRUD" action={() => handleDelete(document.docId)} />
+                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} reason={document.note} type="RUD" action={() => handleDelete(document.docId)} />
                                     ))}
                                 </div>
                             </div>
@@ -405,7 +405,7 @@ const UploadedDocument = () => {
 
                                 <div className="grid grid-cols-4 gap-8 mt-10 w-full">
                                     {documentList.map((document) => (
-                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} type="CRUD" action={() => handleDelete(document.docId)} />
+                                        <DocumentCard docName={document.docName} slug={document.slug} thumbnail={document.thumbnail} totalView={document.totalView} totalFavorite={document.totalFavorite} reason={document.note} type="VRUD" action={() => handleDelete(document.docId)} />
                                     ))}
                                 </div>
                             </div>

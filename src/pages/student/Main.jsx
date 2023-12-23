@@ -14,7 +14,7 @@ const Main = () => {
             </div>
 
             <div className="h-full flex">
-                <div className="w-[18%] bg-white border-r h-full ">
+                <div className="w-[18%] bg-white border-r h-full">
                     <CustomSidebar />
                 </div>
 

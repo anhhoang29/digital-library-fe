@@ -22,7 +22,7 @@ let selectedPage = 0;
 const ListDocument = () => {
     const navigate = useNavigate();
 
-    const { organizationSlug , categorySlug , fieldSlug , searchQuery} = useParams();
+    const { organizationSlug, categorySlug, fieldSlug, searchQuery } = useParams();
 
     const accessToken = localStorage.getItem("accessToken");
     const user = JSON.parse(sessionStorage.getItem("profile"));
@@ -278,7 +278,7 @@ const ListDocument = () => {
 
                     {documentList.length !== 0 && (
                         <div className="flex overflow-x-auto sm:justify-center">
-                            <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                            <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                         </div>
                     )}
                 </div>

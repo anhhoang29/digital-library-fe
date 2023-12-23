@@ -9,6 +9,15 @@ export const getAllCategories = async (config) => {
     }
 };
 
+export const searchCategories = async (config) => {
+    try {
+        const response = await axios.get("/categories/search", config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getAccessibleCategories = async (config) => {
     try {
         const response = await axios.get("/categories", config);
@@ -55,6 +64,15 @@ export const deleteACategory = async (categoryId, config) => {
 };
 
 export const activateCategory = async (categoryId, config) => {
+    try {
+        const response = await privateAxios.put(`/categories/${categoryId}/activation`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const activateACategory = async (categoryId, config) => {
     try {
         const response = await privateAxios.put(`/categories/${categoryId}/activation`, config);
         return response.data;

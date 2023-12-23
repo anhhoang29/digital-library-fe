@@ -25,7 +25,7 @@ const Reviews = () => {
         <tr key={index} className="cursor-pointer">
             <td className="text-center font-bold">{selectedPage * 15 + index + 1}</td>
             <td className="max-w-xs text-justify font-bold">
-                {item.star} <i className="bx bxs-star" style={{color: "green"}}></i>
+                {item.star} <i className="bx bxs-star" style={{ color: "green" }}></i>
             </td>
             <td className="max-w-xs text-justify">{item.content}</td>
             <td className="max-w-xs text-center" onClick={() => handleUser(item.user.userId)}>
@@ -138,7 +138,7 @@ const Reviews = () => {
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ export const getAllDocuments = async (config) => {
     }
 };
 
-export const getAllDocumentsByOrganizations = async (org, config) => {
+export const getDocumentsByOrganizations = async (org, config) => {
     try {
         const response = await privateAxios.get(`/documents/organizations/${org}`, config);
         return response.data;

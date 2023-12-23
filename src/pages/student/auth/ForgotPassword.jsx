@@ -242,7 +242,7 @@ const StudentForgotPassword = () => {
                                                     length={6}
                                                     required
                                                 />
-                                                <Button type="submit" className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300">
+                                                <Button type="submit" className="text-white bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300">
                                                     Xác thực
                                                 </Button>
                                             </div>
@@ -297,7 +297,7 @@ const StudentForgotPassword = () => {
                                                 )}
                                             </label>
 
-                                            <Button color="success" type="submit" isProcessing={isLoading} className="bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300 w-full mt-6">
+                                            <Button color="success" type="submit" isProcessing={isLoading} className="text-white bg-green-400 enabled:hover:bg-green-500 focus:ring-green-300 w-full mt-6">
                                                 Khôi phục mật khẩu
                                             </Button>
                                         </form>
@@ -311,7 +311,7 @@ const StudentForgotPassword = () => {
                                         </Link>
                                     </p>
                                     {status === -1 && (
-                                        <Toast className="top-5 right-5 fixed">
+                                        <Toast className="top-20 right-5 fixed z-50">
                                             <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
                                                 <HiX className="h-5 w-5" />
                                             </div>
@@ -320,7 +320,7 @@ const StudentForgotPassword = () => {
                                         </Toast>
                                     )}
                                     {status === 1 && (
-                                        <Toast className="top-5 right-5 fixed">
+                                        <Toast className="top-20 right-5 fixed z-50">
                                             <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                                                 <HiOutlineCheck className="h-5 w-5" />
                                             </div>
@@ -332,8 +332,8 @@ const StudentForgotPassword = () => {
                             </div>
                         </div>
 
-                        <div className="flex p-6 sm:p-12 md:w-1/2">
-                            <img aria-hidden="true" className="object-cover ml-0 w-full h-full dark:hidden" src={resetPasswordPic} alt="Reset password icon" />
+                        <div className="flex p-6 sm:p-12 md:w-1/2 items-center">
+                            <img aria-hidden="true" className="ml-0 w-full h-fit dark:hidden" src={resetPasswordPic} alt="Reset password icon" />
                         </div>
                     </div>
                 </div>

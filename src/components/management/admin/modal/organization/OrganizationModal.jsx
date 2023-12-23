@@ -1,10 +1,10 @@
 import { Button, Label, Modal, TextInput, Toast } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { HiX, HiOutlineCheck, HiChevronUp, HiChevronLeft } from "react-icons/hi";
+import { HiChevronLeft, HiChevronUp, HiOutlineCheck, HiX } from "react-icons/hi";
 
 import usePrivateAxios from "../../../../../api/usePrivateAxios";
 
-import { createOrganization, getAOrganization, updateOrganization } from "../../../../../api/main/organizationAPI";
+import { createOrganization, getAnOrganization, updateOrganization } from "../../../../../api/main/organizationAPI";
 
 const OrganizationModal = (props) => {
     usePrivateAxios();
@@ -34,7 +34,7 @@ const OrganizationModal = (props) => {
 
     const getOrganizationByOrganizationId = async () => {
         try {
-            const response = await getAOrganization(organizationId);
+            const response = await getAnOrganization(organizationId);
 
             if (response.status === 200) {
                 const organization = response.data;

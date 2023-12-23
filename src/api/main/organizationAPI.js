@@ -1,5 +1,4 @@
-import { privateAxios } from "../axios";
-import axios from "../axios";
+import axios, { privateAxios } from "../axios";
 
 export const getAllOrganizations = async (config) => {
     try {
@@ -28,7 +27,7 @@ export const searchOrganizations = async (config) => {
     }
 };
 
-export const getAOrganization = async (organizationId, config) => {
+export const getAnOrganization = async (organizationId, config) => {
     try {
         const response = await privateAxios.get(`/organizations/${organizationId}`, config);
         return response.data;
@@ -55,9 +54,18 @@ export const updateOrganization = async (organizationId, data, config) => {
     }
 };
 
-export const deleteAOrganization = async (organizationId, config) => {
+export const deleteAnOrganization = async (organizationId, config) => {
     try {
         const response = await privateAxios.delete(`/organizations/${organizationId}`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const activateAnOrganization = async (organizationId, config) => {
+    try {
+        const response = await privateAxios.put(`/organizations/${organizationId}/activation`, config);
         return response.data;
     } catch (error) {
         throw error;

@@ -41,7 +41,7 @@ const CustomNavbar = () => {
                     )}
 
                     {!user && (
-                        <Button color="success" pill onClick={() => navigate("/login")}>
+                        <Button className="text-white bg-green-400 enabled:hover:bg-green-500 focus:ring-green-200 focus:ring-1" pill onClick={() => navigate("/login")}>
                             Đăng nhập
                         </Button>
                     )}

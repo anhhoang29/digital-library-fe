@@ -2,8 +2,8 @@ import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Datepicker, FileInput, Label, Modal, Pagination, TextInput, Toast, Spinner, Badge } from "flowbite-react";
-import { HiAdjustments, HiAtSymbol, HiCake, HiDocumentRemove, HiX, HiOutlineCheck, HiPhone, HiUser, HiCheck } from "react-icons/hi";
+import { Badge, Button, Datepicker, FileInput, Label, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
+import { HiAdjustments, HiAtSymbol, HiCake, HiCheck, HiDocumentRemove, HiOutlineCheck, HiPhone, HiUser, HiX } from "react-icons/hi";
 
 import ActionButton from "../../components/management/action-button/ActionButton";
 import Select from "../../components/management/select/Select";
@@ -674,7 +674,7 @@ const ManagerProfile = () => {
                                 {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                                 <div className="flex overflow-x-auto sm:justify-center">
-                                    <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                    <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                                 </div>
                             </div>
                         </div>

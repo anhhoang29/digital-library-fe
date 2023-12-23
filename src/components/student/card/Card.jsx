@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Tooltip } from "flowbite-react";
-import { HiBookmark, HiEye, HiHeart, HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
+import { Button, Modal, Tooltip } from "flowbite-react";
+import { HiBookmark, HiEye, HiHeart, HiOutlineLightBulb, HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
 
 import "./card.css";
 
 const DocumentCard = (props) => {
-    const { docName, slug, thumbnail, totalView, totalFavorite, type, action } = props;
+    const { docName, slug, thumbnail, totalView, totalFavorite, type, action, tab, reason } = props;
+
+    const [openModal, setOpenModal] = useState(false);
 
     const navigate = useNavigate();
 
     const handleEdit = () => {
         navigate(`/documents/${slug}/edit`);
+    };
+
+    const handleViewReason = () => {
+        setOpenModal(true);
     };
 
     return (
@@ -67,7 +73,7 @@ const DocumentCard = (props) => {
                                 </Tooltip>
                             )}
 
-                            {type === "CRUD" && (
+                            {type === "RUD" && (
                                 <>
                                     <Tooltip content="Chỉnh sửa" style="light">
                                         <HiOutlinePencilAlt
@@ -90,12 +96,63 @@ const DocumentCard = (props) => {
                                     </Tooltip>
                                 </>
                             )}
+
+                            {type === "VRUD" && (
+                                <>
+                                    <Tooltip content="Chỉnh sửa" style="light">
+                                        <HiOutlinePencilAlt
+                                            className="w-7 h-7 text-yellow-500 hover:text-yellow-300 active:text-yellow-200 mr-2"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEdit();
+                                            }}
+                                        />
+                                    </Tooltip>
+
+                                    <Tooltip content="Xoá" style="light">
+                                        <HiOutlineTrash
+                                            className="w-7 h-7 text-red-500 hover:text-red-300 active:text-red-200"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                action();
+                                            }}
+                                        />
+                                    </Tooltip>
+
+                                    <Tooltip content="Xem lý do" style="light">
+                                        <HiOutlineLightBulb
+                                            className="w-7 h-7 text-orange-500 hover:text-orange-300 active:text-orange-200 ml-2"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleViewReason();
+                                            }}
+                                        />
+                                    </Tooltip>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
             <p className="title">{docName}</p>
             {/* </Tooltip> */}
+
+            <Modal show={openModal} size="sm" onClose={() => setOpenModal(false)}>
+                <Modal.Header className="text-red-500">Lý do từ chối</Modal.Header>
+                <Modal.Body>
+                    <div className="space-y-6">
+                        <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">{reason}</p>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => setOpenModal(false)} color="failure" className="rounded-full">
+                        Đóng
+                    </Button>
+                    {/* <Button color="gray" onClick={() => setOpenModal(false)}>
+                        Decline
+                    </Button> */}
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

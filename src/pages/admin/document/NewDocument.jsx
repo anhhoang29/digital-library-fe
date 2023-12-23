@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Select from "../../../components/management/select/Select";
 
-import { getAllCategories } from "../../../api/main/categoryAPI";
+import { getAccessibleCategories, getAllCategories } from "../../../api/main/categoryAPI";
 import { uploadNewDocument } from "../../../api/main/documentAPI";
-import { getAllFields } from "../../../api/main/fieldAPI";
+import { getAccessibleFields, getAllFields } from "../../../api/main/fieldAPI";
 import { getAccessibleOrganizations } from "../../../api/main/organizationAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
@@ -56,7 +56,7 @@ const NewDocument = () => {
 
     const getCategoryList = async () => {
         try {
-            const response = await getAllCategories({
+            const response = await getAccessibleCategories({
                 params: {
                     page: 0,
                     size: 100,
@@ -73,7 +73,7 @@ const NewDocument = () => {
 
     const getFieldList = async () => {
         try {
-            const response = await getAllFields({
+            const response = await getAccessibleFields({
                 params: {
                     page: 0,
                     size: 100,
@@ -265,13 +265,13 @@ const NewDocument = () => {
 
                                 <div className="mb-6">
                                     <label htmlFor="message" className="block mb-2 text-sm font-medium dark:text-white">
-                                        Mô tả
+                                        Giới thiệu
                                     </label>
                                     <textarea
                                         id="message"
                                         rows="4"
                                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Nhập mô tả..."
+                                        placeholder="Nhập giới thiệu..."
                                         required
                                         onChange={(e) => {
                                             setIntroduction(e.target.value);

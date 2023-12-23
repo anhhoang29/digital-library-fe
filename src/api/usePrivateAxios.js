@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { privateAxios } from "./axios";
 // import useRefreshToken from "./useRefreshToken";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const usePrivateAxios = () => {
     const navigate = useNavigate();
@@ -48,9 +48,12 @@ const usePrivateAxios = () => {
                     } else if (response.data.status === 403) {
                         sessionStorage.setItem("entryMessage", "Tài khoản không có quyền truy cập!");
                     }
-                    if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
-                    else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    if (currentPath.includes("/admin")) navigate("/admin/login");
+                    else if (currentPath.includes("/manager")) navigate("/manager/login");
                     if (user && user.role && user.role.roleName === "ROLE_STUDENT") navigate("/login");
+                    // if (user && user.role && user.role.roleName === "ROLE_ADMIN") navigate("/admin/login");
+                    // else if (user && user.role && user.role.roleName === "ROLE_MANAGER") navigate("/manager/login");
+                    // if (user && user.role && user.role.roleName === "ROLE_STUDENT") navigate("/login");
                 } else {
                     sessionStorage.removeItem("entryMessage");
                 }

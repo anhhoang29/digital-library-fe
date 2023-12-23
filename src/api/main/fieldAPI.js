@@ -54,3 +54,12 @@ export const deleteAField = async (fieldId, config) => {
         throw error;
     }
 };
+
+export const activateAField = async (fieldId, config) => {
+    try {
+        const response = await privateAxios.put(`/fields/${fieldId}/activation`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

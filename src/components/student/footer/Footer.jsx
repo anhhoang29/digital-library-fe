@@ -3,12 +3,14 @@ import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-
 
 import logo from "../../../assets/images/logo.png";
 
+import "./footer.css";
+
 const CustomFooter = () => {
     return (
         <Footer container className="bg-gray-200 px-[15%]">
-            <div className="w-full">
+            <div className="w-full hover-link">
                 <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
-                    <div className="mt-4">
+                    <div className="mt-4 footer-brand">
                         <Footer.Brand href="/home" src={logo} alt="WISDO Logo" name="THƯ VIỆN SỐ" />
                     </div>
                     <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">

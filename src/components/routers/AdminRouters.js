@@ -27,12 +27,16 @@ const ManagementRoutes = () => {
             <Route path="/users/latest" element={<Users />} />
             <Route path="/users/:userId" element={<DetailUser />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/categories/:categorySlug" element={<Documents />} />
             <Route path="/categories" element={<Categories />} />
-            <Route path="/documents" element={<Documents />} />
+            <Route path="/fields/:fieldSlug" element={<Documents />} />
             <Route path="/fields" element={<Fields />} />
+            <Route path="/organizations/:organizationSlug" element={<Documents />} />
             <Route path="/organizations" element={<Organizations />} />
+            <Route path="/documents" element={<Documents />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="*" element={<Page404 />} />
         </Routes>
     );

@@ -10,8 +10,8 @@ import DocumentCard from "../../../components/student/card/Card";
 import { getUploadedDocumentsForGuest, getUploadedDocumentsForStudent } from "../../../api/main/documentAPI";
 import { getAUser } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
-import profileBackground from "../../../assets/images/default_background.jpg";
 import profileImage from "../../../assets/images/default_profile.jpg";
+import profileBackground from "../../../assets/images/profile_bg.webp";
 
 import "../document/document.css";
 
@@ -106,12 +106,12 @@ const UserWall = () => {
 
     return (
         <div>
-            <div className="bg-gray-50 p-4">
+            <div className="bg-gray-50 p-4 min-h-screen h-full">
                 <div className="flex w-full ">
                     <div className="p-0 h-min rounded-lg shadow-lg bg-white w-1/4 mr-5">
                         <img alt="Profile" src={profileBackground} className="rounded-t-lg w-full" />
                         <div className="p-5 grid place-items-center">
-                            <img alt="Profile" src={user && user.image ? user.image : profileImage} className="mb-3 mt-[-4.75rem] rounded-full border-solid border-4 border-gray w-28 h-28" />
+                            <img alt="Profile" src={user && user.image ? user.image : profileImage} className="mb-3 mt-[-4.75rem] rounded-full border-solid border-4 border-white ring-2 ring-grey w-28 h-28" />
 
                             <h5 className="mb-2 text-2xl font-medium dark:text-white text-center">
                                 {user && user.lastName} {user && user.firstName}
@@ -119,7 +119,9 @@ const UserWall = () => {
 
                             <div className="mt-2 w-full">
                                 <div className="flex text-center font-bold">
-                                    <span className="block text-base font-normal text-green-400 dark:text-white">{user && user.organization && user.organization.orgName}</span>
+                                    <span className="block text-base font-normal text-green-400 dark:text-white cursor-pointer" onClick={() => navigate("/institutions/" + user.organization.slug)}>
+                                        {user && user.organization && user.organization.orgName}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -161,10 +163,14 @@ const UserWall = () => {
                             </div>
                         </div>
 
-                        <p className="mb-4">
-                            Kết quả <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? (currentPage - 1) * 12 + 1 : 0}</span> đến <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? documentList.length + (currentPage - 1) * 12 : 0}</span> trong khoảng{" "}
-                            <span className="text-cyan-600 font-semibold">{totalRecords}</span>
-                        </p>
+                        {documentList.length !== 0 && (
+                            <p className="mb-4">
+                                Kết quả <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? (currentPage - 1) * 12 + 1 : 0}</span> đến <span className="text-cyan-600 font-semibold">{documentList.length > 0 ? documentList.length + (currentPage - 1) * 12 : 0}</span> trong khoảng{" "}
+                                <span className="text-cyan-600 font-semibold">{totalRecords}</span>
+                            </p>
+                        )}
+
+                        {documentList.length === 0 && <p className="mb-4">Không có tài liệu nào dành cho bạn!</p>}
 
                         <div className="grid grid-cols-3 gap-8 card-small w-full">
                             {documentList.map((document) => (
@@ -174,7 +180,7 @@ const UserWall = () => {
 
                         {documentList.length !== 0 && (
                             <div className="flex overflow-x-auto sm:justify-center mt-4">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                             </div>
                         )}
                     </div>

@@ -1,4 +1,8 @@
-.hover-link .hover:underline {
-    font-style: normal;
+.hover-link a:hover {
+    text-decoration: none;
     color: #4ade80;
+}
+
+.footer-brand .h-8 {
+    height: 5rem;
 }

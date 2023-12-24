@@ -49,11 +49,11 @@ const DetailDocument = () => {
 
     const getDocumentBySlug = async () => {
         const accessToken = localStorage.getItem("accessToken");
-        const user = JSON.parse(sessionStorage.getItem("profile"))
+        const user = JSON.parse(sessionStorage.getItem("profile"));
         try {
             let response = null;
-            
-            if(user && accessToken) response = await getADocument(slug);
+
+            if (user && accessToken) response = await getADocument(slug);
             else response = await getADocumentForGuest(slug);
 
             if (response.status === 200) {

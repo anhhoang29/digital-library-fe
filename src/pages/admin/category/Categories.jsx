@@ -6,16 +6,23 @@ import Table from "../../../components/management/table/Table";
 
 import ActionButton from "../../../components/management/action-button/ActionButton";
 
-import { Badge, Button, Modal, Toast, Spinner } from "flowbite-react";
+import { Badge, Button, Modal, Pagination, Spinner, Toast, Tooltip } from "flowbite-react";
 
-import { deleteACategory, getAllCategories } from "../../../api/main/categoryAPI";
+import { activateACategory, deleteACategory, getAllCategories } from "../../../api/main/categoryAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
-import { HiCheck, HiDocumentRemove, HiX, HiOutlineCheck} from "react-icons/hi";
+import { HiCheck, HiDocumentRemove, HiOutlineCheck, HiX } from "react-icons/hi";
 
-// let selectedPage = 0;
+import SelectFilter from "../../../components/management/select/SelectFilter";
+
+let selectedPage = 0;
 
 const Categories = () => {
+    const deletedStatus = [
+        { name: "Đang hoạt động", value: "false" },
+        { name: "Đã vô hiệu", value: "true" },
+    ];
+
     const tableHead = ["", "Tên", "Trạng thái", "Số tài liệu", ""];
 
     const renderHead = (item, index) => (
@@ -23,28 +30,53 @@ const Categories = () => {
             {item}
         </th>
     );
-    // selectedPage * 20 +
+    //
     const renderBody = (item, index) => (
-        <tr key={index}>
-            <td className="w-1/12 text-center font-bold">{index + 1}</td>
+        <tr key={index} className="cursor-pointer" onClick={() => navigate("/admin/categories/" + item.slug)}>
+            <td className="w-1/12 text-center font-bold">{selectedPage * 10 + index + 1}</td>
             <td className="w-5/12 text-center">{item.categoryName}</td>
             <td className="w-3/12 text-center">
                 <div className="m-auto w-fit">
                     {item.deleted ? (
-                        <Badge color="warning" icon={HiX}>
-                            Đã vô hiệu
-                        </Badge>
+                        <Tooltip content="Kích hoạt danh mục" style="light">
+                            <Badge
+                                color="warning"
+                                icon={HiX}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    activateCategory(item.categoryId);
+                                }}
+                                className="cursor-pointer">
+                                Đã vô hiệu
+                            </Badge>
+                        </Tooltip>
                     ) : (
                         <Badge icon={HiCheck}>Đang hoạt động</Badge>
                     )}
                 </div>
             </td>
-            <td className="w-2/12 text-center">123</td>
+            <td className="w-2/12 text-center">{item.totalDocuments}</td>
             <td className="w-1/12 text-center">
                 <div className="flex space-x-0">
                     {/* <ActionButton onClick={() => handleDetail(item.categoryId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" /> */}
-                    <ActionButton onClick={() => handleEdit(item.categoryId)} icon="bx bx-edit" color="yellow" content="Chỉnh sửa danh mục" />
-                    <ActionButton onClick={() => handleDelete(item.categoryId)} icon="bx bx-trash" color="red" content="Xoá danh mục" />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(item.categoryId);
+                        }}
+                        icon="bx bx-edit"
+                        color="yellow"
+                        content="Chỉnh sửa danh mục"
+                    />
+                    <ActionButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.categoryId);
+                        }}
+                        icon="bx bx-trash"
+                        color="red"
+                        content="Xoá danh mục"
+                    />
                 </div>
             </td>
         </tr>
@@ -89,36 +121,41 @@ const Categories = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
 
-    // useEffect(() => {
-    //     getCategoryList(currentPage);
-    // }, [currentPage]);
+    const [search, setSearch] = useState("");
+    const [deleted, setDeleted] = useState("all");
 
     useEffect(() => {
-        getCategoryList();
-    }, []);
+        selectedPage = currentPage - 1;
+        getCategoryList(currentPage);
+    }, [currentPage]);
 
-    // const onPageChange = (page) => {
-    //     setCurrentPage(page);
-    //     selectedPage = page - 1;
-    //     // data
-    // };
+    useEffect(() => {
+        getCategoryList(currentPage);
+    }, [deleted, search]);
+
+    const onPageChange = (page) => {
+        setCurrentPage(page);
+        selectedPage = page - 1;
+    };
 
     const getCategoryList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getAllCategories();
-            //     {
-            //     params: {
-            //         page: page - 1,
-            //         size: 10,
-            //     },
-            // }
+            const response = await getAllCategories({
+                params: {
+                    page: page - 1,
+                    size: 10,
+                    s: search,
+                    deleted: deleted,
+                },
+            });
+
             setIsFetching(false);
             if (response.status === 200) {
-                setCategoryList(response.data);
-                // setTotalPages(response.data.totalPages);
+                setCategoryList(response.data.content);
+                setTotalPages(response.data.totalPages);
             } else {
-                // navigate("/admin/login");
+                navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -139,7 +176,38 @@ const Categories = () => {
                 setTimeout(() => {
                     setStatus(0);
                 }, 4000);
-                getCategoryList();
+                getCategoryList(1);
+                setCurrentPage(1);
+                selectedPage = 0;
+            } else {
+                setStatus(-1);
+                setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
+                setTimeout(() => {
+                    setStatus(0);
+                }, 4000);
+            }
+        } catch (error) {
+            setStatus(-1);
+            setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
+            setTimeout(() => {
+                setStatus(0);
+            }, 4000);
+        }
+    };
+
+    const activateCategory = async (categoryId) => {
+        try {
+            const response = await activateACategory(categoryId);
+            if (response.status === 200) {
+                setStatus(1);
+                setMessage("Kích hoạt danh mục thành công!");
+
+                setTimeout(() => {
+                    setStatus(0);
+                }, 4000);
+                getCategoryList(1);
+                setCurrentPage(1);
+                selectedPage = 0;
             } else {
                 setStatus(-1);
                 setMessage("Đã xảy ra lỗi! Xin vui lòng thử lại!");
@@ -167,14 +235,56 @@ const Categories = () => {
             <div className="row">
                 <div className="col-12">
                     <div className="card">
+                        <div className="card__body flex items-end justify-between">
+                            <div>
+                                <SelectFilter
+                                    selectName="Trạng thái"
+                                    options={deletedStatus}
+                                    selectedValue={deleted}
+                                    onChangeHandler={(e) => {
+                                        setCurrentPage(1);
+                                        setDeleted(e.target.value);
+                                    }}
+                                    name="name"
+                                    field="value"
+                                    required
+                                />
+                            </div>
+
+                            <div className="relative rounded-lg mb-2 w-1/3">
+                                <input
+                                    type="text"
+                                    id="list-search"
+                                    className="text-sm text-black block w-full p-3 ps-5 border border-gray-300 bg-white focus:ring-0 focus:border-green-400 rounded-lg"
+                                    placeholder="Tìm kiếm"
+                                    onChange={(e) => {
+                                        setCurrentPage(1);
+                                        setSearch(e.target.value);
+                                    }}
+                                    value={search}
+                                    required
+                                />
+
+                                <div className="absolute inset-y-0 end-0 flex items-center pe-5 cursor-pointer rounded-lg">
+                                    <svg className="w-4 h-4 text-green-400 hover:text-green-200 focus:text-green-200 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
                         <div className="card__body">
+                            {categoryList.length === 0 && <p className="mt-2 mb-4 font-medium">Không có kết quả!</p>}
+
                             <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={categoryList} renderBody={(item, index) => renderBody(item, index)} />
 
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
-                            {/* <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
-                            </div> */}
+                            <div className="flex overflow-x-auto sm:justify-center">
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,14 +311,14 @@ const Categories = () => {
             <CategoryModal openCategoryModal={openCategoryModal} categoryId={categoryId} isCreatingNew={isCreatingNew} triggerModal={triggerModal} refreshCategoryList={getCategoryList} />
 
             {status === -1 && (
-                <Toast className="top-1/4 right-5 w-100 fixed z-50">
+                <Toast className="top-1/4 right-5 w-fit fixed z-50">
                     <HiX className="h-5 w-5 bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>
             )}
 
             {status === 1 && (
-                <Toast className="top-1/4 right-5 fixed w-100 z-50">
+                <Toast className="top-1/4 right-5 fixed w-auto z-50">
                     <HiOutlineCheck className="h-5 w-5 bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200" />
                     <div className="pl-4 text-sm font-normal">{message}</div>
                 </Toast>

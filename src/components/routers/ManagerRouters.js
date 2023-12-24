@@ -29,6 +29,7 @@ const ManagementRoutes = () => {
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/profile" element={<ManagerProfile />} />
             <Route path="/home" element={<ManagerDashboard />} />
+            <Route path="/" element={<ManagerDashboard />} />
 
             <Route path="*" element={<Page404 />} />
         </Routes>

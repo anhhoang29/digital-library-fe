@@ -6,10 +6,10 @@ import Table from "../../../components/management/table/Table";
 
 import ActionButton from "../../../components/management/action-button/ActionButton";
 
-import { Badge, Button, Modal, Pagination, Spinner, TextInput, Toast } from "flowbite-react";
-import { HiCheck, HiDocumentRemove, HiDocumentSearch, HiOutlineCheck, HiOutlineDotsHorizontal, HiX } from "react-icons/hi";
+import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
+import { HiCheck, HiDocumentRemove, HiOutlineCheck, HiOutlineDotsHorizontal, HiX } from "react-icons/hi";
 
-import { deleteADocument, getAllDocumentsByOrganizations, getLatestDocumentsByOrganization, searchDocumentsByOrganization } from "../../../api/main/documentAPI";
+import { deleteADocument, getDocumentsByOrganizations, getLatestDocumentsByOrganization } from "../../../api/main/documentAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 import { getAllCategories } from "../../../api/main/categoryAPI";
@@ -107,7 +107,6 @@ const ManagerDocuments = () => {
     const [status, setStatus] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
-    const [isSearching, setIsSearching] = useState(false);
     const [docId, setDocId] = useState("");
     const [search, setSearch] = useState("");
 
@@ -118,22 +117,20 @@ const ManagerDocuments = () => {
     }, []);
 
     useEffect(() => {
-        if (isSearching) getDocumentListWithSearch(currentPage);
-        else {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else getDocumentList(currentPage);
-        }
+        if (isLatestRoute) getLatestDocumentList(currentPage);
+        else getDocumentList(currentPage);
     }, [currentPage]);
 
     useEffect(() => {
         setCurrentPage(1);
-        if (isSearching) {
-            getDocumentListWithSearch(currentPage);
-        } else {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else getDocumentList(currentPage);
-        }
+
+        if (isLatestRoute) getLatestDocumentList(currentPage);
+        else getDocumentList(currentPage);
     }, [category, field, deleted, internal, verifiedStatus, search]);
+
+    useEffect(() => {
+        selectedPage = currentPage - 1;
+    }, [currentPage]);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -143,12 +140,19 @@ const ManagerDocuments = () => {
     const getCategoryList = async () => {
         try {
             setIsFetching(true);
-            const response = await getAllCategories();
+            const response = await getAllCategories({
+                params: {
+                    page: 0,
+                    size: 1000,
+                    s: "",
+                    deleted: "all",
+                },
+            });
             setIsFetching(false);
             if (response.status === 200) {
-                setCategoryList(response.data);
+                setCategoryList(response.data.content);
             } else {
-                // navigate("/manager/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -158,12 +162,19 @@ const ManagerDocuments = () => {
     const getFieldList = async () => {
         try {
             setIsFetching(true);
-            const response = await getAllFields();
+            const response = await getAllFields({
+                params: {
+                    page: 0,
+                    size: 1000,
+                    s: "",
+                    deleted: "all",
+                },
+            });
             setIsFetching(false);
             if (response.status === 200) {
-                setFieldList(response.data);
+                setFieldList(response.data.content);
             } else {
-                // navigate("/manager/login");
+                // navigate("/admin/login");
             }
         } catch (error) {
             console.log(error);
@@ -173,7 +184,7 @@ const ManagerDocuments = () => {
     const getDocumentList = async (page) => {
         try {
             setIsFetching(true);
-            const response = await getAllDocumentsByOrganizations(user.organization.slug, {
+            const response = await getDocumentsByOrganizations(user.organization.slug, {
                 params: {
                     page: page - 1,
                     size: 15,
@@ -183,6 +194,7 @@ const ManagerDocuments = () => {
                     deleted: deleted,
                     internal: internal,
                     status: verifiedStatus,
+                    s: search,
                 },
             });
             setIsFetching(false);
@@ -204,34 +216,6 @@ const ManagerDocuments = () => {
                 params: {
                     page: page - 1,
                     size: 15,
-                    order: "updatedAt",
-                    category: category,
-                    field: field,
-                    deleted: deleted,
-                    internal: internal,
-                    status: verifiedStatus,
-                },
-            });
-            setIsFetching(false);
-            if (response.status === 200) {
-                setDocumentList(response.data.content);
-                setTotalPages(response.data.totalPages);
-            } else {
-                // navigate("/manager/login");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const getDocumentListWithSearch = async (page) => {
-        try {
-            setIsFetching(true);
-            const response = await searchDocumentsByOrganization(user.organization.slug, {
-                params: {
-                    page: page - 1,
-                    size: 15,
-                    order: "updatedAt",
                     category: category,
                     field: field,
                     deleted: deleted,
@@ -263,12 +247,9 @@ const ManagerDocuments = () => {
                 setTimeout(() => {
                     setStatus(0);
                 }, 2000);
-
-                if (isSearching) getDocumentListWithSearch(currentPage);
-                else {
-                    if (isLatestRoute) getLatestDocumentList(currentPage);
-                    else getDocumentList(currentPage);
-                }
+                setCurrentPage(1);
+                if (isLatestRoute) getLatestDocumentList(currentPage);
+                else getDocumentList(currentPage);
             } else {
                 setStatus(-1);
                 setTimeout(() => {
@@ -280,46 +261,15 @@ const ManagerDocuments = () => {
         }
     };
 
-    const handleSearch = () => {
-        if (search === "") {
-            if (isLatestRoute) getLatestDocumentList(currentPage);
-            else getDocumentList(currentPage);
-        } else {
-            setIsSearching(true);
-            getDocumentListWithSearch(1);
-        }
-    };
-
     return (
         <div>
-            <h2 className="page-header">tài liệu</h2>
+            <h2 className="page-header">{isLatestRoute ? "tài liệu mới" : "tài liệu"}</h2>
             <div className="flex h-fit">
                 <div>
-                    <Button color="gray" className="mb-7 mt-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/manager/documents/new")}>
+                    <Button color="gray" className="mb-7 justify-self-end bg-white" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)" }} onClick={() => navigate("/manager/documents/new")}>
                         <i className="bx bxs-calendar-plus mr-3 text-xl hover:text-white" style={{ color: "var(--main-color)" }}></i>
                         Thêm tài liệu
                     </Button>
-                </div>
-
-                <div className="ml-auto w-auto max-h-full flex items-center">
-                    <div className="relative">
-                        <TextInput
-                            id="search"
-                            type="search"
-                            icon={HiDocumentSearch}
-                            placeholder="Nhập để tìm kiếm"
-                            required
-                            className="max-w-2xl w-96"
-                            style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", background: "white" }}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                handleSearch();
-                            }}
-                        />
-                        {/* <Button className="absolute right-0 top-0 bottom-0 px-2 hover:text-gray-200" style={{ boxShadow: "var(--box-shadow)", borderRadius: "var(--border-radius)", backgroundColor: "var(--main-color)" }} onClick={handleSearch}>
-                            Tìm kiếm
-                        </Button> */}
-                    </div>
                 </div>
             </div>
 
@@ -376,6 +326,27 @@ const ManagerDocuments = () => {
                                     required
                                 />
                             </div>
+
+                            <div className="relative rounded-lg ml-auto w-1/3 mt-4">
+                                <input
+                                    type="text"
+                                    id="list-search"
+                                    className="text-sm text-black block w-full p-3 ps-5 border border-gray-300 bg-white focus:ring-0 focus:border-green-400 rounded-lg"
+                                    placeholder="Tìm kiếm"
+                                    onChange={(e) => {
+                                        setCurrentPage(1);
+                                        setSearch(e.target.value);
+                                    }}
+                                    value={search}
+                                    required
+                                />
+
+                                <div className="absolute inset-y-0 end-0 flex items-center pe-5 cursor-pointer rounded-lg">
+                                    <svg className="w-4 h-4 text-green-400 hover:text-green-200 focus:text-green-200 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -385,12 +356,14 @@ const ManagerDocuments = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
+                            {documentList.length === 0 && <p className="mt-2 mb-4 font-medium">Không có kết quả!</p>}
+
                             <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={documentList} renderBody={(item, index) => renderBody(item, index)} />
 
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons style={{ color: "var(--main-color)" }} />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons style={{ color: "var(--main-color)" }} />
                             </div>
                         </div>
                     </div>

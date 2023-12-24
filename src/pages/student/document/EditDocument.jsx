@@ -299,13 +299,13 @@ const StudentEditDocument = () => {
 
                             <div className="mb-6">
                                 <label htmlFor="message" className="block mb-2 text-sm font-medium dark:text-white">
-                                    Mô tả
+                                    Giới thiệu
                                 </label>
                                 <textarea
                                     id="message"
                                     rows="4"
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Nhập mô tả..."
+                                    placeholder="Nhập giới thiệu..."
                                     required
                                     onChange={(e) => {
                                         setIntroduction(e.target.value);
@@ -420,7 +420,7 @@ const StudentEditDocument = () => {
                         </form>
                     </div>
 
-                    <div className="w-[15%] fixed rounded-lg shadow-lg bg-white p-10 ml-4 right-5 border border-gray-50">
+                    {/* <div className="w-[15%] fixed rounded-lg shadow-lg bg-white p-10 ml-4 right-5 border border-gray-50">
                         <ol className="relative text-gray-500 border-s border-gray-200 dark:border-gray-700 dark:text-gray-400">
                             <li className="mb-20 ms-6 flex items-center">
                                 <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
@@ -447,7 +447,7 @@ const StudentEditDocument = () => {
                                 <h3 className="font-medium leading-tight">Hoàn tất</h3>
                             </li>
                         </ol>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

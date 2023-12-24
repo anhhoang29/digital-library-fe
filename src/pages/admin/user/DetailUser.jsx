@@ -7,7 +7,7 @@ import { getAUser } from "../../../api/main/userAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 
 import { Badge, Button, Modal, Pagination, Spinner, Toast } from "flowbite-react";
-import { HiAtSymbol, HiCake, HiCheck, HiChevronLeft, HiCloudUpload, HiDocumentRemove, HiExclamation, HiOutlineCloudUpload, HiOutlineDotsHorizontal, HiOutlinePencilAlt, HiPhone, HiUser, HiUserAdd, HiX } from "react-icons/hi";
+import { HiAtSymbol, HiCake, HiCheck, HiChevronLeft, HiCloudUpload, HiDocumentRemove, HiExclamation, HiOutlineCloudUpload, HiOutlineDotsHorizontal, HiPhone, HiUser, HiUserAdd, HiX } from "react-icons/hi";
 
 import ActionButton from "../../../components/management/action-button/ActionButton";
 import Table from "../../../components/management/table/Table";
@@ -275,7 +275,7 @@ const DetailUser = () => {
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                             </div>
                         </div>
                     </div>

@@ -11,11 +11,12 @@ import { deleteAUser, getAllUsersByOrganization, getLatestUsersByOrganization } 
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import profileImage from "../../../assets/images/default_profile.jpg";
 import UserModal from "../../../components/management/manager/modal/user/UserModal";
+import SelectFilter from "../../../components/management/select/SelectFilter";
 
 let selectedPage = 0;
 
 const ManagerUsers = () => {
-    const tableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", "Trạng thái", ""];
+    const tableHead = ["", "Ảnh", "Họ", "Tên", "Email", "Vai trò", ""];
 
     const roleList = {
         ROLE_ADMIN: "ADMIN",
@@ -23,6 +24,40 @@ const ManagerUsers = () => {
         ROLE_LECTURER: "GIẢNG VIÊN",
         ROLE_MANAGER: "QUẢN LÝ",
     };
+
+    const deletedStatus = [
+        { name: "Đang hoạt động", value: "false" },
+        { name: "Đã vô hiệu", value: "true" },
+    ];
+
+    const genderData = [
+        { name: "Nam", value: "0" },
+        { name: "Nữ", value: "1" },
+        { name: "Khác", value: "2" },
+    ];
+
+    const roleData = [
+        {
+            name: "Admin",
+            value: "ROLE_ADMIN",
+            color: "cyan",
+        },
+        {
+            name: "Sinh viên",
+            value: "ROLE_STUDENT",
+            color: "green",
+        },
+        {
+            name: "Giảng viên",
+            value: "ROLE_LECTURER",
+            color: "indigo",
+        },
+        {
+            name: "Quản lý",
+            value: "ROLE_MANAGER",
+            color: "pink",
+        },
+    ];
 
     const renderHead = (item, index) => (
         <th key={index} className="text-center">
@@ -35,8 +70,8 @@ const ManagerUsers = () => {
             <td className="text-center font-bold" onClick={() => handleDetail(item.userId)}>
                 {selectedPage * 15 + index + 1}
             </td>
-            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
-                <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12" />
+            <td className="max-w-xs flex justify-center items-center" onClick={() => handleDetail(item.userId)}>
+                <img src={item.image ? item.image : profileImage} alt="Profile" className="rounded-full h-12 w-12 text-center" />
             </td>
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 {item.lastName}
@@ -44,13 +79,19 @@ const ManagerUsers = () => {
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 {item.firstName}
             </td>
-            <td className="max-w-xs" onClick={() => handleDetail(item.userId)}>
+            <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 {item.email}
             </td>
-            <td className="max-w-xs text-center m-auto" onClick={() => handleDetail(item.userId)}>
-                <div className="m-auto w-fit">{item.role && <Badge icon={HiOutlineBadgeCheck}>{roleList[item.role.roleName]}</Badge>}</div>
-            </td>
             <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
+                <div className="m-auto w-fit">
+                    {item.role && (
+                        <Badge icon={HiOutlineBadgeCheck} className="w-fit h-full" color={roleData.find((role) => role.value === item.role.roleName)?.color || ""}>
+                            {roleList[item.role.roleName]}
+                        </Badge>
+                    )}
+                </div>
+            </td>
+            {/* <td className="max-w-xs text-center" onClick={() => handleDetail(item.userId)}>
                 <div className="m-auto w-fit">
                     {item.deleted ? (
                         <Badge color="warning" icon={HiX}>
@@ -62,7 +103,7 @@ const ManagerUsers = () => {
                         </Badge>
                     )}
                 </div>
-            </td>
+            </td> */}
             <td className="text-center">
                 <div className="flex space-x-0">
                     <ActionButton onClick={() => handleDetail(item.userId)} icon="bx bxs-user-detail" color="green" content="Xem chi tiết người dùng" />
@@ -75,7 +116,7 @@ const ManagerUsers = () => {
 
     const navigate = useNavigate();
 
-    const user = JSON.parse(sessionStorage.getItem("profile"));
+        const user = JSON.parse(sessionStorage.getItem("profile"));
 
     const handleDetail = (userId) => {
         navigate(`/manager/users/${userId}`);
@@ -116,15 +157,24 @@ const ManagerUsers = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
 
+    const [search, setSearch] = useState("");
+    const [deleted, setDeleted] = useState("all");
+    const [gender, setGender] = useState("all");
+    const [role, setRole] = useState("all");
+
     useEffect(() => {
         if (isLatestRoute) getLatestUserList(currentPage);
         else getUserList(currentPage);
     }, [currentPage]);
 
+    useEffect(() => {
+        if (isLatestRoute) getLatestUserList(currentPage);
+        else getUserList(currentPage);
+    }, [gender, deleted, role, search]);
+
     const onPageChange = (page) => {
         setCurrentPage(page);
         selectedPage = page - 1;
-        // data
     };
 
     const getUserList = async (page) => {
@@ -134,6 +184,10 @@ const ManagerUsers = () => {
                 params: {
                     page: page - 1,
                     size: 15,
+                    deleted: deleted,
+                    gender: gender,
+                    role: role,
+                    s: search,
                 },
             });
             setIsFetching(false);
@@ -155,6 +209,10 @@ const ManagerUsers = () => {
                 params: {
                     page: page - 1,
                     size: 15,
+                    deleted: deleted,
+                    gender: gender,
+                    role: role,
+                    s: search,
                 },
             });
             setIsFetching(false);
@@ -214,12 +272,81 @@ const ManagerUsers = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
+                            <div className="flex items-end justify-between gap-5">
+                                {/* <SelectFilter
+                                    selectName="Trạng thái"
+                                    options={deletedStatus}
+                                    selectedValue={deleted}
+                                    onChangeHandler={(e) => {
+                                        setCurrentPage(1);
+                                        setDeleted(e.target.value);
+                                    }}
+                                    name="name"
+                                    field="value"
+                                    required
+                                /> */}
+
+                                <SelectFilter
+                                    selectName="Giới tính"
+                                    options={genderData}
+                                    selectedValue={gender}
+                                    onChangeHandler={(e) => {
+                                        setCurrentPage(1);
+                                        setGender(e.target.value);
+                                    }}
+                                    name="name"
+                                    field="value"
+                                    required
+                                />
+
+                                <SelectFilter
+                                    selectName="Vai trò"
+                                    options={roleData}
+                                    selectedValue={role}
+                                    onChangeHandler={(e) => {
+                                        setCurrentPage(1);
+                                        setRole(e.target.value);
+                                    }}
+                                    name="name"
+                                    field="value"
+                                    required
+                                />
+
+                                <div className="relative rounded-lg mb-2 w-1/4 ml-auto ">
+                                    <input
+                                        type="text"
+                                        id="list-search"
+                                        className="text-sm text-black block w-full p-3 ps-5 border border-gray-300 bg-white focus:ring-0 focus:border-green-400 rounded-lg"
+                                        placeholder="Tìm kiếm"
+                                        onChange={(e) => {
+                                            setCurrentPage(1);
+                                            setSearch(e.target.value);
+                                        }}
+                                        value={search}
+                                        required
+                                    />
+
+                                    <div className="absolute inset-y-0 end-0 flex items-center pe-5 cursor-pointer rounded-lg">
+                                        <svg className="w-4 h-4 text-green-400 hover:text-green-200 focus:text-green-200 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-4"></div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <div className="card__body">
+                            {userList.length === 0 && <p className="mt-2 mb-4 font-medium">Không có kết quả!</p>}
                             <Table totalPages="10" headData={tableHead} renderHead={(item, index) => renderHead(item, index)} bodyData={userList} renderBody={(item, index) => renderBody(item, index)} />
 
                             {isFetching && <Spinner aria-label="Default status example" className="flex items-center w-full mb-2 mt-2" style={{ color: "var(--main-color)" }} />}
 
                             <div className="flex overflow-x-auto sm:justify-center">
-                                <Pagination previousLabel="Trước" nextLabel="Sau" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                                <Pagination previousLabel="" nextLabel="" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
                             </div>
                         </div>
                     </div>

@@ -2,49 +2,53 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-import Chart from "react-apexcharts";
-
 import { useSelector } from "react-redux";
 
 import StatusCard from "../../components/management/status-card/StatusCard";
 
 import Table from "../../components/management/table/Table";
 
+import Chart from "react-apexcharts";
+
 import { getLatestDocumentsByOrganization } from "../../api/main/documentAPI";
 import { getGeneralStatisticsForManager } from "../../api/main/statisticsAPI";
 import { getLatestUsersByOrganization } from "../../api/main/userAPI";
 import usePrivateAxios from "../../api/usePrivateAxios";
 
-const chartOptions = {
-    series: [
-        {
-            name: "Online Customers",
-            data: [40, 70, 20, 90, 36, 80, 30, 91, 60],
-        },
-        {
-            name: "Store Customers",
-            data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10],
-        },
-    ],
-    options: {
-        color: ["#6ab04c", "#2980b9"],
-        chart: {
-            background: "transparent",
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            curve: "smooth",
-        },
-        xaxis: {
-            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-        },
-        legend: {
-            position: "top",
-        },
-        grid: {
-            show: false,
+const lineOptions = {
+    color: ["#6ab04c", "#2980b9"],
+    chart: {
+        background: "transparent",
+    },
+    stroke: {
+        curve: "smooth",
+    },
+    xaxis: {
+        categories: ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"],
+    },
+    legend: {
+        position: "top",
+    },
+    grid: {
+        show: false,
+    },
+};
+
+const pieOptions = {
+    chart: {
+        background: "transparent",
+    },
+    dataLabels: {
+        enabled: true,
+    },
+    legend: {
+        show: false,
+    },
+    title: {
+        align: "center",
+        style: {
+            fontWeight: "bold",
+            fontSize: "16px",
         },
     },
 };
@@ -97,6 +101,10 @@ const ManagerDashboard = () => {
     const [totalUsers, setTotalUsers] = useState(0);
     const [latestUsers, setLatestUsers] = useState([]);
     const [latestDocuments, setLatestDocuments] = useState([]);
+    const [documentsByMonth, setDocumentsByMonth] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const [usersByMonth, setUsersByMonth] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const [documentsByCategory, setDocumentsByCategory] = useState([]);
+    const [documentsByField, setDocumentsByField] = useState([]);
 
     const statusCards = [
         {
@@ -106,9 +114,9 @@ const ManagerDashboard = () => {
             link: "/manager/users",
         },
         {
-            icon: "bx bx-cart",
+            icon: "bx bx-bar-chart-alt-2",
             count: 0,
-            title: "Daily visits",
+            title: "Lượt truy cập",
             link: "#",
         },
         {
@@ -125,17 +133,22 @@ const ManagerDashboard = () => {
         },
     ];
 
+    const lineSeries = [
+        {
+            name: "Tài liệu",
+            data: Object.values(documentsByMonth),
+        },
+        {
+            name: "Người dùng",
+            data: Object.values(usersByMonth),
+        },
+    ];
+
     useEffect(() => {
         getStatistics();
         getLatestUserList();
         getLatestDocumentList();
     }, []);
-
-    useEffect(() => {
-        statusCards[0].count = totalUsers;
-        statusCards[2].count = totalDocuments;
-        statusCards[3].count = totalPendingDocuments;
-    }, [totalDocuments, totalPendingDocuments, totalUsers]);
 
     const getStatistics = async () => {
         try {
@@ -145,6 +158,10 @@ const ManagerDashboard = () => {
                 setTotalDocuments(response.data.totalDocuments);
                 setTotalPendingDocuments(response.data.totalPendingDocuments);
                 setTotalUsers(response.data.totalUsers);
+                setDocumentsByMonth(response.data.documentsByMonth);
+                setDocumentsByCategory(response.data.documentsByCategory);
+                setDocumentsByField(response.data.documentsByField);
+                setUsersByMonth(response.data.usersByMonth);
             }
         } catch (error) {
             console.log(error);
@@ -179,63 +196,135 @@ const ManagerDashboard = () => {
         <div>
             <h2 className="page-header">Dashboard</h2>
             <div className="row">
-                <div className="col-6">
-                    <div className="row">
-                        {statusCards.map((item, index) => (
-                            <div className="col-6" key={index}>
-                                <StatusCard icon={item.icon} count={item.count} title={item.title} link={item.link} />
+                <div className="flex">
+                    <div className="col-6">
+                        <div className="row">
+                            {statusCards.map((item, index) => (
+                                <div className="col-6" key={index}>
+                                    <StatusCard icon={item.icon} count={item.count} title={item.title} link={item.link} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="col-6">
+                        <div className="card full-height">
+                            {/* chart */}
+                            <Chart
+                                options={
+                                    themeReducer === "theme-mode-dark"
+                                        ? {
+                                              ...lineOptions,
+                                              theme: { mode: "dark" },
+                                          }
+                                        : {
+                                              ...lineOptions,
+                                              theme: { mode: "light" },
+                                          }
+                                }
+                                series={lineSeries}
+                                type="line"
+                                height="100%"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex">
+                    <div className="col-6 w-full">
+                        <div className="card full-height w-full">
+                            {/* chart */}
+                            <Chart
+                                options={
+                                    themeReducer === "theme-mode-dark"
+                                        ? {
+                                              ...pieOptions,
+                                              theme: { mode: "dark", palette: "palette5" },
+                                              labels: Object.keys(documentsByCategory),
+                                              title: {
+                                                  ...pieOptions.title,
+                                                  text: "Tài liệu theo danh mục",
+                                              },
+                                          }
+                                        : {
+                                              ...pieOptions,
+                                              theme: { mode: "light", palette: "palette5" },
+                                              labels: Object.keys(documentsByCategory),
+                                              title: {
+                                                  ...pieOptions.title,
+                                                  text: "Tài liệu theo danh mục",
+                                              },
+                                          }
+                                }
+                                series={Object.values(documentsByCategory)}
+                                type="donut"
+                                height="300px"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-6 w-full">
+                        <div className="card full-height w-full">
+                            {/* chart */}
+                            <Chart
+                                options={
+                                    themeReducer === "theme-mode-dark"
+                                        ? {
+                                              ...pieOptions,
+                                              theme: { mode: "dark", palette: "palette8" },
+                                              labels: Object.keys(documentsByField),
+                                              title: {
+                                                  ...pieOptions.title,
+                                                  text: "Tài liệu theo lĩnh vực",
+                                              },
+                                          }
+                                        : {
+                                              ...pieOptions,
+                                              theme: { mode: "light", palette: "palette8" },
+                                              labels: Object.keys(documentsByField),
+                                              title: {
+                                                  ...pieOptions.title,
+                                                  text: "Tài liệu theo lĩnh vực",
+                                              },
+                                          }
+                                }
+                                series={Object.values(documentsByField)}
+                                type="polarArea"
+                                height="300px"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex w-full">
+                    <div className="col-4">
+                        <div className="card">
+                            <div className="card__header">
+                                <h3>Người dùng mới nhất</h3>
                             </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="col-6">
-                    <div className="card full-height">
-                        {/* chart */}
-                        <Chart
-                            options={
-                                themeReducer === "theme-mode-dark"
-                                    ? {
-                                          ...chartOptions.options,
-                                          theme: { mode: "dark" },
-                                      }
-                                    : {
-                                          ...chartOptions.options,
-                                          theme: { mode: "light" },
-                                      }
-                            }
-                            series={chartOptions.series}
-                            type="line"
-                            height="100%"
-                        />
-                    </div>
-                </div>
-                <div className="col-4">
-                    <div className="card">
-                        <div className="card__header">
-                            <h3>Người dùng mới nhất</h3>
-                        </div>
-                        <div className="card__body overflow-x-auto">
-                            <Table headData={latestUserHead} renderHead={(item, index) => renderLatestUserHead(item, index)} bodyData={latestUsers} renderBody={(item, index) => renderLatestUserBody(item, index)} />
-                        </div>
-                        <div className="card__footer">
-                            <Link to="/manager/users/latest" className="font-bold">
-                                Xem tất cả
-                            </Link>
+                            <div className="card__body overflow-x-auto">
+                                <Table headData={latestUserHead} renderHead={(item, index) => renderLatestUserHead(item, index)} bodyData={latestUsers} renderBody={(item, index) => renderLatestUserBody(item, index)} />
+                            </div>
+                            <div className="card__footer">
+                                <Link to="/manager/users/latest" className="font-bold">
+                                    Xem tất cả
+                                </Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-8">
-                    <div className="card">
-                        <div className="card__header">
-                            <h3>Tài liệu mới nhất</h3>
-                        </div>
-                        <div className="card__body overflow-x-auto">
-                            <Table headData={latestDocumentHead} renderHead={(item, index) => renderLatestDocumentHead(item, index)} bodyData={latestDocuments} renderBody={(item, index) => renderLatestDocumentBody(item, index)} />
-                        </div>
-                        <div className="card__footer">
-                            <Link to="/manager/documents/latest" className="font-bold">
-                                Xem tất cả
-                            </Link>
+                    <div className="col-8">
+                        <div className="card">
+                            <div className="card__header">
+                                <h3>Tài liệu mới nhất</h3>
+                            </div>
+                            <div className="card__body overflow-x-auto">
+                                <Table headData={latestDocumentHead} renderHead={(item, index) => renderLatestDocumentHead(item, index)} bodyData={latestDocuments} renderBody={(item, index) => renderLatestDocumentBody(item, index)} />
+                            </div>
+                            <div className="card__footer">
+                                <Link to="/manager/documents/latest" className="font-bold">
+                                    Xem tất cả
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

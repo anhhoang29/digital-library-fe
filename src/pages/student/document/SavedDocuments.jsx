@@ -46,7 +46,7 @@ const SavedDocument = () => {
                 setDocumentList(response.data.content);
                 setTotalPages(response.data.totalPages);
             } else {
-                navigate("/error-500");
+                // navigate("/error-500");
             }
         } catch (error) {
             navigate("/error-500");

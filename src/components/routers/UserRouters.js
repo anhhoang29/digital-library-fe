@@ -15,11 +15,16 @@ import SavedDocument from "../../pages/student/document/SavedDocuments";
 import UploadedDocument from "../../pages/student/document/UploadedDocuments";
 import ListFields from "../../pages/student/field/ListFields";
 import Error404 from "../../pages/student/error/Error404";
+
+import { useNavigate } from "react-router-dom";
+import RecentDocument from "../../pages/student/document/RecentDocuments";
 // import Search from "../search/search";
 // import UserHome from "../user/home";
 // import UserProfile from "../user/profile";
 
 const UserRoute = () => {
+    const navigate = useNavigate();
+
     return (
         <Routes>
             <Route path="/documents/upload" element={<StudentNewDocument />} />
@@ -29,6 +34,7 @@ const UserRoute = () => {
             <Route path="/me/likes" element={<LikedDocument />} />
             <Route path="/me/saves" element={<SavedDocument />} />
             <Route path="/me/uploads" element={<UploadedDocument />} />
+            <Route path="/me/recents" element={<RecentDocument />} />
             <Route path="/me" element={<StudentProfile />} />
 
             <Route path="/documents" element={<ListDocument />} />
@@ -42,7 +48,14 @@ const UserRoute = () => {
 
             <Route path="/users/:userId" element={<UserWall />} />
 
-            <Route path="/error-500" element={<UserWall />} />
+            <Route
+                path="*"
+                element={null}
+                children={() => {
+                    navigate("/error-404");
+                    return null;
+                }}
+            />
         </Routes>
     );
 };

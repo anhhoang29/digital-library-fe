@@ -6,6 +6,7 @@ import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import logo from "../../../assets/images/logo.png";
 const CustomNavbar = () => {
     const navigate = useNavigate();
+    
     const location = useLocation();
 
     const currentPath = location.pathname;

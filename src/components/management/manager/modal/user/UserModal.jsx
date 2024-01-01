@@ -10,6 +10,7 @@ import { createUser, getAUser, updateUser } from "../../../../../api/main/userAP
 import usePrivateAxios from "../../../../../api/usePrivateAxios";
 
 import profileImage from "../../../../../assets/images/default_profile.jpg";
+import moment from "moment/moment";
 
 const UserModal = (props) => {
     usePrivateAxios();
@@ -343,8 +344,7 @@ const UserModal = (props) => {
                                     labelTodayButton="Hôm nay"
                                     labelClearButton="Xoá"
                                     id="dateOfBirth"
-                                    defaultDate={new Date(dateOfBirth)}
-                                    datepicker-format="dd/MM/yyyy"
+                                    value={moment(new Date(dateOfBirth)).format("DD-MM-YYYY")}
                                     onSelectedDateChanged={(date) => {
                                         setDateOfBirth(date);
                                     }}

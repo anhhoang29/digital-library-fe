@@ -31,7 +31,7 @@ const Profile = () => {
         ROLE_MANAGER: "QUẢN LÝ",
     };
 
-    const tableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
+    const tableHead = ["", "Tên", "Giới thiệu", "Lượt xem", ""];
 
     const renderHead = (item, index) => (
         <th key={index} className="cursor-pointer">
@@ -42,22 +42,13 @@ const Profile = () => {
     const renderBody = (item, index) => (
         <tr key={index}>
             <td className="text-center font-bold" onClick={() => handleDetail(item.slug)}>
-                {selectedPage * 10 + index + 1}
+                {selectedPage * 7 + index + 1}
             </td>
             <td className="max-w-xs text-justify" onClick={() => handleDetail(item.slug)}>
                 {item.docName}
             </td>
             <td className="max-w-xl text-justify" onClick={() => handleDetail(item.slug)}>
-                {item.docIntroduction}
-            </td>
-            <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
-                {item.deleted ? (
-                    <Badge color="warning" icon={HiX}>
-                        Đã xoá
-                    </Badge>
-                ) : (
-                    <Badge icon={HiCheck}>Đang hoạt động</Badge>
-                )}
+                <p className="truncate whitespace-normal leading-6 line-clamp-3">{item.docIntroduction}</p>
             </td>
             <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
                 {item.totalView}
@@ -75,7 +66,7 @@ const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [gender, setGender] = useState(0);
-    const [dateOfBirth, setDateOfBirth] = useState("1990-01-01");
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
 
@@ -137,7 +128,7 @@ const Profile = () => {
             const response = await getUploadedDocuments({
                 params: {
                     page: page - 1,
-                    size: 10,
+                    size: 7,
                 },
             });
             setIsFetching(false);
@@ -543,7 +534,7 @@ const Profile = () => {
                                                 labelTodayButton="Hôm nay"
                                                 labelClearButton="Xoá"
                                                 id="dateOfBirth"
-                                                defaultDate={new Date(dateOfBirth)}
+                                                value={moment(new Date(dateOfBirth)).format("DD-MM-YYYY")}
                                                 datepicker-format="dd/MM/yyyy"
                                                 onSelectedDateChanged={(date) => {
                                                     setDateOfBirth(date);

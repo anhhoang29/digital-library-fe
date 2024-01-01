@@ -10,6 +10,7 @@ import { getADocument, getADocumentForGuest } from "../../../api/main/documentAP
 import { checkLikedStatus, likeDocument } from "../../../api/main/likeAPI";
 import { checkSavedStatus, saveDocument } from "../../../api/main/saveAPI";
 
+import { addToRecentDocuments } from "../../../api/main/recencyAPI";
 import { checkReviewedStatus, getReviewsOfDocument, postAReview } from "../../../api/main/reviewAPI";
 import usePrivateAxios from "../../../api/usePrivateAxios";
 import ClickableStarRating from "../../../components/student/rating/ClickableStarRating";
@@ -44,6 +45,7 @@ const DetailDocument = () => {
             checkLiked();
             checkSaved();
             checkReviewed();
+            addToRecentList();
         }
     }, []);
 
@@ -254,6 +256,14 @@ const DetailDocument = () => {
         setIsStarValid(true);
     };
 
+    const addToRecentList = async () => {
+        try {
+            await addToRecentDocuments(slug);
+        } catch (error) {
+            navigate("/error-500");
+        }
+    };
+
     return (
         <>
             {status === -1 && (
@@ -308,7 +318,7 @@ const DetailDocument = () => {
 
                             <div className="w-1/5 grid place-items-center">
                                 <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400" style={{ fontSize: "3.75rem" }}>
-                                    {document && document.averageRating}
+                                    {document && document.averageRating ? document.averageRating.toFixed(1) : 0}
                                 </h1>
                                 <p className="mt-2">({document && document.totalReviews} đánh giá)</p>
                             </div>

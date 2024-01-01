@@ -31,7 +31,7 @@ const ManagerProfile = () => {
         ROLE_MANAGER: "QUẢN LÝ",
     };
 
-    const tableHead = ["", "Tên", "Giới thiệu", "Trạng thái", "Lượt xem", ""];
+    const tableHead = ["", "Tên", "Giới thiệu", "Lượt xem", ""];
 
     const renderHead = (item, index) => (
         <th key={index} className="cursor-pointer">
@@ -48,16 +48,7 @@ const ManagerProfile = () => {
                 {item.docName}
             </td>
             <td className="max-w-xl text-justify" onClick={() => handleDetail(item.slug)}>
-                {item.docIntroduction}
-            </td>
-            <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
-                {item.deleted ? (
-                    <Badge color="warning" icon={HiX}>
-                        Đã xoá
-                    </Badge>
-                ) : (
-                    <Badge icon={HiCheck}>Đang hoạt động</Badge>
-                )}
+                <p className="truncate whitespace-normal leading-6 line-clamp-3">{item.docIntroduction}</p>
             </td>
             <td className="max-w-xl text-center" onClick={() => handleDetail(item.slug)}>
                 {item.totalView}
@@ -75,7 +66,7 @@ const ManagerProfile = () => {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [gender, setGender] = useState(0);
-    const [dateOfBirth, setDateOfBirth] = useState("1990-01-01");
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
 
@@ -116,6 +107,7 @@ const ManagerProfile = () => {
     const [docId, setDocId] = useState("");
 
     usePrivateAxios();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -542,8 +534,7 @@ const ManagerProfile = () => {
                                                 labelTodayButton="Hôm nay"
                                                 labelClearButton="Xoá"
                                                 id="dateOfBirth"
-                                                defaultDate={new Date(dateOfBirth)}
-                                                datepicker-format="dd/MM/yyyy"
+                                                value={moment(new Date(dateOfBirth)).format("DD-MM-YYYY")}
                                                 onSelectedDateChanged={(date) => {
                                                     setDateOfBirth(date);
                                                 }}

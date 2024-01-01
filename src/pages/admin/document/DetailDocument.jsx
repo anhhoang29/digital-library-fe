@@ -11,7 +11,10 @@ import { Button, Rating } from "flowbite-react";
 import { HiChevronLeft, HiCloudUpload, HiEye, HiInformationCircle, HiLibrary, HiLink, HiOutlinePencilAlt, HiRefresh, HiRss, HiTable, HiThumbUp, HiUserAdd, HiViewBoards, HiXCircle } from "react-icons/hi";
 
 const DetailDocument = () => {
+
     const { slug } = useParams();
+
+    
     const navigate = useNavigate();
 
     usePrivateAxios();

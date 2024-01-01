@@ -118,7 +118,7 @@ const ManagerPendingDocuments = () => {
             if (response.status === 200) {
                 setStatus(1);
 
-                if (approvedStatus) setMessage("Phê duyệt tài liệu thành công!");
+                if (approvedStatus) setMessage("Đã chấp nhận tài liệu!");
                 else setMessage("Đã từ chối tài liệu!");
 
                 setTimeout(() => {
@@ -167,7 +167,7 @@ const ManagerPendingDocuments = () => {
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Thao tác phê duyệt</h3>
                         <div className="flex justify-center gap-4">
                             <Button color="success" isProcessing={isLoading} onClick={() => approveDocument(docId, true)}>
-                                Phê duyệt
+                                Chấp nhận
                             </Button>
                             <Button
                                 color="warning"
@@ -196,7 +196,7 @@ const ManagerPendingDocuments = () => {
                             <div className="mb-2 block">
                                 <Label htmlFor="reason" value="Lý do" />
                             </div>
-                            <TextInput id="reason" placeholder="Tài liệu không đầy đủ" value={reason} onChange={(event) => setReason(event.target.value)} required />
+                            <TextInput id="reason" placeholder="Nhập lý do..." value={reason} onChange={(event) => setReason(event.target.value)} required />
                         </div>
                         <div className="flex justify-center gap-4">
                             <Button color="warning" isProcessing={isLoading} onClick={() => approveDocument(docId, false)}>
